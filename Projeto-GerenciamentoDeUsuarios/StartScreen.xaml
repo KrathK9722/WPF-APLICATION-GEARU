@@ -679,7 +679,7 @@
 
             <Grid
                 x:Name="landing_page"
-                Visibility="Visible">
+                Visibility="Collapsed">
 
                 <StackPanel
                     HorizontalAlignment="Center"
@@ -741,7 +741,7 @@
 
             <Grid
                 x:Name="remove_screen"
-                Visibility="Collapsed">
+                Visibility="Visible">
 
                 <StackPanel
                     Width="600"

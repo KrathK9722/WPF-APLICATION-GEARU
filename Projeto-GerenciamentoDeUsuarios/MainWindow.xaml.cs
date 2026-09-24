@@ -45,11 +45,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 if (int.TryParse(savedIdText, out int savedId)) { }
                 if (adminExist && Convert.ToInt32(savedId) == 0)
                 {
-                    title_create_account.Content = "Criar Conta de Usuário";
+                    title_create_account.Text = "Criar Conta de Usuário";Al
                 }
                 else if (Convert.ToInt32(savedId) == 0)
                 {
-                    title_create_account.Content = "Criar Conta de Administrador";
+                    title_create_account.Text = "Criar Conta de Administrador";
                 }
                 else
                 {
@@ -71,11 +71,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                     if (int.TryParse(savedIdText, out int savedId)) { }
                     if (adminExist && Convert.ToInt32(savedId) == 0)
                     {
-                        title_create_account.Content = "Criar Conta de Usuário";
+                        title_create_account.Text = "Criar Conta de Usuário";
                     }
                     else if (Convert.ToInt32(savedId) == 0)
                     {
-                        title_create_account.Content = "Criar Conta de Administrador";
+                        title_create_account.Text = "Criar Conta de Administrador";
                     }
                     else
                     {
