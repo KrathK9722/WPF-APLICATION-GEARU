@@ -1,0 +1,53 @@
+﻿<Window x:Class="Projeto_GerenciamentoDeUsuarios.Login_Screen"
+        WindowStartupLocation="CenterScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
+        mc:Ignorable="d"
+        Title="Login_Screen" Height="450" Width="800" Background="Black">
+    <Grid x:Name="login_grid" Background="White" Margin="88,0,124,0" Height="336" VerticalAlignment="Center">
+        <Label x:Name="titulo_criar_conta" Content="Fazer login na Conta " Margin="0,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.28,-0.048" FontFamily="Yu Gothic UI Semibold" FontSize="18" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="184" Foreground="Black">
+            <Label.FocusVisualStyle>
+                <Style/>
+            </Label.FocusVisualStyle>
+        </Label>
+        <TextBox x:Name="txt_enter_email_or_user" Margin="0,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Width="152" Foreground="Black" SelectionBrush="Black" Background="#0F292929">
+            <TextBox.BorderBrush>
+                <LinearGradientBrush EndPoint="0,3" MappingMode="Absolute">
+                    <GradientStop Color="#18FFFFFF" Offset="0.33"/>
+                    <GradientStop Color="#12000000" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.BorderBrush>
+        </TextBox>
+        <CheckBox x:Name="checkbox_not_robot" Content="Não sou um robo." Margin="0,197,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" IsChecked="False" HorizontalAlignment="Center" Foreground="Black" Background="#0F292929"/>
+        <Label Content="Digite seu Email ou Usuário" Margin="0,60,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <Label Content="Digite a senha" Margin="0,120,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <PasswordBox x:Name="txt_enter_password" VerticalAlignment="Top" Margin="0,153,0,0" HorizontalAlignment="Center" Width="152" Foreground="Black" Background="#0F292929">
+            <PasswordBox.BorderBrush>
+                <LinearGradientBrush EndPoint="0,3" MappingMode="Absolute">
+                    <GradientStop Color="#18FFFFFF" Offset="0.33"/>
+                    <GradientStop Color="#12000000" Offset="1"/>
+                </LinearGradientBrush>
+            </PasswordBox.BorderBrush>
+        </PasswordBox>
+        <Button x:Name="btn_login_account" Content="Fazer Login" Margin="0,227,0,0" Click="btn_login_account_Click" HorizontalAlignment="Center" Width="148" VerticalAlignment="Top" RenderTransformOrigin="0.356,0.519" Foreground="Black" Background="#0F292929">
+            <Button.BorderBrush>
+                <LinearGradientBrush EndPoint="0,3" MappingMode="Absolute">
+                    <GradientStop Color="#18FFFFFF" Offset="0.33"/>
+                    <GradientStop Color="#12000000" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.BorderBrush>
+        </Button>
+        <Label x:Name="error_user_not_registered" Content="Usuário não cadastrado" Margin="0,79,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_email_not_registered" Content="Email não cadastrado" Margin="0,79,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_wrong_password" Content="Senha inválida" Margin="0,135,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_verify" Content="Verifique sua identidade" Margin="0,176,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_system" Content="Erro no sistema" Margin="0,206,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Button x:Name="btn_login_screen" Content="Login" HorizontalAlignment="Left" Margin="0,-33,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.317,0.754" Height="34" Width="77" BorderBrush="{x:Null}" Background="White" Foreground="Black"/>
+        <Button x:Name="btn_sign_in_screen" Content="Cadastro" HorizontalAlignment="Left" Margin="82,-33,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.567,0.561" Height="34" Width="77" Background="#FFDADADA" BorderBrush="{x:Null}" Click="btn_sign_in_screen_Click" Foreground="Black"/>
+        <Label x:Name="error_data_not_found" Content="Dados não encontrados no sistema" Margin="0,206,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_fill_everything" Content="Preencha todos os campos" Margin="0,206,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+    </Grid>
+</Window>

@@ -1,0 +1,432 @@
+﻿
+/* 
+  
+TIPOS DE RETORNO:
+
+3 = Retorno negativo
+2 = Retorno positivo
+1 or -1 = erro de tentativa
+0 = tentativa concluida
+100 = Email ja cadastrado no sistema
+101 = Usuário ja cadastrado no sistema
+102 = Usuário não cadastrado
+103 = Email não cadastrado
+104 = Senha incorreta
+
+*/
+
+using MySql.Data.MySqlClient;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using BCryptNet = BCrypt.Net.BCrypt;
+
+namespace Projeto_GerenciamentoDeUsuarios
+{
+    public static class GlobalFunctions
+    {
+        public static string connectionString = "Server=localhost;Database=login;Uid=root;Pwd=;";
+
+        // Conexão fica guardada aberta na memória do app
+        public static MySqlConnection Connection { get; set; }
+
+        public static void Open_database()
+        {
+            try
+            {
+                // CORREÇÃO: Abre a conexão sem o 'using' para que ela permaneça viva no app
+                if (Connection == null || Connection.State != System.Data.ConnectionState.Open)
+                {
+                    Connection = new MySqlConnection(connectionString);
+                    Connection.Open();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show("Erro ao conectar: " + ex.Message);
+            }
+        }
+
+        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, int option, string finish_message)
+        {
+            string email = email_space.Text.Trim();
+            string user = user_space.Text.Trim();
+            string password = password_space.Password.Trim();
+            string hashpassword = BCryptNet.HashPassword(password);
+            int admin = 1;
+
+            // Garantir abertura do banco de dados
+            Open_database();
+
+            string query = "";
+            string sqlVerifyuser = "SELECT user FROM users WHERE user = @user";
+            string sqlVerifyemail = "SELECT email FROM users WHERE email = @email";
+
+            using MySqlCommand verify_user = new MySqlCommand(sqlVerifyuser, Connection);
+            using MySqlCommand verify_email = new MySqlCommand(sqlVerifyemail, Connection);
+            verify_email.Parameters.AddWithValue("@email", email);
+            verify_user.Parameters.AddWithValue("@user", user);
+
+            object email_exist = verify_email.ExecuteScalar();
+            object user_exist = verify_user.ExecuteScalar();
+
+            if (email_exist == null && user_exist == null)
+            {
+                if (option == 1)
+                {
+                    query = "INSERT INTO users (email, user, password) VALUES (@email, @user, @hashpassword)";
+                }
+                else if (option == 2)
+                {
+                    query = "INSERT INTO users (email, user, password, IsAdmin) VALUES (@email, @user, @hashpassword, @admin)";
+                }
+                else if (option == 3)
+                {
+                }
+                else if (option == 4)
+                {
+                }
+
+                try
+                {
+                    using (MySqlCommand command = new MySqlCommand(query, Connection))
+                    {
+                        if (option == 1)
+                        {
+                            command.Parameters.AddWithValue("@email", email);
+                            command.Parameters.AddWithValue("@user", user);
+                            command.Parameters.AddWithValue("@hashpassword", hashpassword);
+                        }
+                        else if (option == 2)
+                        {
+                            command.Parameters.AddWithValue("@email", email);
+                            command.Parameters.AddWithValue("@user", user);
+                            command.Parameters.AddWithValue("@hashpassword", hashpassword);
+                            command.Parameters.AddWithValue("@admin", admin);
+                        }
+                        else if (option == 3)
+                        {
+                        }
+                        else if (option == 4)
+                        {
+                        }
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show(finish_message);
+                    Limpar_campos(email_space, user_space, password_space);
+                    return 0;
+                }
+                catch (System.Exception ex)
+                {
+                    return 1;
+                }
+            }
+            else if (email_exist != null)
+            {
+                return 100;
+            }
+            else if (user_exist != null)
+            {
+                return 101;
+            }
+            return 1;
+        }
+
+        public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option)
+        {   
+            string login = email_or_user_space.Text.Trim();
+            string password = password_space.Password.Trim();
+            Open_database();
+
+            if (option == 1)
+            {
+                string sqlVerifyLogin = "SELECT user, email FROM users WHERE user = @login OR email = @login";
+
+                using MySqlCommand verify_login = new MySqlCommand(sqlVerifyLogin, Connection);
+                verify_login.Parameters.AddWithValue("@login", login);
+
+                using MySqlDataReader reader = verify_login.ExecuteReader();
+                if (reader.Read())
+                {
+                    return 0;             
+                }
+                if (!new EmailAddressAttribute().IsValid(login))
+                {
+                    return 102;
+
+                }
+                else
+                {
+                    return 103;
+                }
+            }
+            else if(option == 2)
+            {
+                string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login";
+                using var verifyHash = new MySqlCommand(sqlBuscarHash, Connection);
+
+                verifyHash.Parameters.AddWithValue("@login", login);
+
+                try
+                {
+                    using var reader = verifyHash.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        
+                        string hashBanco = reader["password"].ToString();
+
+                        bool correctPassword = BCryptNet.Verify(password, hashBanco);
+
+                        if (correctPassword)
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            return 104;
+                        }
+                    }
+                    if (!new EmailAddressAttribute().IsValid(login))
+                    {
+                        return 102; // Usuário não cadastrado
+                    }
+                    else
+                    {
+                        return 103; // Email não cadastrado
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    return 1;
+                }
+            }
+            else if (option == 3)
+            {
+                string getID = "SELECT id FROM users WHERE user = @login OR email = @login";
+                using var returnID = new MySqlCommand(getID, Connection);
+                returnID.Parameters.AddWithValue("@login", login);
+
+                try
+                {
+                    using var reader = returnID.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        // Retorna ID
+                        return Convert.ToInt32(reader["id"]);
+                    }
+
+                    if (!new EmailAddressAttribute().IsValid(login))
+                    {
+                        return 102; // Usuário não cadastrado
+                    }
+                    else
+                    {
+                        return 103; // Email não cadastrado
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    return -1; // Erro de banco
+                }
+            }
+            return 1;
+        }
+        public static string ReturnEmail(int id)
+        {
+            Open_database();
+            string getEmail = "SELECT email FROM users WHERE id = @id";
+            using var returnEmail = new MySqlCommand(getEmail, Connection);
+            returnEmail.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnEmail.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Retorna email
+                    return reader["email"].ToString();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return null; // Erro de banco
+            }
+            return null;
+        }
+        public static string ReturnUser(int id)
+        {
+            Open_database();
+            string getUser = "SELECT user FROM users WHERE id = @id";
+            using var returnUser = new MySqlCommand(getUser, Connection);
+            returnUser.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnUser.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Retorna usuário
+                    return reader["user"].ToString();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return null; // Erro de banco
+            }
+            return null;
+        }
+        public static bool ReturnIsAdmin(int id)
+        {
+            Open_database();
+            string getAdmin = "SELECT IsAdmin FROM users WHERE id = @id";
+            using var returnAdmin = new MySqlCommand(getAdmin, Connection);
+            returnAdmin.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnAdmin.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int isAdmin = Convert.ToInt32(reader["IsAdmin"]);
+
+                    if (isAdmin == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+            return false;
+
+        }
+        public static void Limpar_campos(TextBox email_space, TextBox user_space, PasswordBox password_space)
+        {
+            email_space.Clear();
+            user_space.Clear();
+            password_space.Clear();
+        }
+        public static string Verify_robot()
+        {
+            Random random = new Random();
+            char[] alphabet = ['A', 'B', 'C', 'D','E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            char[] letter = new char[6];
+            string text="";
+
+            for (int i = 0; i < 6; i++)
+            {
+                int repeat = random.Next(0, 26);
+                letter[i] = alphabet[repeat];
+                text = $"{text}{letter[i]}";
+            }
+            return text;
+
+        }
+        public static bool AdminExist()
+        {
+            Open_database();
+
+            string query = "SELECT EXISTS(SELECT 1 FROM users WHERE IsAdmin = 1)";
+            using var command = new MySqlCommand(query, Connection);
+
+            try
+            {
+                object result = command.ExecuteScalar();
+                return Convert.ToBoolean(result);
+            }
+            catch (MySqlException)
+            {
+                throw;
+            }
+        }
+        public static bool Verify_database()
+        {
+            Open_database();
+            string query = "SELECT COUNT(*) id FROM houses";
+            using var viewData = new MySqlCommand(query, Connection);
+
+            if (Convert.ToInt32(viewData.ExecuteScalar()) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static void SaveHouse(string location, int area, double price, bool furniture, int bedrooms, int bathrooms, int floors)
+        {
+            Open_database();
+            string query = "INSERT INTO houses (location, area, price, floors, bedrooms, bathrooms, furnished) VALUES (@location, @area, @price, @floors, @bathrooms, @bedrooms, @furniture)";
+            try
+            {
+                using (MySqlCommand command = new MySqlCommand(query, Connection))
+                {
+                    command.Parameters.AddWithValue("@location", location);
+                    command.Parameters.AddWithValue("@area", area);
+                    command.Parameters.AddWithValue("@price", price);
+                    command.Parameters.AddWithValue("@floors", floors);
+                    command.Parameters.AddWithValue("@bedrooms", bedrooms);
+                    command.Parameters.AddWithValue("@bathrooms", bathrooms);
+                    command.Parameters.AddWithValue("@furniture", furniture);
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Casa Registrada");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Erro no banco");
+            }
+        }
+        public static void RemoveHouse()
+        {
+            Open_database();
+            string query = "TRUNCATE TABLE houses";
+            try
+            {
+                using (MySqlCommand command = new MySqlCommand(query, Connection))
+                {
+
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Casas deletadas");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Erro no banco");
+            }
+        }
+        public static int verNumeroRegistros()
+        {
+            Open_database();
+            string query = "SELECT COUNT(*) id FROM houses";
+            using var countRegister = new MySqlCommand(query, Connection);
+
+            if (Convert.ToInt32(countRegister.ExecuteScalar()) > 0)
+            {
+                return Convert.ToInt32(countRegister.ExecuteScalar());
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+}

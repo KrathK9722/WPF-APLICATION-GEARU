@@ -1,0 +1,38 @@
+﻿<Window x:Class="Projeto_GerenciamentoDeUsuarios.MainWindow"
+        WindowStartupLocation="CenterScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Background="Black">
+    <Grid x:Name="register_grid" Background="White" Margin="88,0,124,0" Height="355" VerticalAlignment="Center">
+        <Label x:Name="title_create_account" Content="Erro" VerticalAlignment="Top" RenderTransformOrigin="-0.28,-0.048" FontFamily="Yu Gothic UI Semibold" FontSize="18" HorizontalAlignment="Center" Margin="0,-4,0,0" Foreground="Black">
+            <Label.FocusVisualStyle>
+                <Style/>
+            </Label.FocusVisualStyle>
+        </Label>
+        <TextBox x:Name="txt_create_email" Margin="0,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Width="148" Foreground="Black" Background="#0F292929"/>
+        <CheckBox x:Name="checkbox_not_robot" Content="Não sou um robo." HorizontalAlignment="Center" Margin="0,249,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" IsChecked="False" Foreground="Black"/>
+        <Label Content="Email" Margin="275,70,275,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <Label Content="Criar Senha" Margin="259,122,259,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <Label Content="Digite a senha novamente" Margin="220,179,220,0" VerticalAlignment="Top" RenderTransformOrigin="0.511,1.015" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <PasswordBox x:Name="txt_register_password" HorizontalAlignment="Center" Margin="0,205,0,0" VerticalAlignment="Top" Width="152" Foreground="Black" Background="#0F292929"/>
+        <PasswordBox x:Name="txt_create_password" HorizontalAlignment="Center" VerticalAlignment="Top" Width="152" Margin="0,153,0,0" Foreground="Black" Background="#0F292929"/>
+        <Button x:Name="btn_create_account" Content="Criar Conta" Margin="0,289,0,10" Click="btn_create_account_Click" HorizontalAlignment="Center" Width="116" Foreground="Black" Background="#0F292929"/>
+        <TextBox x:Name="txt_create_user" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" Foreground="Black" Background="#0F292929"/>
+        <Label Content="Usuário" Margin="269,20,269,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <Label x:Name="error_create_user" Content="Usuário deve conter 3 ou mais caracteres" Margin="180,35,180,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_create_email" Content="Email inválido" Margin="180,83,180,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_create_password" Content="Senha deve conter 8 caracteres ou mais" HorizontalAlignment="Center" Margin="0,135,0,0" VerticalAlignment="Top" Height="21" Width="228" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_repeat_password" Content="Senhas não coincidem" Margin="180,192,180,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_verify" Content="Verifique sua identidade" Margin="180,234,180,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_fill_everything" Content="Preencha todos os campos para continuar" Margin="179,267,179,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Button x:Name="btn_login_screen" Content="Login" HorizontalAlignment="Left" Margin="0,-33,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.317,0.754" Height="34" Width="77" Click="btn_login_screen_Click" BorderBrush="{x:Null}" Background="#FFDADADA" Foreground="Black"/>
+        <Button Content="Cadastro" HorizontalAlignment="Left" Margin="82,-33,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.567,0.561" Height="34" Width="77" Background="White" BorderBrush="{x:Null}" Foreground="Black"/>
+        <Label x:Name="error_duplicated_user" Content="Este usuário já esta sendo utilizado" Margin="0,35,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_duplicated_email" Content="Este Email já esta em uso" Margin="0,83,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="error_system" Content="Erro no sistema, tente novamente." Margin="0,267,0,0" VerticalAlignment="Top" Height="21" FontSize="8" Background="{x:Null}" Foreground="#FFB10000" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+    </Grid>
+</Window>
