@@ -355,64 +355,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 throw;
             }
         }
-        public static bool Verify_database()
-        {
-            Open_database();
-            string query = "SELECT COUNT(*) id FROM houses";
-            using var viewData = new MySqlCommand(query, Connection);
-
-            if (Convert.ToInt32(viewData.ExecuteScalar()) > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static void SaveHouse(string location, int area, double price, bool furniture, int bedrooms, int bathrooms, int floors)
-        {
-            Open_database();
-            string query = "INSERT INTO users (location, area, price, floors, bedrooms, bathrooms, furnished) VALUES (@location, @area, @price, @floors, @bathrooms, @bedrooms, @furniture)";
-            try
-            {
-                using (MySqlCommand command = new MySqlCommand(query, Connection))
-                {
-                    command.Parameters.AddWithValue("@location", location);
-                    command.Parameters.AddWithValue("@area", area);
-                    command.Parameters.AddWithValue("@price", price);
-                    command.Parameters.AddWithValue("@floors", floors);
-                    command.Parameters.AddWithValue("@bedrooms", bedrooms);
-                    command.Parameters.AddWithValue("@bathrooms", bathrooms);
-                    command.Parameters.AddWithValue("@furniture", furniture);
-                    command.ExecuteNonQuery();
-                    MessageBox.Show("Casa Registrada");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show("Erro no banco");
-            }
-        }
-        public static void RemoveHouse()
-        {
-            Open_database();
-            string query = "TRUNCATE TABLE users";
-            try
-            {
-                using (MySqlCommand command = new MySqlCommand(query, Connection))
-                {
-
-                    command.ExecuteNonQuery();
-                    MessageBox.Show("Casas deletadas");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show("Erro no banco");
-            }
-        }
         public static int verNumeroRegistros()
         {
             Open_database();
@@ -427,6 +369,14 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 return 0;
             }
+        }
+        public static int ReturnImage(int id)
+        {
+            return 0;
+        }
+        public static string getImage(int imageNumber)
+        {
+            return "imagePath";
         }
     }
 }

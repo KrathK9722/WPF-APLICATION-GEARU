@@ -399,8 +399,7 @@
 
                     <Button
                         x:Name="menu_button_switch"
-                        Style="{DynamicResource MenuButtonStyle}"
-                        Click="switch_click">
+                        Style="{DynamicResource MenuButtonStyle}">
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock
@@ -502,120 +501,11 @@
 
                             <StackPanel>
 
-
-                                <TextBlock
-                                    Text="Localização"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,7"/>
-                                <TextBox
-                                    x:Name="register_location"
-                                    TextChanged="TextBox_TextChanged"
-                                    />
-                                <TextBlock
-                                    Text="Andares"
-                                    FontWeight="SemiBold"
-                                    />
-                                <ComboBox
-                                    x:Name="register_floor"
-                                    SelectedIndex="-1"
-                                    SelectionChanged="ComboBox_SelectionChanged"
-                                    >
-
-                                    <ComboBoxItem Content="1 andar"/>
-                                    <ComboBoxItem Content="2 andares"/>
-                                    <ComboBoxItem Content="3 andares"/>
-                                    <ComboBoxItem Content="4 andares"/>
-                                    <ComboBoxItem Content="5 andares ou mais"/>
-
-                                </ComboBox>
-
-
-                                <TextBlock
-                                    Text="Quantidade de quartos"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,7"/>
-                                <ComboBox
-                                    x:Name="register_bedroom"
-                                    SelectedIndex="-1"
-                                    SelectionChanged="ComboBox_SelectionChanged"
-                                    >
-
-                                    <ComboBoxItem Content="1"/>
-                                    <ComboBoxItem Content="2"/>
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="4"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="6"/>
-                                    <ComboBoxItem Content="7 ou mais"/>
-
-                                </ComboBox>
-
-
-                                <TextBlock
-                                    Text="Quantidade de banheiros"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,7"/>
-                                <ComboBox
-                                    x:Name="register_bathroom"
-                                    SelectedIndex="-1"
-                                    SelectionChanged="ComboBox_SelectionChanged"
-                                    >
-
-                                    <ComboBoxItem Content="1"/>
-                                    <ComboBoxItem Content="2"/>
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="4"/>
-                                    <ComboBoxItem Content="5 ou mais"/>
-
-                                </ComboBox>
-                                <TextBlock
-                                    x:Name="price_register"
-                                    Text="Preço"
-                                    FontWeight="SemiBold"/>
-
-
-                                <!-- PREÇO -->
-                                <Slider
-                                    x:Name="price_slide"
-                                    Minimum="100000"
-                                    Maximum="10000000"
-                                    Value="3"
-                                    TickFrequency="10000"
-                                    TickPlacement="BottomRight"
-                                    IsSnapToTickEnabled="True"
-                                    ValueChanged="Slider_PriceChanged"
-                                    />
-                                <TextBlock
-                                    x:Name="area_register"
-                                    Text="Área"
-                                    FontWeight="SemiBold"/>
-
-
-                                <!-- ÁREA -->
-                                <Slider
-                                    x:Name="area_slide"
-                                    Minimum="10"
-                                    Maximum="1000"
-                                    Value="10"
-                                    TickFrequency="5"
-                                    TickPlacement="BottomRight"
-                                    IsSnapToTickEnabled="True"
-                                    ValueChanged="Slider_AreaChanged"
-                                    
-                                    />
-                                <CheckBox
-                                    x:Name="has_furniture"
-                                    Content="Com mobília"
-                                    Checked="CheckBox_Checked" Foreground="{DynamicResource TextPrimary}"
-                                    />
-
-
                                 <Button
                                     x:Name="confirm_click"
                                     Content="Criar registro"
                                     Style="{DynamicResource PrimaryButtonStyle}"
-                                    Height="44"
-                                    Click="confirm_Click"/>
+                                    Height="44"/>
 
                             </StackPanel>
 
@@ -730,7 +620,7 @@
 
                 </StackPanel>
                 <Button x:Name="return_page" Content="&lt;" Margin="34,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="return_page_Click" Background="Transparent" BorderBrush="Transparent"/>
-                <Button x:Name="pass_page" Content="&gt;" Margin="672,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="pass_page_Click" Background="Transparent" BorderBrush="Transparent"/>
+                <Button x:Name="pass_page" Content="&gt;" Margin="678,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="pass_page_Click" Background="Transparent" BorderBrush="Transparent"/>
 
             </Grid>
 
@@ -774,8 +664,7 @@
                                 Content="Remover todas as casas"
                                 Style="{DynamicResource PrimaryButtonStyle}"
                                 Height="45"
-                                Margin="0,0,0,15"
-                                Click="remove_all_button_Click"/>
+                                Margin="0,0,0,15"/>
 
 
                             <Button
