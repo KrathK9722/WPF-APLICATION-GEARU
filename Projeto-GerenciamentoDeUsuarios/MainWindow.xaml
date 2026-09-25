@@ -259,12 +259,11 @@
                         HorizontalAlignment="Center">
 
                         <TextBlock
-                            Text="A"
                             Foreground="White"
                             FontSize="28"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center"><Run Language="pt-br" Text="G"/></TextBlock>
 
                     </Border>
 
@@ -285,11 +284,10 @@
 
                     <TextBlock
                         Grid.Row="2"
-                        Text="Crie sua conta na Imobiliária Arfe."
                         FontSize="13"
                         Foreground="{StaticResource TextSecondary}"
                         HorizontalAlignment="Center"
-                        Margin="0,0,0,28"/>
+                        Margin="0,0,0,28" Height="17" VerticalAlignment="Bottom"><Run Text="Crie sua conta n"/><Run Language="pt-br" Text="o"/><Run Text=" GEARU."/></TextBlock>
 
 
                     <!-- ================================================= -->
@@ -545,7 +543,7 @@
 
                         <Button
                             x:Name="btn_login_screen"
-                            Content="Voltar para o Login"
+                            Content="Ir para a janela de Login"
                             Style="{StaticResource SecondaryButtonStyle}"
                             Height="42"
                             Margin="0,10,0,0"

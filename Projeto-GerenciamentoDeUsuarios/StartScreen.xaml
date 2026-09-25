@@ -24,9 +24,13 @@
         <SolidColorBrush x:Key="SidebarHover" Color="#E8E8E8"/>
         <SolidColorBrush x:Key="SidebarSelected" Color="#DCEBFF"/>
         <SolidColorBrush x:Key="PrimaryBlue" Color="#0067C0"/>
+        <SolidColorBrush x:Key="PrimaryButtonText" Color="White"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#1A1A1A"/>
         <SolidColorBrush x:Key="TextSecondary" Color="#616161"/>
         <SolidColorBrush x:Key="BorderColor" Color="#E1E1E1"/>
+        <SolidColorBrush x:Key="ButtonBackground" Color="White"/>
+        <SolidColorBrush x:Key="ButtonBorder" Color="DarkGray"/>
+        <SolidColorBrush x:Key="ButtonText" Color="Black"/>
 
 
         <!-- SOMBRA -->
@@ -45,7 +49,7 @@
         <Style x:Key="MenuButtonStyle" TargetType="Button">
 
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="13"/>
@@ -80,7 +84,7 @@
                                 <Setter
                                     TargetName="ButtonBorder"
                                     Property="Background"
-                                    Value="{StaticResource SidebarHover}"/>
+                                    Value="{DynamicResource SidebarHover}"/>
 
                             </Trigger>
 
@@ -89,7 +93,7 @@
                                 <Setter
                                     TargetName="ButtonBorder"
                                     Property="Background"
-                                    Value="#D6D6D6"/>
+                                    Value="{DynamicResource ButtonBorder}"/>
 
                             </Trigger>
 
@@ -108,8 +112,8 @@
 
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
 
-            <Setter Property="Background" Value="{StaticResource PrimaryBlue}"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource PrimaryBlue}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonText}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="14"/>
@@ -187,7 +191,7 @@
 
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource SidebarSelected}"/>
             <Setter Property="BorderBrush" Value="#D1D1D1"/>
             <Setter Property="BorderThickness" Value="1"/>
 
@@ -199,7 +203,7 @@
         <Style TargetType="Label">
 
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="13"/>
 
         </Style>
@@ -209,7 +213,7 @@
 
     <!-- LAYOUT PRINCIPAL -->
 
-    <Grid Background="{StaticResource WindowBackground}">
+    <Grid Background="{DynamicResource WindowBackground}">
 
         <Grid.ColumnDefinitions>
 
@@ -230,8 +234,8 @@
 
         <Border
             Grid.Column="0"
-            Background="#F2F2F2"
-            BorderBrush="{StaticResource BorderColor}"
+            Background="{DynamicResource SidebarBackground}"
+            BorderBrush="{DynamicResource BorderColor}"
             BorderThickness="0,0,1,0">
 
             <Grid>
@@ -258,12 +262,12 @@
                     <Border
                         Width="40"
                         Height="40"
-                        Background="#0067C0"
+                        Background= "{DynamicResource PrimaryBlue}"
                         CornerRadius="10">
 
                         <TextBlock
-                            Text="A"
-                            Foreground="White"
+                            Text="G"
+                            Foreground="{DynamicResource PrimaryButtonText}"
                             FontSize="20"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
@@ -276,15 +280,15 @@
                         VerticalAlignment="Center">
 
                         <TextBlock
-                            Text="ARFE"
+                            Text="GEARU"
                             FontSize="16"
                             FontWeight="SemiBold"
-                            Foreground="#1A1A1A"/>
+                            Foreground="{DynamicResource TextPrimary}"/>
 
                         <TextBlock
-                            Text="Imobiliária"
+                            Text="Gestão de usuários"
                             FontSize="11"
-                            Foreground="#777777"/>
+                            Foreground="{DynamicResource TextSecondary}"/>
 
                     </StackPanel>
 
@@ -303,7 +307,7 @@
 
                     <Button
                         x:Name="menu_button_start"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="start_click">
 
                         <StackPanel Orientation="Horizontal">
@@ -327,7 +331,7 @@
 
                     <Button
                         x:Name="menu_button_register"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="register_click">
 
                         <StackPanel Orientation="Horizontal">
@@ -338,9 +342,7 @@
                                 Width="35"
                                 VerticalAlignment="Center"/>
 
-                            <TextBlock
-                                Text="Registrar casas"
-                                VerticalAlignment="Center"/>
+                            <TextBlock Text="Registrar Usuários"/>
 
                         </StackPanel>
 
@@ -351,7 +353,7 @@
 
                     <Button
                         x:Name="menu_button_edit"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="edit_click">
 
                         <StackPanel Orientation="Horizontal">
@@ -363,8 +365,7 @@
                                 VerticalAlignment="Center"/>
 
                             <TextBlock
-                                Text="Editar casas"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center"><Run Language="pt-br" Text="Editar Usuários"/></TextBlock>
 
                         </StackPanel>
 
@@ -375,7 +376,7 @@
 
                     <Button
                         x:Name="menu_button_remove"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="remove_click">
 
                         <StackPanel Orientation="Horizontal">
@@ -387,8 +388,7 @@
                                 VerticalAlignment="Center"/>
 
                             <TextBlock
-                                Text="Remover casas"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center"><Run Text="Remover"/><Run Language="pt-br" Text=" Usuários"/></TextBlock>
 
                         </StackPanel>
 
@@ -399,7 +399,7 @@
 
                     <Button
                         x:Name="menu_button_switch"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="switch_click">
                         <StackPanel Orientation="Horizontal">
 
@@ -407,7 +407,7 @@
                                 FontSize="19"
                                 Width="35"
                                 VerticalAlignment="Center"><Run Language="pt-br" Text="🌓"/></TextBlock>
-                            <ui:ToggleSwitch Content="Dark Mode" Checked="ToggleSwitch_Checked" Foreground="Black" Height="58" Width="140" >
+                            <ui:ToggleSwitch Content="Dark Mode" Checked="BotaoDarkMode_Checked" Unchecked="BotaoDarkMode_Unchecked" Foreground="Black" Height="58" Width="140" >
                                 <ui:ToggleSwitch.Background>
                                     <SolidColorBrush Color="#FF5D5D5D"/>
                                 </ui:ToggleSwitch.Background>
@@ -423,12 +423,12 @@
 
                 <Border
                     Grid.Row="2"
-                    BorderBrush="#DDDDDD"
+                    BorderBrush="{DynamicResource BorderColor}"
                     BorderThickness="0,1,0,0">
 
                     <Button
                         x:Name="menu_button_exit"
-                        Style="{StaticResource MenuButtonStyle}"
+                        Style="{DynamicResource MenuButtonStyle}"
                         Click="exit_click"
                         Margin="8">
 
@@ -437,8 +437,8 @@
                             <TextBlock
                                 Text="❌"
                                 FontSize="19"
-                                Width="35"
-                                VerticalAlignment="Center"/>
+                                Width="29"
+                                VerticalAlignment="Center" Height="24"/>
 
                             <TextBlock
                                 VerticalAlignment="Center" FontSize="18"><Run Text="Sair"/><Run Language="pt-br" Text=" do Sistema"/></TextBlock>
@@ -460,7 +460,7 @@
 
         <Grid x:Name="main_grid"
             Grid.Column="1"
-            Background="#F7F7F7">
+            Background="{DynamicResource WindowBackground}">
 
 
             <!-- ============================================= -->
@@ -482,23 +482,23 @@
                             Text="Registrar casa"
                             FontSize="28"
                             FontWeight="SemiBold"
-                            Foreground="#1A1A1A"
+                            Foreground="{DynamicResource TextPrimary}"
                             Margin="0,10,0,5"/>
 
                         <TextBlock
                             Text="Cadastre uma nova propriedade no sistema."
                             FontSize="14"
-                            Foreground="#707070"
+                            Foreground="{DynamicResource TextSecondary}"
                             Margin="0,0,0,30"/>
 
 
                         <!-- CARD -->
 
                         <Border
-                            Background="White"
+                            Background="{DynamicResource ButtonBackground}"
                             CornerRadius="12"
                             Padding="30"
-                            Effect="{StaticResource SoftShadow}">
+                            Effect="{DynamicResource SoftShadow}">
 
                             <StackPanel>
 
@@ -606,14 +606,14 @@
                                 <CheckBox
                                     x:Name="has_furniture"
                                     Content="Com mobília"
-                                    Checked="CheckBox_Checked" Foreground="Black"
+                                    Checked="CheckBox_Checked" Foreground="{DynamicResource TextPrimary}"
                                     />
 
 
                                 <Button
                                     x:Name="confirm_click"
                                     Content="Criar registro"
-                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Style="{DynamicResource PrimaryButtonStyle}"
                                     Height="44"
                                     Click="confirm_Click"/>
 
@@ -647,22 +647,22 @@
                         <TextBlock
                             FontSize="28"
                             FontWeight="SemiBold"
-                            Foreground="#1A1A1A"
+                            Foreground="{DynamicResource TextPrimary}"
                             Margin="0,10,0,5"><Run Language="pt-br" Text="Editar"/><Run Text=" casa"/><Run Language="pt-br" Text="s"/></TextBlock>
 
                         <TextBlock
                             FontSize="14"
-                            Foreground="#707070"
+                            Foreground="{DynamicResource TextSecondary}"
                             Margin="0,0,0,30"><Run Language="pt-br" Text="Edite os anúncios"/><Run Text=" no sistema."/></TextBlock>
 
 
                         <!-- CARD -->
 
                         <Border
-                            Background="White"
+                            Background="{DynamicResource ButtonBackground}"
                             CornerRadius="12"
                             Padding="30"
-                            Effect="{StaticResource SoftShadow}">
+                            Effect="{DynamicResource SoftShadow}">
 
                         </Border>
 
@@ -679,7 +679,7 @@
 
             <Grid
                 x:Name="landing_page"
-                Visibility="Collapsed">
+                Visibility="Visible">
 
                 <StackPanel
                     HorizontalAlignment="Center"
@@ -689,26 +689,26 @@
 
                     <TextBlock
                         x:Name="title_landing_page"
-                        Text="Bem-vindo à Imobiliária Arfe"
                         FontSize="30"
                         FontWeight="SemiBold"
-                        HorizontalAlignment="Center"/>
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"><Run Text="Bem-vindo "/><Run Language="pt-br" Text="ao Sistema "/></TextBlock>
 
                     <TextBlock
                         Text="Gerencie suas propriedades de forma simples."
-                        Foreground="#707070"
+                        Foreground="{DynamicResource TextSecondary}"
                         FontSize="14"
                         HorizontalAlignment="Center"
                         Margin="0,7,0,30"/>
                     <TextBlock x:Name="number_page_card"
-                        Foreground="#707070"
+                        Foreground="{DynamicResource TextSecondary}"
                         FontSize="14" HorizontalAlignment="Center" Height="24" FontWeight="Bold"
                         ><Run Language="pt-br" Text="Página: 1/5"/></TextBlock>
                     <Border
-                        Background="White"
+                        Background="{DynamicResource ButtonBackground}"
                         CornerRadius="19,19,19,19"
                         Padding="15"
-                        Effect="{StaticResource SoftShadow}" Width="548">
+                        Effect="{DynamicResource SoftShadow}" Width="548">
                         <ScrollViewer 
                             HorizontalScrollBarVisibility="Auto">
                             <WrapPanel x:Name="ContainerDeCards" Margin="10" />
@@ -721,7 +721,7 @@
                     <Button
                         x:Name="menu_button_register_first_house"
                         Content="➕ Registre sua primeira casa"
-                        Style="{StaticResource PrimaryButtonStyle}"
+                        Style="{DynamicResource PrimaryButtonStyle}"
                         Width="230"
                         Height="45"
                         HorizontalAlignment="Center"
@@ -729,8 +729,8 @@
                         Click="register_click"/>
 
                 </StackPanel>
-                <Button x:Name="return_page" Content="&lt;" Margin="38,105,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="72" Click="return_page_Click"/>
-                <Button x:Name="pass_page" Content="&gt;" Margin="678,105,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="72" Click="pass_page_Click"/>
+                <Button x:Name="return_page" Content="&lt;" Margin="34,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="return_page_Click" Background="Transparent" BorderBrush="Transparent"/>
+                <Button x:Name="pass_page" Content="&gt;" Margin="672,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="pass_page_Click" Background="Transparent" BorderBrush="Transparent"/>
 
             </Grid>
 
@@ -741,7 +741,7 @@
 
             <Grid
                 x:Name="remove_screen"
-                Visibility="Visible">
+                Visibility="Collapsed">
 
                 <StackPanel
                     Width="600"
@@ -751,17 +751,18 @@
 
                     <TextBlock
                         x:Name="title_remove"
-                        Text="Remoção de casas"
                         FontSize="30"
-                        FontWeight="SemiBold"/>
+                        FontWeight="SemiBold"><Run Text="Remoção de Usuários"
+                        Foreground="{DynamicResource TextPrimary}" />
+                    </TextBlock>
 
                     <TextBlock
-                        Foreground="#707070"
+                        Foreground="{DynamicResource TextSecondary}"
                         Margin="0,5,0,30"><Run Text="Escolha uma ação"/><Run Language="pt-br" Text=" a seguir:"/></TextBlock>
 
 
                     <Border x:Name="border"
-                        Background="White"
+                        Background="{DynamicResource WindowBackground}"
                         CornerRadius="12"
                         Padding="30"
                         Effect="{Binding Cursor, ElementName=remove_screen}">
@@ -771,7 +772,7 @@
                             <Button
                                 x:Name="remove_all_button"
                                 Content="Remover todas as casas"
-                                Style="{StaticResource PrimaryButtonStyle}"
+                                Style="{DynamicResource PrimaryButtonStyle}"
                                 Height="45"
                                 Margin="0,0,0,15"
                                 Click="remove_all_button_Click"/>
@@ -781,7 +782,7 @@
                                 x:Name="remove_specific_button"
                                 Content="Selecionar uma casa"
                                 Height="45"
-                                Background="#FF0067C0"
+                                Background="{DynamicResource PrimaryBlue}"
                                 BorderThickness="0"
                                 Click="remove_specific_button_Click" Width="540"/>
 
@@ -815,7 +816,7 @@
 
                     <TextBlock
                         Text="Selecione o ID da casa que deseja remover."
-                        Foreground="#707070"
+                        Foreground="{DynamicResource TextSecondary}"
                         Margin="0,5,0,30"/>
 
                 </StackPanel>

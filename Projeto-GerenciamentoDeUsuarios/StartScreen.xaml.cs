@@ -1,11 +1,13 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Expr;
+using Org.BouncyCastle.Tls;
 using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -17,7 +19,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public string user;
         public static bool IsAdmin;
 
-        public static string connectionString = "Server=127.0.0.1:3306;Database=arfe;Uid=root;Pwd=;";
+        public static string connectionString = GlobalFunctions.connectionString;
 
         public static MySqlConnection Connection { get; set; }
 
@@ -51,6 +53,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void SetScreen()
         {
+            title_landing_page.Text = $"Bem vindo ao Sistema GEARU, {user}";
             ShowScreen(landing_page);
             viewCard();
         }
@@ -106,12 +109,17 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 if (i < registerNumber)
                 {
+                    string userType = "Comum";
                     CardVision novoCard = new CardVision();
 
-                    novoCard.CardTitle = $"Preço: valor#{i}";
-                    novoCard.CardDescription = $"Localização: Local#{i}";
-                    novoCard.CardImageSource = "C:\\Users\\arthur_kochan\\Documents\\Desafio_CRUD\\Desafio_CRUD\\help-removebg-preview.png";
-                    novoCard.CardArea = $"Area: #{i}m²";
+                    novoCard.CardTitle = $"Usuário: {GlobalFunctions.ReturnUser(i+1)}";
+                    novoCard.CardDescription = $"Email: {GlobalFunctions.ReturnEmail(i+1)}";
+                    novoCard.CardImageSource = "C:\\Users\\arthur_kochan\\Documents\\Projeto-GerenciamentoDeUsuarios\\Projeto-GerenciamentoDeUsuarios\\ProfileImage\\11.png";
+                    if (GlobalFunctions.ReturnIsAdmin(i+1) == true)
+                    {
+                        userType = "Admin";
+                    }
+                    novoCard.CardArea = $"Tipo de Usuário:{userType}";
                     novoCard.Width = 140;
                     novoCard.Margin = new Thickness(13.5);
 
@@ -496,10 +504,37 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         }
 
-        private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
+        private bool _isDarkMode = false;
+        private void BotaoDarkMode_Checked(object sender, RoutedEventArgs e)
         {
-            
+            this.Resources["WindowBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#202020"));
+            this.Resources["SidebarBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
+            this.Resources["SidebarHover"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D2D2D"));
+            this.Resources["SidebarSelected"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26384F"));
+            this.Resources["PrimaryBlue"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("DarkSlateBlue"));
+            this.Resources["BorderColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2B2B2B"));
+            this.Resources["TextPrimary"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            this.Resources["TextSecondary"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#AAAAAA"));
+            this.Resources["ButtonBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF404040"));
+            this.Resources["ButtonText"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
+            this.Resources["ButtonBorder"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Gray"));
         }
+
+        private void BotaoDarkMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.Resources["WindowBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7F7F7"));
+            this.Resources["SidebarBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2F2F2"));
+            this.Resources["SidebarHover"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E8E8"));
+            this.Resources["SidebarSelected"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DCEBFF"));
+            this.Resources["PrimaryBlue"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0067C0"));
+            this.Resources["BorderColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E1E1E1"));
+            this.Resources["TextPrimary"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
+            this.Resources["TextSecondary"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#616161"));
+            this.Resources["ButtonBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
+            this.Resources["ButtonText"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Black"));
+            this.Resources["ButtonBorder"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("DarkGray"));
+        }
+
 
         private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

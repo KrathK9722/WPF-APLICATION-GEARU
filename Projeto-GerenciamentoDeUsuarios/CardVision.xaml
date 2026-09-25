@@ -24,7 +24,7 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="Aqua"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Effect">
@@ -42,7 +42,7 @@
                     </Setter>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#F0F0F0"/>
+                    <Setter Property="Background" Value="LightGray"/>
                     <Setter Property="Effect">
                         <Setter.Value>
                             <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="3" Direction="270" ShadowDepth="1"/>

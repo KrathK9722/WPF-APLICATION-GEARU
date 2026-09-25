@@ -45,7 +45,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 if (int.TryParse(savedIdText, out int savedId)) { }
                 if (adminExist && Convert.ToInt32(savedId) == 0)
                 {
-                    title_create_account.Text = "Criar Conta de Usuário";Al
+                    title_create_account.Text = "Criar Conta de Usuário";
                 }
                 else if (Convert.ToInt32(savedId) == 0)
                 {

@@ -28,7 +28,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 {
     public static class GlobalFunctions
     {
-        public static string connectionString = "Server=localhost;Database=login;Uid=root;Pwd=;";
+        public static string connectionString = "Server=localhost;Database=GEARU;Uid=root;Pwd=;";
 
         // Conexão fica guardada aberta na memória do app
         public static MySqlConnection Connection { get; set; }
@@ -374,7 +374,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static void SaveHouse(string location, int area, double price, bool furniture, int bedrooms, int bathrooms, int floors)
         {
             Open_database();
-            string query = "INSERT INTO houses (location, area, price, floors, bedrooms, bathrooms, furnished) VALUES (@location, @area, @price, @floors, @bathrooms, @bedrooms, @furniture)";
+            string query = "INSERT INTO users (location, area, price, floors, bedrooms, bathrooms, furnished) VALUES (@location, @area, @price, @floors, @bathrooms, @bedrooms, @furniture)";
             try
             {
                 using (MySqlCommand command = new MySqlCommand(query, Connection))
@@ -398,7 +398,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static void RemoveHouse()
         {
             Open_database();
-            string query = "TRUNCATE TABLE houses";
+            string query = "TRUNCATE TABLE users";
             try
             {
                 using (MySqlCommand command = new MySqlCommand(query, Connection))
@@ -416,10 +416,10 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static int verNumeroRegistros()
         {
             Open_database();
-            string query = "SELECT COUNT(*) id FROM houses";
+            string query = "SELECT COUNT(*) id FROM users";
             using var countRegister = new MySqlCommand(query, Connection);
 
-            if (Convert.ToInt32(countRegister.ExecuteScalar()) > 0)
+            if (Convert.ToInt32(countRegister.ExecuteScalar()) > 1)
             {
                 return Convert.ToInt32(countRegister.ExecuteScalar());
             }
