@@ -39,7 +39,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
         public void setTitle()
         {
-            string archivePath = @"C:\Users\arthur_kochan\Desktop\Tokens\session.txt";
+            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
             if (File.Exists(archivePath)) {
                 string savedIdText = File.ReadAllText(archivePath);
                 if (int.TryParse(savedIdText, out int savedId)) { }
@@ -62,9 +62,15 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                string content = 0.ToString();
-                File.WriteAllText(archivePath, content);
-                File.SetAttributes(archivePath, FileAttributes.Hidden);
+                if (!Directory.Exists(@"C:\Documentos\GEARU\Tokens"))
+                {
+                    Directory.CreateDirectory(@"C:\Documentos\GEARU\Tokens");
+                }
+                if (!File.Exists(archivePath))
+                {
+                    File.WriteAllText(archivePath, "0");
+                    File.SetAttributes(archivePath, FileAttributes.Hidden);
+                }
                 if (File.Exists(archivePath))
                 {
                     string savedIdText = File.ReadAllText(archivePath);
@@ -145,7 +151,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_fill_everything.Visibility = Visibility.Hidden;
+                error_fill_everything.Visibility = Visibility.Collapsed;
             }
 
             // ERROR MESSAGE CREATE USER
@@ -156,7 +162,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_create_user.Visibility = Visibility.Hidden;
+                error_create_user.Visibility = Visibility.Collapsed;
             }
 
             // ERROR MESSAGE CREATE EMAIL
@@ -167,7 +173,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_create_email.Visibility = Visibility.Hidden;
+                error_create_email.Visibility = Visibility.Collapsed;
             }
 
             // ERROR MESSAGE CREATE PASSWORD
@@ -178,7 +184,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_create_password.Visibility = Visibility.Hidden;
+                error_create_password.Visibility = Visibility.Collapsed;
             }
 
             // ERROR MESSAGE PASSWORD REPEAT
@@ -189,7 +195,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_repeat_password.Visibility = Visibility.Hidden;
+                error_repeat_password.Visibility = Visibility.Collapsed;
             }
 
             // ERROR ROBOT VERIFY
@@ -200,7 +206,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_verify.Visibility = Visibility.Hidden;
+                error_verify.Visibility = Visibility.Collapsed;
             }
 
             
@@ -226,7 +232,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_system.Visibility = Visibility.Hidden;
+                        error_system.Visibility = Visibility.Collapsed;
                     }
                     
                     // Erro de email duplicado
@@ -239,7 +245,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_duplicated_email.Visibility = Visibility.Hidden;
+                        error_duplicated_email.Visibility = Visibility.Collapsed;
                     }
 
                     // Erro de usuário duplicado
@@ -252,7 +258,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_duplicated_user.Visibility = Visibility.Hidden;
+                        error_duplicated_user.Visibility = Visibility.Collapsed;
                     }
 
                 }

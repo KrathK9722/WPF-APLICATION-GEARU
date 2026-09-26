@@ -296,7 +296,22 @@
                         TextWrapping="Wrap"
                         Foreground="#1A1A1A"
                         SelectionBrush="{StaticResource PrimaryBlue}"/>
-
+                    <Label
+                        x:Name="error_user_not_registered"
+                        Content="Usuário não cadastrado"
+                        Foreground="#B10000"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        HorizontalContentAlignment="Center"
+                        Visibility="Collapsed"/>
+                    <Label
+                        x:Name="error_email_not_registered"
+                        Content="Email não cadastrado"
+                        Foreground="#B10000"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        HorizontalContentAlignment="Center"
+                        Visibility="Collapsed"/>
                 </StackPanel>
 
 
@@ -324,7 +339,14 @@
                         BorderBrush="#D1D1D1"
                         BorderThickness="1"
                         VerticalContentAlignment="Center"/>
-
+                    <Label
+                        x:Name="error_wrong_password"
+                        Content="Senha inválida"
+                        Foreground="#B10000"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        HorizontalContentAlignment="Center"
+                        Visibility="Collapsed"/>
                 </StackPanel>
 
 
@@ -355,42 +377,31 @@
                 <StackPanel
                     Grid.Row="6"
                     Margin="0,15,0,0">
-
                     <Label
-                        x:Name="error_user_not_registered"
-                        Content="Usuário não cadastrado"
+                        x:Name="error_data_not_found"
+                        Content="Dados não encontrados no sistema"
                         Foreground="#B10000"
                         FontSize="11"
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
-
+                        Visibility="Collapsed"/>
                     <Label
-                        x:Name="error_email_not_registered"
-                        Content="Email não cadastrado"
+                        x:Name="error_fill_everything"
+                        Content="Preencha todos os campos"
                         Foreground="#B10000"
                         FontSize="11"
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
-
-                    <Label
-                        x:Name="error_wrong_password"
-                        Content="Senha inválida"
-                        Foreground="#B10000"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
+                        Visibility="Collapsed"/>
 
                     <Label
                         x:Name="error_verify"
-                        Content="Verifique sua identidade"
+                        Content="Confirme que você não é um robô"
                         Foreground="#B10000"
                         FontSize="11"
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
+                        Visibility="Collapsed"/>
 
                     <Label
                         x:Name="error_system"
@@ -399,25 +410,7 @@
                         FontSize="11"
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
-
-                    <Label
-                        x:Name="error_data_not_found"
-                        Content="Dados não encontrados no sistema"
-                        Foreground="#B10000"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
-
-                    <Label
-                        x:Name="error_fill_everything"
-                        Content="Preencha todos os campos"
-                        Foreground="#B10000"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        HorizontalContentAlignment="Center"
-                        Visibility="Hidden"/>
+                        Visibility="Collapsed"/>
 
                 </StackPanel>
 

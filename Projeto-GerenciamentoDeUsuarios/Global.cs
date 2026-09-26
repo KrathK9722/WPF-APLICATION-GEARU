@@ -372,11 +372,33 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
         public static int ReturnImage(int id)
         {
+            Open_database();
+            string getImage = "SELECT imageValue FROM users WHERE id = @id";
+            using var returnImage = new MySqlCommand(getImage, Connection);
+            returnImage.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnImage.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int imageValue = Convert.ToInt32(reader["imageValue"]);
+
+                    return imageValue;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return 0;
+            }
             return 0;
+
         }
         public static string getImage(int imageNumber)
         {
-            return "imagePath";
+            string imageText = imageNumber.ToString();
+            return $"C:\\Users\\arthu\\source\\repos\\WPF-APLICATION-GEARU\\Projeto-GerenciamentoDeUsuarios\\ProfileImage\\{imageText}.png";
         }
     }
 }

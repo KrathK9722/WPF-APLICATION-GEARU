@@ -82,7 +82,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_fill_everything.Visibility = Visibility.Hidden;
+                error_fill_everything.Visibility = Visibility.Collapsed;
             }
 
             // ERROR ROBOT VERIFY
@@ -93,7 +93,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             else
             {
-                error_verify.Visibility = Visibility.Hidden;
+                error_verify.Visibility = Visibility.Collapsed;
             }
 
 
@@ -111,7 +111,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_system.Visibility = Visibility.Hidden;
+                        error_system.Visibility = Visibility.Collapsed;
                     }
 
                     // Erro de email não cadastrado
@@ -121,7 +121,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_email_not_registered.Visibility = Visibility.Hidden;
+                        error_email_not_registered.Visibility = Visibility.Collapsed;
                     }
 
                     // Erro de usuário não cadastrado
@@ -131,7 +131,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_user_not_registered.Visibility = Visibility.Hidden;
+                        error_user_not_registered.Visibility = Visibility.Collapsed;
                     }
 
                     // Erro de dados não encontrados
@@ -141,7 +141,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        error_data_not_found.Visibility = Visibility.Hidden;
+                        error_data_not_found.Visibility = Visibility.Collapsed;
                     }
                     reset_capcha();
                     return;
@@ -159,7 +159,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                         }
                         else
                         {
-                            error_system.Visibility = Visibility.Hidden;
+                            error_system.Visibility = Visibility.Collapsed;
                         }
 
                         // Erro de senha errada
@@ -169,7 +169,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                         }
                         else
                         {
-                            error_wrong_password.Visibility = Visibility.Hidden;
+                            error_wrong_password.Visibility = Visibility.Collapsed;
                         }
                         // Erro de dados não encontrados
                         if (system_return == 105)
@@ -179,7 +179,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                         }
                         else
                         {
-                            error_data_not_found.Visibility = Visibility.Hidden;
+                            error_data_not_found.Visibility = Visibility.Collapsed;
                         }
                         error = 0;
                         reset_capcha();

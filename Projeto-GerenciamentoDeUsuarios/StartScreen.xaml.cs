@@ -32,7 +32,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             InitializeComponent();
 
             //Salvar Sessão
-            string archivePath = @"C:\Users\arthur_kochan\Desktop\Tokens\session.txt";
+            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
 
             string content = ID.ToString();
             File.SetAttributes(archivePath, FileAttributes.Normal);
@@ -115,7 +115,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     CardVision novoCard = new CardVision();
                     novoCard.CardTitle = $"Usuário: {GlobalFunctions.ReturnUser(i+1)}";
                     novoCard.CardDescription = $"Email: {GlobalFunctions.ReturnEmail(i+1)}";
-                    novoCard.CardImageSource = "archivePath";
+                    novoCard.CardImageSource = $"{archivePath}";
                     if (GlobalFunctions.ReturnIsAdmin(i+1) == true)
                     {
                         userType = "Admin";
@@ -145,7 +145,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             if (result == MessageBoxResult.Yes)
             {
                 ID = 0;
-                string archivePath = @"C:\Users\arthur_kochan\Desktop\Tokens\session.txt";
+                string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
 
                 string content = ID.ToString();
                 File.SetAttributes(archivePath, FileAttributes.Normal);
