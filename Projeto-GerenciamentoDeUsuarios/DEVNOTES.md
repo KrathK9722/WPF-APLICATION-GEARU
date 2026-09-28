@@ -1,8 +1,38 @@
-x:Key="WindowBackground" Color="#F7F7F7"/>
-        <SolidColorBrush x:Key="SidebarBackground" Color="#F2F2F2"/>
-        <SolidColorBrush x:Key="SidebarHover" Color="#E8E8E8"/>
-        <SolidColorBrush x:Key="SidebarSelected" Color="#DCEBFF"/>
-        <SolidColorBrush x:Key="PrimaryBlue" Color="#0067C0"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#1A1A1A"/>
-        <SolidColorBrush x:Key="TextSecondary" Color="#616161"/>
-        <SolidColorBrush x:Key="BorderColor"
+
+## CÓDIGO DO BANCO DE DADOS
+
+---
+
+CREATE DATABASE GEARU;
+
+USE GEARU;
+
+SELECT * FROM log; #Mostrar  o banco de dados
+SELECT * FROM users; #Mostrar  o banco de dados
+
+add 
+
+CREATE TABLE `GEARU`.`users` (`id` INT NOT NULL AUTO_INCREMENT ,
+`email` VARCHAR(255) UNIQUE NOT NULL ,
+`user` VARCHAR(255) UNIQUE NOT NULL , 
+`name` VARCHAR(255) NOT NULL,
+`password` VARCHAR(255) NOT NULL ,
+`IsAdmin` TINYINT(1) NOT NULL DEFAULT 0,
+PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+CREATE TABLE `GEARU`.`log` (`id` INT NOT NULL AUTO_INCREMENT ,
+`location` VARCHAR(255) NOT NULL ,
+`user` VARCHAR(255) NOT NULL , 
+`time` TIMESTAMP NOT NULL,
+`action` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
+PRIMARY KEY (`id`));
+
+TRUNCATE TABLE users; #Limpa a tabela de usuários
+TRUNCATE TABLE log;
+    
+INSERT INTO log (location, user, time, action) values ("SQL", "SYSTEM", now(), "Test");
+
+set time_zone = "+00:00";
+
+---
