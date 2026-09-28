@@ -398,7 +398,8 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static string getImage(int imageNumber)
         {
             string imageText = imageNumber.ToString();
-            return $"C:\\Users\\arthu\\source\\repos\\WPF-APLICATION-GEARU\\Projeto-GerenciamentoDeUsuarios\\ProfileImage\\{imageText}.png";
+            string user = Environment.UserName;
+            return $"C:\\Users\\{user}\\source\\repos\\WPF-APLICATION-GEARU\\Projeto-GerenciamentoDeUsuarios\\ProfileImage\\{imageText}.png";
         }
     }
 }
