@@ -6,31 +6,31 @@ namespace Projeto_GerenciamentoDeUsuarios
     public partial class CardVision : UserControl
     {
         // 1. Registro da propriedade do Título
-        public static readonly DependencyProperty CardTitleProperty =
+        public static readonly DependencyProperty CardUserProperty =
             DependencyProperty.Register(
-                nameof(CardTitle),
+                nameof(CardUser),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Título Padrão"));
+                new PropertyMetadata("Usuário: Erro"));
 
-        public string CardTitle
+        public string CardUser
         {
-            get => (string)GetValue(CardTitleProperty);
-            set => SetValue(CardTitleProperty, value);
+            get => (string)GetValue(CardUserProperty);
+            set => SetValue(CardUserProperty, value);
         }
 
         // 2. Registro da propriedade da Descrição
-        public static readonly DependencyProperty CardDescriptionProperty =
+        public static readonly DependencyProperty CardEmailProperty =
             DependencyProperty.Register(
-                nameof(CardDescription),
+                nameof(CardEmail),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Descrição padrão do card."));
+                new PropertyMetadata("Email: Sem Email Cadastrado"));
 
-        public string CardDescription
+        public string CardEmail
         {
-            get => (string)GetValue(CardDescriptionProperty);
-            set => SetValue(CardDescriptionProperty, value);
+            get => (string)GetValue(CardEmailProperty);
+            set => SetValue(CardEmailProperty, value);
         }
 
         // 3. Registro da propriedade da Imagem
@@ -39,7 +39,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 nameof(CardImageSource),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("https://via.placeholder.com/150"));
+                new PropertyMetadata(GlobalFunctions.getImage(0)));
 
         public string CardImageSource
         {
@@ -52,21 +52,21 @@ namespace Projeto_GerenciamentoDeUsuarios
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty CardAreaProperty =
+        public static readonly DependencyProperty CardUserTypeProperty =
             DependencyProperty.Register(
-                nameof(CardArea),
+                nameof(CardUserType),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Area padrão do card."));
+                new PropertyMetadata("Usuário: Erro"));
 
-        public string CardArea
+        public string CardUserType
         {
-            get => (string)GetValue(CardAreaProperty);
-            set => SetValue(CardAreaProperty, value);
+            get => (string)GetValue(CardUserTypeProperty);
+            set => SetValue(CardUserTypeProperty, value);
         }
         private void Card_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Card '{CardTitle}' foi clicado!");
+            MessageBox.Show($"Card '{CardUser}' foi clicado!");
             e.Handled = true;
         }
     }

@@ -9,6 +9,12 @@
              d:DesignHeight="200" d:DesignWidth="150">
 
     <UserControl.Resources>
+        <!-- CORES -->
+
+        <SolidColorBrush x:Key="CardBackground" Color="#F7F7F7"/>
+        <SolidColorBrush x:Key="CardBorder" Color="#FFE3E4F7"/>
+
+
         <Style TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -16,7 +22,7 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
+                                CornerRadius="15">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
@@ -24,8 +30,12 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="DarkGray"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Opacity="0.5" Color="{DynamicResource CardBorder}"></SolidColorBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="7"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Effect">
                 <Setter.Value>
@@ -53,37 +63,44 @@
         </Style>
     </UserControl.Resources>
 
-    <Button Click="Card_Click">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Image x:Name="ImgIcon" 
-                   Grid.Row="0" 
-                   Source="{Binding CardImageSource, ElementName=ThisCard}" 
-                   Stretch="Uniform" 
-                   Margin="5"/>
-
-            <StackPanel Grid.Row="1" Margin="10,0,10,10">
-                <TextBlock x:Name="TitleTextBlock" 
-                           Text="{Binding CardTitle, ElementName=ThisCard}" 
-                           FontSize="14" 
-                           FontWeight="Bold" 
-                           TextWrapping="Wrap" 
-                           Margin="0,0,0,5"/>
-                <TextBlock x:Name="DescriptionTextBlock" 
-                           Text="{Binding CardDescription, ElementName=ThisCard}" 
-                           FontSize="12" 
-                           Foreground="Gray" 
-                           TextWrapping="Wrap"/>
-                <TextBlock x:Name="AreaTextBlock" 
-                           Text="{Binding CardArea, ElementName=ThisCard}" 
-                           FontSize="12" 
-                           Foreground="Gray" 
-                           TextWrapping="Wrap"/>
-            </StackPanel>
-        </Grid>
-    </Button>
+    <Border BorderBrush="White" BorderThickness="1" CornerRadius="19">
+        <Button Click="Card_Click" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="10,-15,81,0" Grid.RowSpan="2">
+                    <Image x:Name="ImgIcon" 
+                        Grid.Row="0" 
+                        Source="{Binding CardImageSource, ElementName=ThisCard}" 
+                        Stretch="Uniform" 
+                        Margin="-1,0,0,0"/>
+                </Grid>
+                <StackPanel Grid.Row="1" Margin="10,0,10,10">
+                    <TextBlock x:Name="UserTypeTextBlock" 
+                               Text="{Binding CardUserType, ElementName=ThisCard}" 
+                               FontSize="12" 
+                               Foreground="Gray" 
+                               TextWrapping="Wrap" 
+                               FontFamily="Roboto"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="10,0,10,10">
+                    <TextBlock x:Name="EmailTextBlock" 
+                       Text="{Binding CardEmail, ElementName=ThisCard}" 
+                       FontSize="12" 
+                       Foreground="Gray" 
+                       TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="10,0,10,10">
+                    <TextBlock x:Name="UserTextBlock" 
+                       Text="{Binding CardUser, ElementName=ThisCard}" 
+                       FontSize="14" 
+                       FontWeight="Bold" 
+                       TextWrapping="Wrap"
+                       Foreground = "Black" Width="115"/>
+                </StackPanel>
+            </Grid>
+        </Button>
+    </Border>
 </UserControl>

@@ -4,6 +4,7 @@ using Org.BouncyCastle.Tls;
 using System;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -79,10 +80,6 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void menu_button_click(object sender, RoutedEventArgs e)
         {
-            // No novo design Windows 11 o menu fica sempre aberto.
-            // Esse método continua existindo porque os botões
-            // "Menu" do XAML utilizam esse evento.
-
             ShowScreen(landing_page);
             viewCard();
         }
@@ -109,18 +106,19 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 if (i < registerNumber)
                 {
-                    int imageNumber = GlobalFunctions.ReturnImage(i);
-                    string archivePath = GlobalFunctions.getImage(imageNumber);
                     string userType = "Comum";
-                    CardVision novoCard = new CardVision();
-                    novoCard.CardTitle = $"Usuário: {GlobalFunctions.ReturnUser(i+1)}";
-                    novoCard.CardDescription = $"Email: {GlobalFunctions.ReturnEmail(i+1)}";
-                    novoCard.CardImageSource = $"{archivePath}";
-                    if (GlobalFunctions.ReturnIsAdmin(i+1) == true)
+                    int imageNumber = GlobalFunctions.ReturnImage(i+1);
+                    if (GlobalFunctions.ReturnIsAdmin(i + 1) == true)
                     {
                         userType = "Admin";
+                        imageNumber = 10;
                     }
-                    novoCard.CardArea = $"Tipo de Usuário:{userType}";
+                    string archivePath = GlobalFunctions.getImage(imageNumber);
+                    CardVision novoCard = new CardVision();
+                    novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(i+1)}";
+                    novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(i+1)}";
+                    novoCard.CardImageSource = $"{archivePath}";
+                    novoCard.CardUserType = $"Tipo de Usuário:{userType}";
                     novoCard.Width = 140;
                     novoCard.Margin = new Thickness(13.5);
 
