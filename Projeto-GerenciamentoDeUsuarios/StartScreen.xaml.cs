@@ -92,6 +92,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public void viewCard()
 
         {
+            int idBanco = 0;
             registerNumber = GlobalFunctions.verNumeroRegistros();
             if (registerNumber > 3)
             {
@@ -104,22 +105,29 @@ namespace Projeto_GerenciamentoDeUsuarios
             number_page_card.Text = $"Página: {page + 1}/{maxPage + 1}";
             for (int i = inicio; i < fim; i++)
             {
+                idBanco += 1;
+                if (GlobalFunctions.ReturnUser(idBanco + 1) == null)
+                {
+                    idBanco += 1;
+                    i -= 1; //Botar variavel verificar quantos cards ja foram criados de acordo com os registros
+                    continue;
+                }
                 if (i < registerNumber)
                 {
                     string userType = "Comum";
-                    int imageNumber = GlobalFunctions.ReturnImage(i+1);
-                    if (GlobalFunctions.ReturnIsAdmin(i + 1) == true)
+                    int imageNumber = GlobalFunctions.ReturnImage(idBanco + 1);
+                    if (GlobalFunctions.ReturnIsAdmin(idBanco + 1) == true)
                     {
                         userType = "Admin";
                         imageNumber = 10;
                     }
                     string archivePath = GlobalFunctions.getImage(imageNumber);
                     CardVision novoCard = new CardVision();
-                    novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(i+1)}";
-                    novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(i+1)}";
+                    novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(idBanco + 1)}";
+                    novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco + 1)}";
                     novoCard.CardImageSource = $"{archivePath}";
-                    novoCard.CardUserType = $"Tipo de Usuário:{userType}";
-                    novoCard.Width = 140;
+                    novoCard.CardUserType = $"Tipo de Usuário: {userType}";
+                    novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
                     ContainerDeCards.Children.Add(novoCard);
