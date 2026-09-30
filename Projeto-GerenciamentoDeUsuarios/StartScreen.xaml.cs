@@ -244,5 +244,9 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
 
         }
+
+        private void start_create_click(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
