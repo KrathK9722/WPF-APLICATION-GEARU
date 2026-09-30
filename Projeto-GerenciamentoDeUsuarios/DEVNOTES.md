@@ -38,3 +38,5 @@ INSERT INTO log (location, user, time, action) values ("SQL", "SYSTEM", now(), "
 set time_zone = "+00:00";
 
 ---
+
+Botão registrar usuário criado mas ainda não abre janela mainwindow
