@@ -93,44 +93,38 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         {
             int idBanco = 0;
+            int cardsCriados = 0;
             registerNumber = GlobalFunctions.verNumeroRegistros();
-            if (registerNumber > 3)
-            {
-                maxPage = (int)Math.Ceiling(registerNumber / 3.0) - 1;
-            }
-            ContainerDeCards.Children.Clear();
-            int inicio = page * 3;
-            int fim = inicio + 3;
 
-            number_page_card.Text = $"Página: {page + 1}/{maxPage + 1}";
-            for (int i = inicio; i < fim; i++)
+            ContainerDeCards.Children.Clear();
+
+            while (cardsCriados < registerNumber)
             {
                 idBanco += 1;
-                if (GlobalFunctions.ReturnUser(idBanco + 1) == null)
+                if (GlobalFunctions.ReturnUser(idBanco) == null)
                 {
-                    idBanco += 1;
-                    i -= 1; //Botar variavel verificar quantos cards ja foram criados de acordo com os registros
                     continue;
                 }
-                if (i < registerNumber)
+                if (cardsCriados < registerNumber)
                 {
                     string userType = "Comum";
-                    int imageNumber = GlobalFunctions.ReturnImage(idBanco + 1);
-                    if (GlobalFunctions.ReturnIsAdmin(idBanco + 1) == true)
+                    int imageNumber = GlobalFunctions.ReturnImage(idBanco);
+                    if (GlobalFunctions.ReturnIsAdmin(idBanco) == true)
                     {
                         userType = "Admin";
                         imageNumber = 10;
                     }
                     string archivePath = GlobalFunctions.getImage(imageNumber);
                     CardVision novoCard = new CardVision();
-                    novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(idBanco + 1)}";
-                    novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco + 1)}";
+                    novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(idBanco)}";
+                    novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco)}";
                     novoCard.CardImageSource = $"{archivePath}";
                     novoCard.CardUserType = $"Tipo de Usuário: {userType}";
                     novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
                     ContainerDeCards.Children.Add(novoCard);
+                    cardsCriados += 1;
                 }
             }
         }
@@ -175,26 +169,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             ShowScreen(landing_page);
         }
 
-        private void pass_page_Click(object sender, RoutedEventArgs e)
-        {
-            if (registerNumber > 3)
-            {
-                maxPage = (int)Math.Ceiling(registerNumber / 3.0) - 1;
-            }
-            if (page < maxPage){ 
-                page += 1;
-            }
-            viewCard();
-        }
 
-        private void return_page_Click(object sender, RoutedEventArgs e)
-        {
-            if (page > 0)
-            {
-                page -= 1;
-            }
-            viewCard();
-        }
 
         // ==========================================================
         // REGISTRAR CASA

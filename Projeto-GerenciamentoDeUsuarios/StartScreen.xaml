@@ -8,15 +8,15 @@
     x:Class="Projeto_GerenciamentoDeUsuarios.StartScreen"
     mc:Ignorable="d"
     Title="StartScreen"
-    Width="1000"
-    Height="650"
     MinWidth="850"
-    MinHeight="550"
+    MinHeight="800"
     Background="#F7F7F7"
-    FontFamily="Segoe UI">
-
+    FontFamily="Segoe UI"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized">
+    
     <Window.Resources>
-
+        
         <!-- CORES -->
 
         <SolidColorBrush x:Key="WindowBackground" Color="#F7F7F7"/>
@@ -574,7 +574,7 @@
                 <StackPanel
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Width="567"
+                    Width="970"
                     Margin="0,50,0,0">
 
                     <TextBlock
@@ -590,18 +590,15 @@
                         FontSize="14"
                         HorizontalAlignment="Center"
                         Margin="0,7,0,30"/>
-                    <TextBlock x:Name="number_page_card"
-                        Foreground="{DynamicResource TextSecondary}"
-                        FontSize="14" HorizontalAlignment="Center" Height="24" FontWeight="Bold"
-                        ><Run Language="pt-br" Text="Página: 1/5"/></TextBlock>
                     <Border
                         Background="{DynamicResource ButtonBackground}"
                         CornerRadius="19,19,19,19"
                         Padding="15"
-                        Effect="{DynamicResource SoftShadow}" Width="548">
+                        Effect="{DynamicResource SoftShadow}" Width="970">
                         <ScrollViewer 
-                            HorizontalScrollBarVisibility="Auto">
-                            <WrapPanel x:Name="ContainerDeCards" Margin="10" />
+                            HorizontalScrollBarVisibility="Disabled" 
+                            VerticalScrollBarVisibility="Visible" Height="518" >
+                            <WrapPanel x:Name="ContainerDeCards" Margin="10" Width="970"/>
 
                         </ScrollViewer>
 
@@ -619,8 +616,6 @@
                         Click="register_click"/>
 
                 </StackPanel>
-                <Button x:Name="return_page" Content="&lt;" Margin="34,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="return_page_Click" Background="Transparent" BorderBrush="Transparent"/>
-                <Button x:Name="pass_page" Content="&gt;" Margin="678,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource TextSecondary}" FontSize="72" Click="pass_page_Click" Background="Transparent" BorderBrush="Transparent"/>
 
             </Grid>
 

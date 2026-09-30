@@ -18,6 +18,8 @@ CREATE TABLE `GEARU`.`users` (`id` INT NOT NULL AUTO_INCREMENT ,
 `name` VARCHAR(255) NOT NULL,
 `password` VARCHAR(255) NOT NULL ,
 `IsAdmin` TINYINT(1) NOT NULL DEFAULT 0,
+`imageValue` INT NOT NULL DEFAULT 0,
+`ultimoLogin` timestamp not null,
 PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

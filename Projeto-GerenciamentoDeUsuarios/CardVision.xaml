@@ -291,7 +291,7 @@
                                        FontSize="11"
                                        Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="Cadastrado"
+                            <TextBlock Text="{Binding CardAccountStatus,ElementName=ThisCard}"
                                        FontSize="12"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource TextPrimary}"
@@ -304,13 +304,13 @@
                 <StackPanel Grid.Row="3"
                             Margin="16,13,16,5">
 
-                    <TextBlock Text="Sobre"
+                    <TextBlock
                                FontSize="13"
                                FontWeight="Bold"
                                Foreground="{DynamicResource TextPrimary}"
-                               Margin="0,0,0,5"/>
+                               Margin="0,0,0,5" Text="Nome Completo"/>
 
-                    <TextBlock Text="Informações do usuário cadastrado no sistema."
+                    <TextBlock Text="{Binding CardFullName,ElementName=ThisCard}"
                                FontSize="11"
                                Foreground="{DynamicResource TextSecondary}"
                                TextWrapping="Wrap"
@@ -323,8 +323,7 @@
                                Foreground="{DynamicResource TextPrimary}"
                                Margin="0,0,0,5"/>
 
-                    <TextBlock Text="{Binding CardEmail,
-                                              ElementName=ThisCard}"
+                    <TextBlock Text="{Binding CardEmail,ElementName=ThisCard}"
                                FontSize="11"
                                Foreground="{DynamicResource TextSecondary}"
                                TextWrapping="Wrap"
@@ -340,18 +339,27 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- BOTÃO PRINCIPAL VISUAL -->
-                    <Button Grid.Column="0"
+                    <Button x:Name="CardButton" Grid.Column="0"
                             Content="Visualizar perfil"
                             Style="{StaticResource ProfileButton}"
+                            Visibility="{Binding CardOpenClickVisibility, ElementName=ThisCard}"
                             Margin="0,0,6,0"
                             Click="Card_Click"/>
+
+                    <Button x:Name="CardCloseButton" Grid.Column="0"
+                            Content="Fechar Perfil"
+                            Style="{StaticResource ProfileButton}"
+                            Visibility="{Binding CardCloseClickVisibility, ElementName=ThisCard}"
+                            Click="Card_Close_Click" Grid.ColumnSpan="2"/>
 
                     <!-- BOTÃO SECUNDÁRIO VISUAL -->
                     <Button Grid.Column="1"
                             Content="↗"
+                            Visibility="{Binding CardOpenClickVisibility, ElementName=ThisCard}"
                             Style="{StaticResource SecondaryButton}"
-                            FontSize="18"
-                            Click="Card_Click"/>
+                            Click="Card_Click"
+                            FontSize="18">
+                    </Button>
                 </Grid>
 
             </Grid>

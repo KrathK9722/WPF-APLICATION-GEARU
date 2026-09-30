@@ -22,6 +22,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media.Imaging;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Projeto_GerenciamentoDeUsuarios
@@ -399,7 +400,8 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             string imageText = imageNumber.ToString();
             string user = Environment.UserName;
-            return $"C:\\Users\\{user}\\source\\repos\\WPF-APLICATION-GEARU\\Projeto-GerenciamentoDeUsuarios\\ProfileImage\\{imageText}.png";
+            string archivePath = $"/ProfileImage/{imageText}.png";
+            return archivePath;
         }
     }
 }

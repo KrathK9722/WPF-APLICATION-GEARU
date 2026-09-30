@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Projeto_GerenciamentoDeUsuarios
@@ -11,7 +12,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 nameof(CardUser),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Usuário: Erro"));
+                new PropertyMetadata("Erro"));
 
         public string CardUser
         {
@@ -25,7 +26,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 nameof(CardEmail),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Email: Sem Email Cadastrado"));
+                new PropertyMetadata("Sem Email Cadastrado"));
 
         public string CardEmail
         {
@@ -57,17 +58,98 @@ namespace Projeto_GerenciamentoDeUsuarios
                 nameof(CardUserType),
                 typeof(string),
                 typeof(CardVision),
-                new PropertyMetadata("Usuário: Erro"));
+                new PropertyMetadata("Erro de visualização"));
 
         public string CardUserType
         {
             get => (string)GetValue(CardUserTypeProperty);
             set => SetValue(CardUserTypeProperty, value);
         }
+
+        public static readonly DependencyProperty CardAccountStatusProperty =
+            DependencyProperty.Register(
+                nameof(CardAccountStatus),
+                typeof(string),
+                typeof(CardVision),
+                new PropertyMetadata("Erro de Status"));
+
+        public string CardAccountStatus
+        {
+            get => (string)GetValue(CardAccountStatusProperty);
+            set => SetValue(CardAccountStatusProperty, value);
+        }
+
+        public static readonly DependencyProperty CardFullNameProperty =
+            DependencyProperty.Register(
+                nameof(CardFullName),
+                typeof(string),
+                typeof(CardVision),
+                new PropertyMetadata("Sem Nome cadastrado"));
+
+        public string CardFullName
+        {
+            get => (string)GetValue(CardFullNameProperty);
+            set => SetValue(CardFullNameProperty, value);
+        }
+
+        public static readonly DependencyProperty CardOpenClickVisibilityProperty =
+        DependencyProperty.Register(
+        nameof(CardOpenClickVisibility),
+        typeof(Visibility),
+        typeof(CardVision),
+        new PropertyMetadata(Visibility.Visible));
+
+        public Visibility CardOpenClickVisibility
+        {
+            get => (Visibility)GetValue(CardOpenClickVisibilityProperty);
+            set => SetValue(CardOpenClickVisibilityProperty, value);
+        }
+
+        public static readonly DependencyProperty CardCloseClickVisibilityProperty =
+        DependencyProperty.Register(
+        nameof(CardCloseClickVisibility),
+        typeof(Visibility),
+        typeof(CardVision),
+        new PropertyMetadata(Visibility.Collapsed));
+
+        public Visibility CardCloseClickVisibility
+        {
+            get => (Visibility)GetValue(CardCloseClickVisibilityProperty);
+            set => SetValue(CardCloseClickVisibilityProperty, value);
+        }
+
         private void Card_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Card '{CardUser}' foi clicado!");
+
             e.Handled = true;
+            CardVision cardCopia = new CardVision
+            {
+                CardUser = this.CardUser,
+                CardEmail = this.CardEmail,
+                CardImageSource = this.CardImageSource,
+                CardUserType = this.CardUserType,
+                CardAccountStatus = this.CardAccountStatus,
+                CardFullName = this.CardFullName,
+                CardOpenClickVisibility = Visibility.Collapsed,
+                CardCloseClickVisibility = Visibility.Visible,
+
+                Margin = new Thickness(0)
+            };
+
+            CardWindow popup = new CardWindow(cardCopia);
+
+            popup.ShowDialog();
         }
+        private void Card_Close_Click(object sender, RoutedEventArgs e)
+        {
+            Window parent = Window.GetWindow(this);
+
+            // Se ela existir, fecha ela imediatamente
+            if (parent != null)
+            {
+                parent.Close();
+            }
+        }
+
     }
 }
