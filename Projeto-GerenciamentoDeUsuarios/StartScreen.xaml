@@ -501,7 +501,8 @@
 
                             <StackPanel>
                                 <Button
-                                    x:Name="start_create_click"
+                                    x:Name="create_user"
+                                    Click="create_user_click"
                                     Content="Criar Usuário"
                                     Style="{DynamicResource PrimaryButtonStyle}"
                                     Height="44"/>
