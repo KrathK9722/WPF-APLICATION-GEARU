@@ -149,6 +149,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             error_repeat_password.Visibility = Visibility.Collapsed;
             error_system.Visibility = Visibility.Collapsed;
             error_verify.Visibility = Visibility.Collapsed;
+            error_enter_full_name.Visibility = Visibility.Collapsed;
             // ERROR MESSAGE FILL EVERYTHING
             if (string.IsNullOrWhiteSpace(txt_create_email.Text) || string.IsNullOrWhiteSpace(txt_create_password.Password))
             {
@@ -157,10 +158,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 reset_capcha();
                 return;
             }
-            else
-            {
-                error_fill_everything.Visibility = Visibility.Collapsed;
-            }
 
             // ERROR MESSAGE CREATE USER
             if (txt_create_user.Text.Length < 3)
@@ -168,20 +165,18 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error_create_user.Visibility = Visibility.Visible;
                 error += 1;
             }
-            else
-            {
-                error_create_user.Visibility = Visibility.Collapsed;
-            }
+            // ERROR MESSAGE ENTER FULL NAME
 
+            if (txt_enter_full_name.Text.Length < 5)
+            {
+                error_enter_full_name.Visibility= Visibility.Visible;
+                error += 1;
+            }
             // ERROR MESSAGE CREATE EMAIL
             if (!new EmailAddressAttribute().IsValid(txt_create_email.Text))
             {
                 error_create_email.Visibility = Visibility.Visible;
                 error += 1;
-            }
-            else
-            {
-                error_create_email.Visibility = Visibility.Collapsed;
             }
 
             // ERROR MESSAGE CREATE PASSWORD
@@ -190,20 +185,12 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error_create_password.Visibility = Visibility.Visible;
                 error += 1;
             }
-            else
-            {
-                error_create_password.Visibility = Visibility.Collapsed;
-            }
 
             // ERROR MESSAGE PASSWORD REPEAT
             if (txt_create_password.Password != txt_register_password.Password)
             {
                 error_repeat_password.Visibility = Visibility.Visible;
                 error += 1;
-            }
-            else
-            {
-                error_repeat_password.Visibility = Visibility.Collapsed;
             }
 
             // ERROR ROBOT VERIFY
@@ -212,12 +199,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error_verify.Visibility = Visibility.Visible;
                 error += 1;
             }
-            else
-            {
-                error_verify.Visibility = Visibility.Collapsed;
-            }
-
-            
 
             // PRINT IF REGISTER IS CORRECT
             if (error == 0)
@@ -225,11 +206,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 int system_return;
                 if (adminExist)
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, 1, "Success!! Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 1, "Success!! Account Created.");
                 }
                 else
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, 2, "Success!! Admin Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 2, "Success!! Admin Account Created.");
                 }
                 if (system_return != 0)
                 {
@@ -237,10 +218,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                     if (system_return == 1)
                     {
                         error_system.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        error_system.Visibility = Visibility.Collapsed;
                     }
                     
                     // Erro de email duplicado
@@ -251,10 +228,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                             error_duplicated_email.Visibility = Visibility.Visible;
                         }
                     }
-                    else
-                    {
-                        error_duplicated_email.Visibility = Visibility.Collapsed;
-                    }
 
                     // Erro de usuário duplicado
                     if (system_return == 101)
@@ -263,10 +236,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                         {
                             error_duplicated_user.Visibility = Visibility.Visible;
                         }
-                    }
-                    else
-                    {
-                        error_duplicated_user.Visibility = Visibility.Collapsed;
                     }
 
                 }

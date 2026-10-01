@@ -119,6 +119,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco)}";
                     novoCard.CardImageSource = $"{archivePath}";
                     novoCard.CardUserType = $"Tipo de Usuário: {userType}";
+                    novoCard.CardFullName = $"{GlobalFunctions.ReturnFullName(idBanco)}";
                     novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
@@ -238,6 +239,10 @@ namespace Projeto_GerenciamentoDeUsuarios
             this.Resources["ButtonBorder"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("DarkGray"));
         }
 
+        private void BotaoDarkMode_Changed(object sender, EventArgs e)
+        {
+            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
+        }
 
         private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

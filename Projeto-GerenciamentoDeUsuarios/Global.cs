@@ -51,12 +51,13 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, int option, string finish_message)
+        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int option, string finish_message)
         {
             string email = email_space.Text.Trim();
             string user = user_space.Text.Trim();
             string password = password_space.Password.Trim();
             string hashpassword = BCryptNet.HashPassword(password);
+            string fullname = fullname_space.Text.Trim();
             int admin = 1;
 
             // Garantir abertura do banco de dados
@@ -78,11 +79,11 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 if (option == 1)
                 {
-                    query = "INSERT INTO users (email, user, password) VALUES (@email, @user, @hashpassword)";
+                    query = "INSERT INTO users (email, user, password, name) VALUES (@email, @user, @hashpassword, @fullname)";
                 }
                 else if (option == 2)
                 {
-                    query = "INSERT INTO users (email, user, password, IsAdmin) VALUES (@email, @user, @hashpassword, @admin)";
+                    query = "INSERT INTO users (email, user, password, IsAdmin, name) VALUES (@email, @user, @hashpassword, @admin, @fullname)";
                 }
                 else if (option == 3)
                 {
@@ -107,6 +108,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@user", user);
                             command.Parameters.AddWithValue("@hashpassword", hashpassword);
                             command.Parameters.AddWithValue("@admin", admin);
+                            command.Parameters.AddWithValue("@fullname", fullname);
                         }
                         else if (option == 3)
                         {
@@ -254,6 +256,29 @@ namespace Projeto_GerenciamentoDeUsuarios
                 {
                     // Retorna email
                     return reader["email"].ToString();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return null; // Erro de banco
+            }
+            return null;
+        }
+        public static string ReturnFullName(int id)
+        {
+            Open_database();
+            string getName = "SELECT name FROM users WHERE id = @id";
+            using var returnName = new MySqlCommand(getName, Connection);
+            returnName.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnName.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Retorna email
+                    return reader["name"].ToString();
                 }
             }
             catch (MySqlException ex)
