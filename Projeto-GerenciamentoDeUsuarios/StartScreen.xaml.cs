@@ -241,7 +241,6 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void BotaoDarkMode_Changed(object sender, EventArgs e)
         {
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
         }
 
         private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)
