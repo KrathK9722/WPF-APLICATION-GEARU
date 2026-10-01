@@ -32,45 +32,53 @@ namespace Projeto_GerenciamentoDeUsuarios
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        public void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            
             login_grid.IsEnabled = false;
             var cap = new CAPTCHA_WINDOW(this, "login"); // Abre captcha como dialogo e seta Main como owner
             bool? result = cap.ShowDialog();
 
+            login_grid.IsEnabled = true;
             if (result == true)
             {
                 // Captcha confirmado e válido
-                checkbox_not_robot.IsEnabled = false;
                 checado = true;
                 checkbox_not_robot.IsChecked = true;
-                login_grid.IsEnabled = true;
+
+                grid_not_robot.Visibility = Visibility.Collapsed;
+                checked_image_grid.Visibility = Visibility.Visible;
+
+                error_verify.Visibility = Visibility.Collapsed;
             }
             else
             {
                 // Captcha não confirmado ou cancelado
-                checado = false;
-                checkbox_not_robot.IsChecked = false;
-                login_grid.IsEnabled = true;
+                reset_capcha();
             }
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            checkbox_not_robot.IsEnabled = true;
+            grid_not_robot.Visibility = Visibility.Visible;
             checado = false;
         }
 
-        private void reset_capcha()
+        public void reset_capcha()
         {
             checado = false;
-            checkbox_not_robot.IsEnabled = true;
             checkbox_not_robot.IsChecked = false;
+            grid_not_robot.Visibility = Visibility.Visible;
+            checked_image_grid.Visibility = Visibility.Collapsed;
         }
         private void btn_login_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
         {
             int error = 0;
+            error_data_not_found.Visibility = Visibility.Collapsed;
+            error_fill_everything.Visibility = Visibility.Collapsed;
+            error_system.Visibility = Visibility.Collapsed;
+            error_verify.Visibility = Visibility.Collapsed;
+            error_wrong_user_or_password.Visibility = Visibility.Collapsed;
 
             // ERROR MESSAGE FILL EVERYTHING
             if (string.IsNullOrWhiteSpace(txt_enter_email_or_user.Text) || string.IsNullOrWhiteSpace(txt_enter_password.Password))
@@ -80,20 +88,12 @@ namespace Projeto_GerenciamentoDeUsuarios
                 reset_capcha();
                 return;
             }
-            else
-            {
-                error_fill_everything.Visibility = Visibility.Collapsed;
-            }
 
             // ERROR ROBOT VERIFY
             if (checado == false)
             {
                 error_verify.Visibility = Visibility.Visible;
                 error += 1;
-            }
-            else
-            {
-                error_verify.Visibility = Visibility.Collapsed;
             }
 
 
@@ -109,39 +109,23 @@ namespace Projeto_GerenciamentoDeUsuarios
                     {
                         error_system.Visibility = Visibility.Visible;
                     }
-                    else
-                    {
-                        error_system.Visibility = Visibility.Collapsed;
-                    }
 
                     // Erro de email não cadastrado
                     if (system_return == 103)
                     {
-                        error_email_not_registered.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        error_email_not_registered.Visibility = Visibility.Collapsed;
+                        error_wrong_user_or_password.Visibility = Visibility.Visible;
                     }
 
                     // Erro de usuário não cadastrado
                     if (system_return == 102)
                     {
-                        error_user_not_registered.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        error_user_not_registered.Visibility = Visibility.Collapsed;
+                        error_wrong_user_or_password.Visibility = Visibility.Visible;
                     }
 
                     // Erro de dados não encontrados
                     if (system_return == 105)
                     {
                         error_data_not_found.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        error_data_not_found.Visibility = Visibility.Collapsed;
                     }
                     reset_capcha();
                     return;
@@ -157,29 +141,17 @@ namespace Projeto_GerenciamentoDeUsuarios
                         {
                             error_system.Visibility = Visibility.Visible;
                         }
-                        else
-                        {
-                            error_system.Visibility = Visibility.Collapsed;
-                        }
 
                         // Erro de senha errada
                         if (system_return == 104)
                         {
-                            error_wrong_password.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            error_wrong_password.Visibility = Visibility.Collapsed;
+                            error_wrong_user_or_password.Visibility = Visibility.Visible;
                         }
                         // Erro de dados não encontrados
                         if (system_return == 105)
                         {
                             error += 1;
                             error_data_not_found.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            error_data_not_found.Visibility = Visibility.Collapsed;
                         }
                         error = 0;
                         reset_capcha();
@@ -208,11 +180,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return;
             }
         }
-        private void btn_sign_in_screen_Click(object sender, RoutedEventArgs e)
+        private void close_screen_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow register_screen = new MainWindow();
-            register_screen.Show();
-            register_screen.setTitle();
             this.Close();
             return;
 

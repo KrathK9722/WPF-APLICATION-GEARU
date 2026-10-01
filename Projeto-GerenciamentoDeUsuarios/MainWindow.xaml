@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="Cadastro"
         Width="1000"
-        Height="650"
+        Height="900"
         MinWidth="850"
-        MinHeight="550"
+        MinHeight="900"
         Background="#F7F7F7"
         FontFamily="Segoe UI">
 
@@ -212,7 +212,7 @@
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled"
-            Padding="20">
+            Padding="20" Margin="0,0,0,-36">
 
             <!-- ================================================= -->
             <!-- CARD DE CADASTRO -->
@@ -274,12 +274,11 @@
 
                     <TextBlock x:Name="title_create_account"
                         Grid.Row="1"
-                        Text="Criar conta"
                         FontSize="26"
                         FontWeight="SemiBold"
                         Foreground="{StaticResource TextPrimary}"
                         HorizontalAlignment="Center"
-                        Margin="0,18,0,5"/>
+                        Margin="0,18,0,5"><Run Text="Criar"/><Run Text=" "/><Run Language="pt-br" Text="Conta "/><Run Text="de Administrador"/></TextBlock>
 
 
                     <TextBlock
@@ -334,7 +333,36 @@
 
                     </StackPanel>
 
+                    <!--==================================================-->
+                    <!-- NOME COMPLETO -->
+                    <!-- =================================================-->
+                    <StackPanel Grid.Row="3" Margin="0,90,0,0">
 
+                        <Label
+                            Content="Nome Completo"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <TextBox
+                            x:Name="txt_enter_full_name"
+                            TextWrapping="Wrap"
+                            Foreground="#1A1A1A"
+                            SelectionBrush="{StaticResource PrimaryBlue}"/>
+
+
+                        <Label
+                            x:Name="error_enter_full_name"
+                            Content="Insira um nome válido"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
                     <!-- ================================================= -->
                     <!-- EMAIL -->
                     <!-- ================================================= -->
@@ -470,14 +498,6 @@
                         Grid.Row="7"
                         Margin="0,18,0,0">
 
-                        <CheckBox
-                            x:Name="checkbox_not_robot"
-                            Content="Não sou um robô."
-                            Checked="CheckBox_Checked"
-                            IsChecked="False"
-                            Foreground="#444444"
-                            FontSize="13"/>
-
 
                         <Label
                             x:Name="error_verify"
@@ -489,6 +509,22 @@
                             Padding="0"
                             Margin="0,7,0,0"
                             Visibility="Collapsed"/>
+                        <Grid x:Name="grid_not_robot" Height="31" Visibility="Visible">
+                            <CheckBox                       
+                                x:Name="checkbox_not_robot"
+                                Content="Não sou um robô."
+                                Checked="CheckBox_Checked"
+                                IsChecked="False"
+                                Foreground="#444444"
+                                FontSize="13" Background="#FFC3C3C3" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Grid x:Name="checked_image_grid" Height="31" Visibility="Collapsed">
+                            <Image x:Name="checked_image"
+                                Source="/DesignImages/image_checked_notrobot.png"
+                                Stretch="Uniform" Margin="89,2,80,0"/>
+                        </Grid>
+
+
 
                     </StackPanel>
 
@@ -543,11 +579,11 @@
 
                         <Button
                             x:Name="btn_login_screen"
-                            Content="Ir para a janela de Login"
+                            Content="Fechar Sistema"
                             Style="{StaticResource SecondaryButtonStyle}"
                             Height="42"
                             Margin="0,10,0,0"
-                            Click="btn_login_screen_Click"/>
+                            Click="close_screen_Click"/>
 
                     </StackPanel>
 

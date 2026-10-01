@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DesignImages\image_checked_notrobot.png" />
     <None Remove="ProfileImage\0.png" />
     <None Remove="ProfileImage\1.png" />
     <None Remove="ProfileImage\10.png" />
@@ -33,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="DesignImages\image_checked_notrobot.png" />
     <Resource Include="ProfileImage\0.png" />
     <Resource Include="ProfileImage\1.png" />
     <Resource Include="ProfileImage\10.png" />

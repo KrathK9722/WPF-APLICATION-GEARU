@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
         mc:Ignorable="d"
-        Title="CAPTCHA_WINDOW" Height="100" Width="140
+        Title="CAPTCHA_WINDOW" Height="120
+        " Width="140
         "
         WindowStartupLocation="CenterScreen"
         >
     <Grid Margin="0,0,0,-19">
         <Label x:Name="random_value" Content="Label" HorizontalAlignment="Center" Margin="0,18,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#C5000000"/>
         <TextBlock HorizontalAlignment="Left" Margin="44,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBox x:Name="captcha_box" HorizontalAlignment="Center" Margin="0,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="68" Height="16" TextChanged="captcha_box_TextChanged" Foreground="Black" Background="#0F292929"/>
+        <TextBox x:Name="captcha_box" HorizontalAlignment="Center" Margin="0,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Height="31" TextChanged="captcha_box_TextChanged" Foreground="Black" Background="#0F292929"/>
         <Label Content="Escreva o texto abaixo na caixa" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Top" FontSize="9" Foreground="#C5000000"/>
-        <Button x:Name="confirm_captcha" Content="Confirmar" HorizontalAlignment="Center" Margin="0,62,0,0" VerticalAlignment="Top" Click="confirm_captcha_click" FontSize="11" Foreground="Black" Background="#0F292929"/>
+        <Button x:Name="confirm_captcha" Content="Confirmar" HorizontalAlignment="Center" Margin="0,74,0,0" VerticalAlignment="Top" Click="confirm_captcha_click" FontSize="11" Foreground="Black" Background="#0F292929"/>
 
     </Grid>
 </Window>

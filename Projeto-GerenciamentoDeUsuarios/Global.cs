@@ -362,7 +362,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             string query = "SELECT COUNT(*) id FROM users";
             using var countRegister = new MySqlCommand(query, Connection);
 
-            if (Convert.ToInt32(countRegister.ExecuteScalar()) > 1)
+            if (Convert.ToInt32(countRegister.ExecuteScalar()) > 0)
             {
                 return Convert.ToInt32(countRegister.ExecuteScalar());
             }

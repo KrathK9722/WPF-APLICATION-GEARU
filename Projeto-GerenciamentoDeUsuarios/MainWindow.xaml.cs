@@ -45,13 +45,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 if (int.TryParse(savedIdText, out int savedId)) { }
                 if (adminExist && Convert.ToInt32(savedId) == 0)
                 {
-                    title_create_account.Text = "Criar Conta de Usuário";
+                    Login_Screen loginScreen = new Login_Screen();
+                    loginScreen.Show();
+                    this.Close();
                 }
-                else if (Convert.ToInt32(savedId) == 0)
-                {
-                    title_create_account.Text = "Criar Conta de Administrador";
-                }
-                else
+                else if (Convert.ToInt32(savedId) != 0)
                 {
                     StartScreen.ID = Convert.ToInt32(savedId);
                     StartScreen Start_screen = new StartScreen();
@@ -106,41 +104,51 @@ namespace Projeto_GerenciamentoDeUsuarios
             register_grid.IsEnabled = false;
             var cap = new CAPTCHA_WINDOW(this); // Abre captcha como dialogo e seta Main como owner
             bool? result = cap.ShowDialog();
-            
 
+            register_grid.IsEnabled = true;
             if (result == true)
             {
                 // Captcha confirmado e válido
-                checkbox_not_robot.IsEnabled = false;
                 checado = true;
                 checkbox_not_robot.IsChecked = true;
-                register_grid.IsEnabled = true;
+
+                grid_not_robot.Visibility = Visibility.Collapsed;
+                checked_image_grid.Visibility = Visibility.Visible;
+
+                error_verify.Visibility = Visibility.Collapsed;
             }
             else
             {
                 // Captcha não confirmado ou cancelado
-                checado = false;
-                checkbox_not_robot.IsChecked = false;
-                register_grid.IsEnabled = true;
+                reset_capcha();
             }
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            checkbox_not_robot.IsEnabled = true;
+            grid_not_robot.Visibility = Visibility.Visible;
             checado = false;
         }
 
         public void reset_capcha()
         {
             checado = false;
-            checkbox_not_robot.IsEnabled = true;
             checkbox_not_robot.IsChecked = false;
+            grid_not_robot.Visibility = Visibility.Visible;
+            checked_image_grid.Visibility = Visibility.Collapsed;
         }
         public void btn_create_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
         {
             int error = 0;
-
+            error_create_email.Visibility = Visibility.Collapsed;
+            error_create_password.Visibility = Visibility.Collapsed;
+            error_create_user.Visibility = Visibility.Collapsed;
+            error_fill_everything.Visibility = Visibility.Collapsed;
+            error_duplicated_email.Visibility = Visibility.Collapsed;
+            error_duplicated_user.Visibility = Visibility.Collapsed;
+            error_repeat_password.Visibility = Visibility.Collapsed;
+            error_system.Visibility = Visibility.Collapsed;
+            error_verify.Visibility = Visibility.Collapsed;
             // ERROR MESSAGE FILL EVERYTHING
             if (string.IsNullOrWhiteSpace(txt_create_email.Text) || string.IsNullOrWhiteSpace(txt_create_password.Password))
             {
@@ -281,12 +289,9 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return;
             }
         }
-        public void btn_login_screen_Click(object sender, RoutedEventArgs e)
+        private void close_screen_Click(object sender, RoutedEventArgs e)
         {
-            Login_Screen login_Screen = new Login_Screen();
-            login_Screen.Show();
             this.Close();
-
         }
     }
 }

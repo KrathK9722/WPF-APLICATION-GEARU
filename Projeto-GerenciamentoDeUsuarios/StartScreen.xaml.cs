@@ -95,7 +95,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             int idBanco = 0;
             int cardsCriados = 0;
             registerNumber = GlobalFunctions.verNumeroRegistros();
-
             ContainerDeCards.Children.Clear();
 
             while (cardsCriados < registerNumber)

@@ -585,11 +585,10 @@
                         Foreground="{DynamicResource TextPrimary}"><Run Text="Bem-vindo "/><Run Language="pt-br" Text="ao Sistema "/></TextBlock>
 
                     <TextBlock
-                        Text="Gerencie suas propriedades de forma simples."
                         Foreground="{DynamicResource TextSecondary}"
                         FontSize="14"
                         HorizontalAlignment="Center"
-                        Margin="0,7,0,30"/>
+                        Margin="0,7,0,30"><Run Language="pt-br" Text="Visualize os Usuários do sistema"/><Run Text="."/></TextBlock>
                     <Border
                         Background="{DynamicResource ButtonBackground}"
                         CornerRadius="19,19,19,19"
@@ -607,7 +606,7 @@
 
                     <Button
                         x:Name="menu_button_register_first_house"
-                        Content="➕ Registre sua primeira casa"
+                        Content="➕ Registar novo Usuário"
                         Style="{DynamicResource PrimaryButtonStyle}"
                         Width="230"
                         Height="45"

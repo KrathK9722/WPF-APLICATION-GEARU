@@ -11,38 +11,17 @@
         Width="1000"
         Height="650"
         MinWidth="850"
-        MinHeight="550"
+        MinHeight="750"
         Background="#F7F7F7"
         FontFamily="Segoe UI">
 
     <Window.Resources>
-
-        <!-- ================================================= -->
-        <!-- CORES -->
-
-        <!-- ================================================= -->
-        <!-- SOMBRA -->
-
-        <!-- ================================================= -->
-        <!-- BOTÃO PRINCIPAL -->
-
-        <!-- ================================================= -->
-        <!-- BOTÃO SECUNDÁRIO -->
-
-        <!-- ================================================= -->
-        <!-- TEXTBOX -->
-
-        <!-- ================================================= -->
-        <!-- LABEL -->
-        <!-- ================================================= -->
 
         <SolidColorBrush x:Key="WindowBackground" Color="#F7F7F7"/>
         <SolidColorBrush x:Key="PrimaryBlue" Color="#0067C0"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#1A1A1A"/>
         <SolidColorBrush x:Key="TextSecondary" Color="#707070"/>
         <SolidColorBrush x:Key="BorderColor" Color="#D1D1D1"/>
-
-        <!-- ================================================= -->
 
         <DropShadowEffect
             x:Key="SoftShadow"
@@ -51,8 +30,6 @@
             Direction="270"
             Opacity="0.12"
             Color="#000000"/>
-
-        <!-- ================================================= -->
 
         <Style x:Key="PrimaryButtonStyle" TargetType="{x:Type Button}">
 
@@ -113,8 +90,6 @@
 
         </Style>
 
-        <!-- ================================================= -->
-
         <Style x:Key="SecondaryButtonStyle" TargetType="{x:Type Button}">
 
             <Setter Property="Background" Value="#EDEDED"/>
@@ -173,8 +148,6 @@
 
         </Style>
 
-        <!-- ================================================= -->
-
         <Style TargetType="{x:Type TextBox}">
 
             <Setter Property="Height" Value="42"/>
@@ -187,8 +160,6 @@
 
         </Style>
 
-        <!-- ================================================= -->
-
         <Style TargetType="{x:Type Label}">
 
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -199,16 +170,7 @@
 
     </Window.Resources>
 
-
-    <!-- ===================================================== -->
-    <!-- LAYOUT PRINCIPAL -->
-    <!-- ===================================================== -->
-
     <Grid x:Name="login_grid" Background="{StaticResource WindowBackground}">
-
-        <!-- ================================================= -->
-        <!-- CARD DE LOGIN -->
-        <!-- ================================================= -->
 
         <Border
             Width="430"
@@ -234,11 +196,6 @@
 
                 </Grid.RowDefinitions>
 
-
-                <!-- ================================================= -->
-                <!-- LOGO -->
-                <!-- ================================================= -->
-
                 <Border
                     Grid.Row="0"
                     Width="58"
@@ -255,11 +212,6 @@
                         VerticalAlignment="Center"><Run Language="pt-br" Text="G"/></TextBlock>
 
                 </Border>
-
-
-                <!-- ================================================= -->
-                <!-- TÍTULO -->
-                <!-- ================================================= -->
 
                 <TextBlock
                     Grid.Row="1"
@@ -278,11 +230,6 @@
                     HorizontalAlignment="Center"
                     Margin="0,0,0,28"><Run Text="Entre na sua conta "/><Run Language="pt-br" Text="d"/><Run Text="o GEARU."/></TextBlock>
 
-
-                <!-- ================================================= -->
-                <!-- USUÁRIO / EMAIL -->
-                <!-- ================================================= -->
-
                 <StackPanel Grid.Row="3">
 
                     <Label
@@ -297,27 +244,14 @@
                         Foreground="#1A1A1A"
                         SelectionBrush="{StaticResource PrimaryBlue}"/>
                     <Label
-                        x:Name="error_user_not_registered"
-                        Content="Usuário não cadastrado"
-                        Foreground="#B10000"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        HorizontalContentAlignment="Center"
-                        Visibility="Collapsed"/>
-                    <Label
-                        x:Name="error_email_not_registered"
-                        Content="Email não cadastrado"
+                        x:Name="error_wrong_user_or_password"
+                        Content="Usuário, Email ou Senha incorretos"
                         Foreground="#B10000"
                         FontSize="11"
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
                         Visibility="Collapsed"/>
                 </StackPanel>
-
-
-                <!-- ================================================= -->
-                <!-- SENHA -->
-                <!-- ================================================= -->
 
                 <StackPanel
                     Grid.Row="4"
@@ -339,44 +273,24 @@
                         BorderBrush="#D1D1D1"
                         BorderThickness="1"
                         VerticalContentAlignment="Center"/>
-                    <Label
-                        x:Name="error_wrong_password"
-                        Content="Senha inválida"
-                        Foreground="#B10000"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        HorizontalContentAlignment="Center"
-                        Visibility="Collapsed"/>
                 </StackPanel>
-
-
-                <!-- ================================================= -->
-                <!-- VERIFICAÇÃO -->
-
-
-                <!-- ================================================= -->
-                <!-- ERROS -->
-
-
-                <!-- ================================================= -->
-                <!-- BOTÕES -->
-                <!-- ================================================= -->
-
-                <CheckBox
-                    Grid.Row="5"
-                    x:Name="checkbox_not_robot"
-                    Content="Não sou um robô."
-                    Checked="CheckBox_Checked"
-                    IsChecked="False"
-                    Foreground="#444444"
-                    Margin="0,18,0,0" Background="#19000000"/>
-
-
-                <!-- ================================================= -->
-
+                <Grid x:Name="grid_not_robot" Height="31" Visibility="Visible" Margin="0,15,0,194" Grid.Row="6">
+                    <CheckBox                       
+                        x:Name="checkbox_not_robot"
+                        Content="Não sou um robô."
+                        Checked="CheckBox_Checked"
+                        IsChecked="False"
+                        Foreground="#444444"
+                        FontSize="13" Background="#FFC3C3C3" HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid x:Name="checked_image_grid" Height="31" Visibility="Collapsed" Margin="0,15,0,194" Grid.Row="6">
+                    <Image x:Name="checked_image"
+                        Source="/DesignImages/image_checked_notrobot.png"
+                        Stretch="Uniform" Margin="89,2,80,0"/>
+                </Grid>
                 <StackPanel
                     Grid.Row="6"
-                    Margin="0,15,0,0">
+                    Margin="0,45,0,0">
                     <Label
                         x:Name="error_data_not_found"
                         Content="Dados não encontrados no sistema"
@@ -414,9 +328,6 @@
 
                 </StackPanel>
 
-
-                <!-- ================================================= -->
-
                 <StackPanel
                     Grid.Row="6"
                     Margin="0,72,0,72">
@@ -432,15 +343,14 @@
 
                     <Button
                         x:Name="btn_sign_in_screen"
-                        Content="Criar uma conta"
+                        Content="Fechar Sistema"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Height="42"
                         Margin="0,10,0,0"
-                        Click="btn_sign_in_screen_Click"/>
+                        Click="close_screen_Click"/>
 
                 </StackPanel>
 
-                <!-- Mantido para compatibilidade com o código existente -->
                 <Button
                     x:Name="btn_login_screen"
                     Content="Login"
