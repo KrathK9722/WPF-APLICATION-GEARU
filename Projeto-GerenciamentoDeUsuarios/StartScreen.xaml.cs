@@ -54,6 +54,15 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void SetScreen()
         {
+            string config = GlobalFunctions.ReturnConfig(ID);
+            if (config == "DarkMode:False")
+            {
+                BotaoDarkMode.IsChecked = false;
+            }
+            else
+            {
+                BotaoDarkMode.IsChecked = true;
+            }
             title_landing_page.Text = $"Bem vindo ao Sistema GEARU, {user}";
             ShowScreen(landing_page);
             viewCard();
@@ -241,6 +250,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void BotaoDarkMode_Changed(object sender, EventArgs e)
         {
+            // ALTERAR VALOR CONFIG DARKMODE NO BANCO DADOS SQL QUANDO MUDAR O BOTÃO
         }
 
         private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)

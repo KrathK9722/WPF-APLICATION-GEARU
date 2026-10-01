@@ -140,6 +140,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return 1;
         }
 
+        
+
         public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option)
         {   
             string login = email_or_user_space.Text.Trim();
@@ -302,6 +304,29 @@ namespace Projeto_GerenciamentoDeUsuarios
                 {
                     // Retorna usuário
                     return reader["user"].ToString();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return null; // Erro de banco
+            }
+            return null;
+        }
+        public static string ReturnConfig(int id)
+        {
+            Open_database();
+            string getConfig = "SELECT systemConfig FROM users WHERE id = @id";
+            using var returnConfig = new MySqlCommand(getConfig, Connection);
+            returnConfig.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnConfig.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Retorna usuário
+                    return reader["systemConfig"].ToString();
                 }
             }
             catch (MySqlException ex)
