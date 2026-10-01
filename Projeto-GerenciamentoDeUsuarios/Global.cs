@@ -15,6 +15,7 @@ TIPOS DE RETORNO:
 
 */
 
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -444,6 +445,29 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return 0;
             }
             return 0;
+
+        }
+        public static int changeConfig(bool darkmode, bool savelogin, int id)
+        {
+            Open_database();
+            string query = "UPDATE users SET systemConfig = @config WHERE ID=@id";
+            string configString = $"DarkMode:{darkmode.ToString().ToLower()} SaveLogin:{savelogin.ToString().ToLower()}";
+            
+
+            try
+            {
+                using (MySqlCommand command = new MySqlCommand(query, Connection))
+                {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("@config", configString);
+                        command.ExecuteNonQuery();
+                }
+                return 0;
+            }
+            catch (System.Exception ex)
+            {
+                return 1;
+            }
 
         }
         public static string getImage(int imageNumber)

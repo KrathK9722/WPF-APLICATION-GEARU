@@ -13,7 +13,9 @@
     Background="#F7F7F7"
     FontFamily="Segoe UI"
     WindowStartupLocation="CenterScreen"
-    WindowState="Maximized">
+    WindowState="Maximized"
+    Closing="Window_Closing">
+    
     
     <Window.Resources>
         
@@ -407,6 +409,24 @@
                                 Width="35"
                                 VerticalAlignment="Center"><Run Language="pt-br" Text="🌓"/></TextBlock>
                             <ui:ToggleSwitch x:Name="BotaoDarkMode" Content="Dark Mode" Checked="BotaoDarkMode_Checked" Unchecked="BotaoDarkMode_Unchecked" Foreground="Black" Height="58" Width="140" IsChecked="False" >
+                                <ui:ToggleSwitch.Background>
+                                    <SolidColorBrush Color="#FF5D5D5D"/>
+                                </ui:ToggleSwitch.Background>
+                            </ui:ToggleSwitch>
+
+                        </StackPanel>
+
+                    </Button>
+                    <Button
+                        x:Name="menu_button_switch_savelogin"
+                        Style="{DynamicResource MenuButtonStyle}" Width="195">
+                        <StackPanel Orientation="Horizontal" Width="177">
+
+                            <TextBlock
+                                FontSize="19"
+                                Width="35"
+                                VerticalAlignment="Center"><Run Language="pt-br" Text="💾"/></TextBlock>
+                            <ui:ToggleSwitch x:Name="BotaoSaveLogin" Content="Guardar Login" Checked="BotaoSaveLogin_Checked" Unchecked="BotaoSaveLogin_Unchecked" Foreground="Black" Height="58" Width="143" IsChecked="False" >
                                 <ui:ToggleSwitch.Background>
                                     <SolidColorBrush Color="#FF5D5D5D"/>
                                 </ui:ToggleSwitch.Background>

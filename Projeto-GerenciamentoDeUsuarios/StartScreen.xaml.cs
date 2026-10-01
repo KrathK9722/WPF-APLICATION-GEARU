@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Expr;
+using Org.BouncyCastle.Asn1.Cmp;
 using Org.BouncyCastle.Tls;
 using System;
 using System.Configuration;
@@ -19,6 +20,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public string email;
         public string user;
         public static bool IsAdmin;
+        private static bool SaveLogin = false;
 
         public static string connectionString = GlobalFunctions.connectionString;
 
@@ -31,14 +33,12 @@ namespace Projeto_GerenciamentoDeUsuarios
         public StartScreen()
         {
             InitializeComponent();
-
-            //Salvar Sessão
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
-
-            string content = ID.ToString();
-            File.SetAttributes(archivePath, FileAttributes.Normal);
-            File.WriteAllText(archivePath, content);
-            File.SetAttributes(archivePath, FileAttributes.Hidden);
+            if (ID == 0)
+            {
+                string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
+                string savedIdText = File.ReadAllText(archivePath);
+                ID = Convert.ToInt32(savedIdText);
+            }
 
             email = GlobalFunctions.ReturnEmail(ID);
             user = GlobalFunctions.ReturnUser(ID);
@@ -55,14 +55,27 @@ namespace Projeto_GerenciamentoDeUsuarios
         private void SetScreen()
         {
             string config = GlobalFunctions.ReturnConfig(ID);
-            if (config == "DarkMode:False")
+            if (config == "DarkMode:false SaveLogin:true")
             {
                 BotaoDarkMode.IsChecked = false;
+                BotaoSaveLogin.IsChecked = true;
+            }
+            else if (config == "DarkMode:true SaveLogin:true")
+            {
+                BotaoDarkMode.IsChecked = true;
+                BotaoSaveLogin.IsChecked = true;
+            }
+            else if (config == "DarkMode:true SaveLogin:false")
+            {
+                BotaoDarkMode.IsChecked = true;
+                BotaoSaveLogin.IsChecked = false;
             }
             else
             {
-                BotaoDarkMode.IsChecked = true;
+                BotaoDarkMode.IsChecked = false;
+                BotaoSaveLogin.IsChecked = false;
             }
+
             title_landing_page.Text = $"Bem vindo ao Sistema GEARU, {user}";
             ShowScreen(landing_page);
             viewCard();
@@ -138,35 +151,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-
-        // ==========================================================
-        // SAIR
-        // ==========================================================
-
-        private void exit_click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult result = MessageBox.Show(
-                "Deseja realmente sair?",
-                "Sair",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                ID = 0;
-                string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
-
-                string content = ID.ToString();
-                File.SetAttributes(archivePath, FileAttributes.Normal);
-                File.WriteAllText(archivePath, content);
-                File.SetAttributes(archivePath, FileAttributes.Hidden);
-                Login_Screen login_screen = new Login_Screen();
-                login_screen.Show();
-                Close();
-            }
-        }
-
-
         // ==========================================================
         // INÍCIO
         // ==========================================================
@@ -212,7 +196,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         // REMOVER CASA ESPECÍFICA
         // ==========================================================
 
-        private void remove_specific_button_Click(object sender,RoutedEventArgs e)
+        private void remove_specific_button_Click(object sender, RoutedEventArgs e)
         {
             ShowScreen(remove_specific_screen);
         }
@@ -231,6 +215,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             this.Resources["ButtonBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF404040"));
             this.Resources["ButtonText"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
             this.Resources["ButtonBorder"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Gray"));
+            Option_Changed();
         }
 
         private void BotaoDarkMode_Unchecked(object sender, RoutedEventArgs e)
@@ -246,13 +231,30 @@ namespace Projeto_GerenciamentoDeUsuarios
             this.Resources["ButtonBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
             this.Resources["ButtonText"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Black"));
             this.Resources["ButtonBorder"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("DarkGray"));
+            Option_Changed();
         }
-
-        private void BotaoDarkMode_Changed(object sender, EventArgs e)
+        private void BotaoSaveLogin_Checked(object sender, RoutedEventArgs e)
         {
-            // ALTERAR VALOR CONFIG DARKMODE NO BANCO DADOS SQL QUANDO MUDAR O BOTÃO
+            //Salvar Sessão
+            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
+            string content = ID.ToString();
+            File.SetAttributes(archivePath, FileAttributes.Normal);
+            File.WriteAllText(archivePath, content);
+            File.SetAttributes(archivePath, FileAttributes.Hidden);
+            Option_Changed();
         }
+        private void BotaoSaveLogin_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //Salvar Sessão
+            int value = 0;
+            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
 
+            string content = value.ToString();
+            File.SetAttributes(archivePath, FileAttributes.Normal);
+            File.WriteAllText(archivePath, content);
+            File.SetAttributes(archivePath, FileAttributes.Hidden);
+            Option_Changed();
+        }
         private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -260,6 +262,59 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void create_user_click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Option_Changed()
+        {
+            bool darkmode = false;
+            bool savelogin = false;
+            if (BotaoDarkMode.IsChecked == true)
+            {
+                darkmode = true;
+            }
+            if (BotaoSaveLogin.IsChecked == true)
+            {
+                savelogin = true;
+            }
+
+            GlobalFunctions.changeConfig(darkmode, savelogin, ID);
+        }
+
+        // ==========================================================
+        // SAIR
+        // ==========================================================
+        private void exit_click(object sender, RoutedEventArgs e)
+        {
+                Close();
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show(
+                "Deseja realmente sair?",
+                "Sair",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                ID = 0;
+                Login_Screen login_screen = new Login_Screen();
+                if (BotaoSaveLogin.IsChecked == false)
+                {
+                    login_screen.Show();
+                }
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+
+        }
+
+        private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
         }
     }
 }

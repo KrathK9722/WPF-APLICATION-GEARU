@@ -1,0 +1,599 @@
+﻿<Window x:Class="Projeto_GerenciamentoDeUsuarios.RegisterNewUser"
+        WindowStartupLocation="CenterScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
+        mc:Ignorable="d"
+        Title="Cadastro"
+        Width="1000"
+        Height="900"
+        MinWidth="850"
+        MinHeight="900"
+        Background="#F7F7F7"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+
+        <!-- ================================================= -->
+        <!-- CORES -->
+        <!-- ================================================= -->
+
+        <SolidColorBrush x:Key="WindowBackground" Color="#F7F7F7"/>
+        <SolidColorBrush x:Key="PrimaryBlue" Color="#0067C0"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#1A1A1A"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#707070"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#D1D1D1"/>
+
+        <!-- ================================================= -->
+        <!-- SOMBRA -->
+        <!-- ================================================= -->
+
+        <DropShadowEffect
+            x:Key="SoftShadow"
+            BlurRadius="18"
+            ShadowDepth="2"
+            Direction="270"
+            Opacity="0.12"
+            Color="#000000"/>
+
+
+        <!-- ================================================= -->
+        <!-- BOTÃO PRINCIPAL -->
+        <!-- ================================================= -->
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+
+            <Setter Property="Background" Value="{StaticResource PrimaryBlue}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                            x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="7"
+                            Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="#1976D2"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="#005A9E"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- BOTÃO SECUNDÁRIO -->
+        <!-- ================================================= -->
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+
+            <Setter Property="Background" Value="#EDEDED"/>
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                            x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="7"
+                            Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="#E0E0E0"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="#D5D5D5"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- TEXTBOX -->
+        <!-- ================================================= -->
+
+        <Style TargetType="TextBox">
+
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D1D1D1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- LABEL -->
+        <!-- ================================================= -->
+
+        <Style TargetType="Label">
+
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="13"/>
+
+        </Style>
+
+    </Window.Resources>
+
+
+    <!-- ===================================================== -->
+    <!-- ÁREA PRINCIPAL -->
+    <!-- ================================================= -->
+
+    <Grid x:Name="register_grid" Background="{StaticResource WindowBackground}">
+
+
+        <!-- ================================================= -->
+        <!-- SCROLL VIEW -->
+        <!-- ================================================= -->
+
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Disabled"
+            Padding="20" Margin="0,0,0,-36">
+
+            <!-- ================================================= -->
+            <!-- CARD DE CADASTRO -->
+            <!-- ================================================= -->
+
+            <Border
+                Width="430"
+                Padding="40"
+                Background="White"
+                CornerRadius="14"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,20,0,20"
+                Effect="{StaticResource SoftShadow}">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+
+
+                    <!-- ================================================= -->
+                    <!-- LOGO -->
+                    <!-- ================================================= -->
+
+                    <Border
+                        Grid.Row="0"
+                        Width="58"
+                        Height="58"
+                        Background="{StaticResource PrimaryBlue}"
+                        CornerRadius="14"
+                        HorizontalAlignment="Center">
+
+                        <TextBlock
+                            Foreground="White"
+                            FontSize="28"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"><Run Language="pt-br" Text="G"/></TextBlock>
+
+                    </Border>
+
+
+                    <!-- ================================================= -->
+                    <!-- TÍTULO -->
+                    <!-- ================================================= -->
+
+                    <TextBlock x:Name="title_create_account"
+                        Grid.Row="1"
+                        FontSize="26"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource TextPrimary}"
+                        HorizontalAlignment="Center"
+                        Margin="0,18,0,5"><Run Text="Cri"/><Run Language="pt-br" Text="a"/><Run Text="r"/><Run Language="pt-br" Text=" novo Usuário"/></TextBlock>
+
+
+                    <TextBlock
+                        Grid.Row="2"
+                        FontSize="13"
+                        Foreground="{StaticResource TextSecondary}"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,28" Height="17" VerticalAlignment="Bottom"><Run Text="Cri"/><Run Language="pt-br" Text="ar novo Usuário no"/><Run Text=" GEARU."/></TextBlock>
+
+
+                    <!-- ================================================= -->
+                    <!-- USUÁRIO -->
+                    <!-- ================================================= -->
+
+                    <StackPanel Grid.Row="3">
+
+                        <Label
+                            Content="Usuário"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <TextBox
+                            x:Name="txt_create_user"
+                            TextWrapping="Wrap"
+                            Foreground="#1A1A1A"
+                            SelectionBrush="{StaticResource PrimaryBlue}"/>
+
+
+                        <Label
+                            x:Name="error_create_user"
+                            Content="Usuário deve conter 3 ou mais caracteres"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+
+                        <Label
+                            x:Name="error_duplicated_user"
+                            Content="Este usuário já está sendo utilizado"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+
+                    <!--==================================================-->
+                    <!-- NOME COMPLETO -->
+                    <!-- =================================================-->
+                    <StackPanel Grid.Row="3" Margin="0,90,0,0">
+
+                        <Label
+                            Content="Nome Completo"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <TextBox
+                            x:Name="txt_enter_full_name"
+                            TextWrapping="Wrap"
+                            Foreground="#1A1A1A"
+                            SelectionBrush="{StaticResource PrimaryBlue}"/>
+
+
+                        <Label
+                            x:Name="error_enter_full_name"
+                            Content="Insira um nome válido"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+                    <!-- ================================================= -->
+                    <!-- EMAIL -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="4"
+                        Margin="0,18,0,0">
+
+                        <Label
+                            Content="Email"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <TextBox
+                            x:Name="txt_create_email"
+                            TextWrapping="Wrap"
+                            Foreground="#1A1A1A"
+                            SelectionBrush="{StaticResource PrimaryBlue}"/>
+
+
+                        <Label
+                            x:Name="error_create_email"
+                            Content="Email inválido"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+
+                        <Label
+                            x:Name="error_duplicated_email"
+                            Content="Este Email já está em uso"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+
+
+                    <!-- ================================================= -->
+                    <!-- SENHA -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="5"
+                        Margin="0,18,0,0">
+
+                        <Label
+                            Content="Criar senha"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <PasswordBox
+                            x:Name="txt_create_password"
+                            Height="42"
+                            FontSize="14"
+                            Padding="12,8"
+                            Foreground="#1A1A1A"
+                            Background="White"
+                            BorderBrush="#D1D1D1"
+                            BorderThickness="1"
+                            VerticalContentAlignment="Center"/>
+
+
+                        <Label
+                            x:Name="error_create_password"
+                            Content="Senha deve conter 8 caracteres ou mais"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+
+
+                    <!-- ================================================= -->
+                    <!-- REPETIR SENHA -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="6"
+                        Margin="0,18,0,0">
+
+                        <Label
+                            Content="Digite a senha novamente"
+                            Padding="0"
+                            Margin="0,0,0,7"
+                            FontWeight="SemiBold"/>
+
+                        <PasswordBox
+                            x:Name="txt_register_password"
+                            Height="42"
+                            FontSize="14"
+                            Padding="12,8"
+                            Foreground="#1A1A1A"
+                            Background="White"
+                            BorderBrush="#D1D1D1"
+                            BorderThickness="1"
+                            VerticalContentAlignment="Center"/>
+
+
+                        <Label
+                            x:Name="error_repeat_password"
+                            Content="Senhas não coincidem"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,5,0,0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+
+
+                    <!-- ================================================= -->
+                    <!-- VERIFICAÇÃO -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="7"
+                        Margin="0,18,0,0">
+
+
+                        <Label
+                            x:Name="error_verify"
+                            Content="Confirme que você não é um robô"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Margin="0,7,0,0"
+                            Visibility="Collapsed"/>
+                        <Grid x:Name="grid_not_robot" Height="31" Visibility="Visible">
+                            <CheckBox                       
+                                x:Name="checkbox_not_robot"
+                                Content="Não sou um robô."
+                                Checked="CheckBox_Checked"
+                                IsChecked="False"
+                                Foreground="#444444"
+                                FontSize="13" Background="#FFC3C3C3" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Grid x:Name="checked_image_grid" Height="31" Visibility="Collapsed">
+                            <Image x:Name="checked_image"
+                                Source="/DesignImages/image_checked_notrobot.png"
+                                Stretch="Uniform" Margin="89,2,80,0"/>
+                        </Grid>
+
+
+
+                    </StackPanel>
+
+
+                    <!-- ================================================= -->
+                    <!-- ERRO GERAL -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="8"
+                        Margin="0,15,0,0">
+
+                        <Label
+                            x:Name="error_fill_everything"
+                            Content="Preencha todos os campos para continuar"
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Visibility="Collapsed"/>
+
+
+                        <Label
+                            x:Name="error_system"
+                            Content="Erro no sistema, tente novamente."
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Padding="0"
+                            Visibility="Collapsed"/>
+
+                    </StackPanel>
+
+
+                    <!-- ================================================= -->
+                    <!-- BOTÕES -->
+                    <!-- ================================================= -->
+
+                    <StackPanel
+                        Grid.Row="9"
+                        Margin="0,18,0,0">
+
+                        <Button
+                            x:Name="btn_create_account"
+                            Content="Criar Conta"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Height="44"
+                            Click="btn_create_account_Click"/>
+
+
+                        <Button
+                            x:Name="btn_login_screen"
+                            Content="Fechar tela de Registro"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Height="42"
+                            Margin="0,10,0,0"
+                            Click="close_screen_Click"/>
+
+                    </StackPanel>
+
+
+                </Grid>
+
+            </Border>
+
+        </ScrollViewer>
+
+    </Grid>
+
+</Window>
