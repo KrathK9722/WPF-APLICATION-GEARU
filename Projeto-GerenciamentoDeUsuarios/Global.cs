@@ -102,6 +102,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@email", email);
                             command.Parameters.AddWithValue("@user", user);
                             command.Parameters.AddWithValue("@hashpassword", hashpassword);
+                            command.Parameters.AddWithValue("@fullname", fullname);
                         }
                         else if (option == 2)
                         {

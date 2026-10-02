@@ -41,4 +41,4 @@ set time_zone = "+00:00";
 
 ---
 
-Botão registrar usuário criado mas ainda não abre janela mainwindow
+Validar registro de usuários pela janela de registro

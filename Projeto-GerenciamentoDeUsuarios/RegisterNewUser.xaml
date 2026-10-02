@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
         mc:Ignorable="d"
         Title="Registrar Usuário no GEARU"
-        MinWidth="200"
-        MinHeight="870"
+        MinWidth="430"
+        MinHeight="815"
+        MaxHeight="815"
+        MaxWidth="430"
         FontFamily="Segoe UI"
         WindowStyle="ToolWindow"
-        AllowsTransparency="True"
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -201,11 +202,11 @@
     <!-- ÁREA PRINCIPAL -->
     <!-- ================================================= -->
 
-    <Grid x:Name="register_grid">
+    <Grid x:Name="register_grid" Height="800" VerticalAlignment="Center" Margin="0,0,0,0" Width="430">
 
-            <!-- ================================================= -->
-            <!-- CARD DE CADASTRO -->
-            <!-- ================================================= -->
+        <!-- ================================================= -->
+        <!-- CARD DE CADASTRO -->
+        <!-- ================================================= -->
 
         <Border
                 Width="430"
@@ -213,9 +214,7 @@
                 Background="White"
                 CornerRadius="14"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="0,20,0,20"
-                Effect="{StaticResource SoftShadow}">
+                Effect="{StaticResource SoftShadow}" Margin="0,0,0,1">
 
             <Grid>
 

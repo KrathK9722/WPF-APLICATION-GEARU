@@ -96,25 +96,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error += 1;
             }
 
-            // ERROR ROBOT VERIFY
-            if (checado == false)
-            {
-                error_verify.Visibility = Visibility.Visible;
-                error += 1;
-            }
-
             // PRINT IF REGISTER IS CORRECT
             if (error == 0)
             {
                 int system_return;
-                if (adminExist)
-                {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 1, "Success!! Account Created.");
-                }
-                else
-                {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 2, "Success!! Admin Account Created.");
-                }
+                system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 1, "Success!! Account Created.");
                 if (system_return != 0)
                 {
                     // Erro geral do sistema

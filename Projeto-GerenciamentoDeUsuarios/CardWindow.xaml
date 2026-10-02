@@ -8,8 +8,7 @@
         Title="Detalhes do Usuário" 
         SizeToContent="WidthAndHeight" 
         WindowStyle="ToolWindow"
-        AllowsTransparency="True"
-        Background="Transparent"
+        Background="White"
         WindowStartupLocation="CenterScreen">
 
     <!-- O conteúdo desta janela será injetado dinamicamente via C# -->
