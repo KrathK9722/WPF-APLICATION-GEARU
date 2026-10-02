@@ -18,7 +18,7 @@ CREATE TABLE `GEARU`.`users` (`id` INT NOT NULL AUTO_INCREMENT ,
 `lastEdit` DATETIME NOT null default current_timestamp,
 `creationDate` DATETIME NOT null default current_timestamp,
 `status` VARCHAR(10) not null default "Ativado",
-`systemConfig` varchar (300) not null default "DarkMode:False",
+`systemConfig` varchar (300) not null default "DarkMode:false",
 PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
