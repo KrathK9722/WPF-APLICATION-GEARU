@@ -16,20 +16,27 @@ namespace Projeto_GerenciamentoDeUsuarios
     public partial class StartScreen : Window
     {
 
+        // ARMAZENAR VALORES
         public static int ID;
         public string email;
         public string user;
         public static bool IsAdmin;
         private static bool SaveLogin = false;
+        private bool _isDarkMode = false;
 
+        // VERIFICAR TELAS ABERTAS
+        public static bool create_user_opened = false;
+        public static bool edit_user_opened = false;
+        public static bool remove_user_opened = false;
+            
+        // CONEXÃO
         public static string connectionString = GlobalFunctions.connectionString;
-
         public static MySqlConnection Connection { get; set; }
 
-        public int page = 0;
-        public int maxPage = 0;
+        // NÚMEROS DE USUÁRIOS REGISTRADOS
         public int registerNumber = GlobalFunctions.verNumeroRegistros();
 
+        // CÓDIGO
         public StartScreen()
         {
             InitializeComponent();
@@ -157,7 +164,6 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void start_click(object sender, RoutedEventArgs e)
         {
-            page = 0;
             viewCard();
             ShowScreen(landing_page);
         }
@@ -165,13 +171,28 @@ namespace Projeto_GerenciamentoDeUsuarios
 
 
         // ==========================================================
-        // REGISTRAR CASA
+        // REGISTRAR USUÁRIO
         // ==========================================================
 
         private void register_click(object sender, RoutedEventArgs e)
         {
             ShowScreen(register_screen);
         }
+        private void create_user_click(object sender, RoutedEventArgs e)
+        {
+            if (create_user_opened == true)
+            {
+                return;
+            }
+            RegisterNewUser registrarUser = new RegisterNewUser();
+            registrarUser.Show();
+            RegisterNewUser.ID = ID;
+            RegisterNewUser.email = email;
+            RegisterNewUser.IsAdmin = IsAdmin;
+            RegisterNewUser.user = user;
+            create_user_opened = true;
+        }
+
         // ==========================================================
         // EDITAR
         // ==========================================================
@@ -190,18 +211,14 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             ShowScreen(remove_screen);
         }
-
-
-        // ==========================================================
-        // REMOVER CASA ESPECÍFICA
-        // ==========================================================
-
         private void remove_specific_button_Click(object sender, RoutedEventArgs e)
         {
             ShowScreen(remove_specific_screen);
         }
 
-        private bool _isDarkMode = false;
+        // ==========================================================
+        // CONFIGURAÇÕES DO SISTEMA
+        // ==========================================================
         private void BotaoDarkMode_Checked(object sender, RoutedEventArgs e)
         {
             this.Resources["WindowBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#202020"));
@@ -255,14 +272,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             File.SetAttributes(archivePath, FileAttributes.Hidden);
             Option_Changed();
         }
-        private void landing_page_data_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void create_user_click(object sender, RoutedEventArgs e)
-        {
-        }
 
         private void Option_Changed()
         {
@@ -301,19 +310,22 @@ namespace Projeto_GerenciamentoDeUsuarios
                 Login_Screen login_screen = new Login_Screen();
                 if (BotaoSaveLogin.IsChecked == false)
                 {
+                    if (create_user_opened)
+                    {
+                        RegisterNewUser registerUser = new RegisterNewUser();
+                        registerUser.Close();
+                    }
                     login_screen.Show();
                 }
-                e.Cancel = false;
+                else
+                {
+                    Environment.Exit(0);
+                }
             }
             else
             {
                 e.Cancel = true;
             }
-
-        }
-
-        private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
-        {
 
         }
     }

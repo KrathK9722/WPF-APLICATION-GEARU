@@ -25,6 +25,10 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         // Variáveis
         bool checado = false;
+        public static int ID;
+        public static string email;
+        public static string user;
+        public static bool IsAdmin;
 
         // Instâncias
         public string connectionString = GlobalFunctions.connectionString;
@@ -35,108 +39,8 @@ namespace Projeto_GerenciamentoDeUsuarios
         public RegisterNewUser()
         {
             InitializeComponent();
-            setTitle();
-        }
-        public void setTitle()
-        {
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
-            if (File.Exists(archivePath)) {
-                string savedIdText = File.ReadAllText(archivePath);
-                if (int.TryParse(savedIdText, out int savedId)) { }
-                if (adminExist && Convert.ToInt32(savedId) == 0)
-                {
-                    Login_Screen loginScreen = new Login_Screen();
-                    loginScreen.Show();
-                    this.Close();
-                }
-                else if (Convert.ToInt32(savedId) != 0)
-                {
-                    StartScreen.ID = Convert.ToInt32(savedId);
-                    StartScreen Start_screen = new StartScreen();
-                    Start_screen.Show();
-                    this.Close();
-                    return;
-                }
-            }
-            else
-            {
-                if (!Directory.Exists(@"C:\Documentos\GEARU\Tokens"))
-                {
-                    Directory.CreateDirectory(@"C:\Documentos\GEARU\Tokens");
-                }
-                if (!File.Exists(archivePath))
-                {
-                    File.WriteAllText(archivePath, "0");
-                    File.SetAttributes(archivePath, FileAttributes.Hidden);
-                }
-                if (File.Exists(archivePath))
-                {
-                    string savedIdText = File.ReadAllText(archivePath);
-                    if (int.TryParse(savedIdText, out int savedId)) { }
-                    if (adminExist && Convert.ToInt32(savedId) == 0)
-                    {
-                        title_create_account.Text = "Criar Conta de Usuário";
-                    }
-                    else if (Convert.ToInt32(savedId) == 0)
-                    {
-                        title_create_account.Text = "Criar Conta de Administrador";
-                    }
-                    else
-                    {
-                        StartScreen.ID = Convert.ToInt32(savedId);
-                        StartScreen Start_screen = new StartScreen();
-                        Start_screen.Show();
-                        this.Close();
-                        return;
-                    }
-                }
-                else
-                {
-                    this.Close();
-                    MessageBox.Show("Erro ao criar o arquivo.");
-                }
-            }
         }
 
-        public void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            
-            register_grid.IsEnabled = false;
-            var cap = new CAPTCHA_WINDOW(this); // Abre captcha como dialogo e seta Main como owner
-            bool? result = cap.ShowDialog();
-
-            register_grid.IsEnabled = true;
-            if (result == true)
-            {
-                // Captcha confirmado e válido
-                checado = true;
-                checkbox_not_robot.IsChecked = true;
-
-                grid_not_robot.Visibility = Visibility.Collapsed;
-                checked_image_grid.Visibility = Visibility.Visible;
-
-                error_verify.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                // Captcha não confirmado ou cancelado
-                reset_capcha();
-            }
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            grid_not_robot.Visibility = Visibility.Visible;
-            checado = false;
-        }
-
-        public void reset_capcha()
-        {
-            checado = false;
-            checkbox_not_robot.IsChecked = false;
-            grid_not_robot.Visibility = Visibility.Visible;
-            checked_image_grid.Visibility = Visibility.Collapsed;
-        }
         public void btn_create_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
         {
             int error = 0;
@@ -155,7 +59,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 error_fill_everything.Visibility = Visibility.Visible;
                 error += 1;
-                reset_capcha();
                 return;
             }
 
@@ -242,10 +145,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 else
                 {
                     Login_Screen login_Screen = new Login_Screen();
-                    login_Screen.Show();
-                    this.Close();
                     txt_register_password.Clear();
-                    reset_capcha();
                     return;
 
                 }
@@ -254,12 +154,12 @@ namespace Projeto_GerenciamentoDeUsuarios
             else
             {
                 error = 0;
-                reset_capcha();
                 return;
             }
         }
-        private void close_screen_Click(object sender, RoutedEventArgs e)
+        private void comeback_Click(object sender, RoutedEventArgs e)
         {
+            StartScreen.create_user_opened = false;
             this.Close();
         }
     }

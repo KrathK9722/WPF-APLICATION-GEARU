@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
         mc:Ignorable="d"
-        Title="Cadastro"
+        Title="Cadastro de Admin no GEARU"
         Width="1000"
         Height="900"
         MinWidth="850"
