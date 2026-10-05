@@ -225,11 +225,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 int system_return;
                 if (adminExist)
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 1, "Success!! Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 0, 1, "Success!! Account Created.");
                 }
                 else
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 2, "Success!! Admin Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 1, 2, "Success!! Admin Account Created.");
                 }
                 if (system_return != 0)
                 {

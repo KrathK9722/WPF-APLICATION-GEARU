@@ -24,16 +24,13 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         // Variáveis
         bool checado = false;
-        public static int ID;
-        public static string email;
-        public static string user;
-        public static bool IsAdmin;
-
+        public static int AdminID;
+        private bool NewUserIsAdmin = false;
         public static int ImageValue = 0;
 
         // Instâncias
-        public string connectionString = GlobalFunctions.connectionString;
-        public bool adminExist = GlobalFunctions.AdminExist();
+        private string connectionString = GlobalFunctions.connectionString;
+        private bool adminExist = GlobalFunctions.AdminExist();
 
 
         // Inicialização/Função Primária
@@ -43,7 +40,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             viewAvatar();
         }
 
-        public void viewAvatar()
+        private void viewAvatar()
         {
             int quantidadeImagens = GlobalFunctions.GetImageCount();
 
@@ -64,7 +61,18 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-        public void btn_create_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
+        private void button_adminlevel_Checked(object sender, RoutedEventArgs e)
+        {
+            NewUserIsAdmin = true;
+            button_adminlevel.Content = "Usuário de nivel Administrador";
+        }
+        private void button_adminlevel_Unchecked(object sender, RoutedEventArgs e)
+        {
+            NewUserIsAdmin = false;
+            button_adminlevel.Content = "Usuário de nivel Comum";
+        }
+
+        private void btn_create_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
         {
             int error = 0;
             error_create_email.Visibility = Visibility.Collapsed;
@@ -122,7 +130,14 @@ namespace Projeto_GerenciamentoDeUsuarios
             if (error == 0)
             {
                 int system_return;
-                system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 1, "Success!! Account Created.");
+                if (NewUserIsAdmin) 
+                { 
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, GlobalFunctions.GetAdminLevel(AdminID)+1, 2, "Success!! New Admin Account Created."); 
+                }
+                else 
+                {
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 0, 1, "Success!! User Account Created.");
+                }
                 if (system_return != 0)
                 {
                     // Erro geral do sistema

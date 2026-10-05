@@ -52,7 +52,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int imageValue , int option, string finish_message)
+        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int imageValue, int AdminLevel, int option, string finish_message)
         {
             string email = email_space.Text.Trim();
             string user = user_space.Text.Trim();
@@ -60,6 +60,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             string hashpassword = BCryptNet.HashPassword(password);
             string fullname = fullname_space.Text.Trim();
             int image = imageValue;
+            int adminLevel = AdminLevel;
             int admin = 1;
 
             // Garantir abertura do banco de dados
@@ -85,7 +86,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 }
                 else if (option == 2)
                 {
-                    query = "INSERT INTO users (email, user, password, IsAdmin, name, imageValue) VALUES (@email, @user, @hashpassword, @admin, @fullname, @imageValue)";
+                    query = "INSERT INTO users (email, user, password, IsAdmin, name, imageValue, AdminLevel) VALUES (@email, @user, @hashpassword, @admin, @fullname, @imageValue, @AdminLevel)";
                 }
                 else if (option == 3)
                 {
@@ -114,14 +115,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@admin", admin);
                             command.Parameters.AddWithValue("@fullname", fullname);
                             command.Parameters.AddWithValue("@imageValue", image);
+                            command.Parameters.AddWithValue("@AdminLevel", adminLevel);
                         }
-                        else if (option == 3)
-                        {
-                        }
-                        else if (option == 4)
-                        {
-                        }
-
                         command.ExecuteNonQuery();
                     }
 
@@ -419,6 +414,32 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return false;
             }
             return false;
+
+        }
+
+        public static int GetAdminLevel(int id)
+        {
+            Open_database();
+            string getAdminLevel = "SELECT AdminLevel FROM users WHERE id = @id";
+            using var returnAdminLevel = new MySqlCommand(getAdminLevel, Connection);
+            returnAdminLevel.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnAdminLevel.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int AdminLevel = Convert.ToInt32(reader["AdminLevel"]);
+
+                    return AdminLevel;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return 0;
+            }
+            return 0;
 
         }
         public static bool ReturnIsLocked(int id)

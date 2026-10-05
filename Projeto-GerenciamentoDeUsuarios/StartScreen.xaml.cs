@@ -44,6 +44,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public StartScreen()
         {
             InitializeComponent();
+            exit = false;
             if (ID == 0)
             {
                 string savedIdText = File.ReadAllText(archivePath);
@@ -216,10 +217,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             RegisterNewUser registrarUser = new RegisterNewUser();
             registrarUser.Show();
-            RegisterNewUser.ID = ID;
-            RegisterNewUser.email = email;
-            RegisterNewUser.IsAdmin = IsAdmin;
-            RegisterNewUser.user = user;
+            RegisterNewUser.AdminID = ID;
             create_user_opened = true;
         }
 
@@ -393,6 +391,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                         onlineTimer.Stop();
                     }
                     ID = 0;
+                    exit = true;
                     login_screen.Show();
                 }
                 else

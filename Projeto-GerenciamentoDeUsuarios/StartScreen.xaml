@@ -426,7 +426,7 @@
                                 FontSize="19"
                                 Width="35"
                                 VerticalAlignment="Center"><Run Language="pt-br" Text="💾"/></TextBlock>
-                            <ui:ToggleSwitch x:Name="BotaoSaveLogin" Content="Guardar Login" Checked="BotaoSaveLogin_Checked" Unchecked="BotaoSaveLogin_Unchecked" Foreground="Black" Height="58" Width="143" IsChecked="False" >
+                            <ui:ToggleSwitch x:Name="BotaoSaveLogin" Content="Guardar Login" Checked="BotaoSaveLogin_Checked" Unchecked="BotaoSaveLogin_Unchecked" Foreground="{DynamicResource TextPrimary}" Height="58" Width="143" IsChecked="False" >
                                 <ui:ToggleSwitch.Background>
                                     <SolidColorBrush Color="#FF5D5D5D"/>
                                 </ui:ToggleSwitch.Background>
