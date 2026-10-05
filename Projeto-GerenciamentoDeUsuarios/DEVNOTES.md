@@ -44,7 +44,6 @@ set time_zone = "+00:00";
 
 ---
 
-FINALIZAR REGISTRO DE USUÁRIO: Opção de ser admin
 FINALIZAR EDIÇÃO USUÁRIOS: Edição por janela separada e por janela especifica do card com edição de NOME COMPLETO, USUÁRIO, EMAIL, STATUS, AVATAR, TIPO DE USUÁRIO
 FINALIZAR REMOÇÃO USUÁRIO: Remover pelo nome ou email e confirmar com senha da conta do adm
 

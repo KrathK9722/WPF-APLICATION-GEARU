@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Remover Usuário do GEARU"
         MinWidth="430"
-        MinHeight="815"
-        MaxHeight="815"
+        MinHeight="600"
+        MaxHeight="600"
         MaxWidth="430"
         FontFamily="Segoe UI"
         WindowStyle="ToolWindow"
@@ -203,7 +203,7 @@
     <!-- ÁREA PRINCIPAL -->
     <!-- ================================================= -->
 
-    <Grid x:Name="register_grid" Height="800" VerticalAlignment="Center" Margin="0,0,0,0" Width="430">
+    <Grid x:Name="register_grid" Height="485" VerticalAlignment="Center" Width="430">
 
         <!-- ================================================= -->
         <!-- CARD DE CADASTRO -->
@@ -215,7 +215,7 @@
                 Background="White"
                 CornerRadius="14"
                 HorizontalAlignment="Center"
-                Effect="{StaticResource SoftShadow}" Margin="0,0,0,1">
+                Effect="{StaticResource SoftShadow}" Margin="0,-49,0,-42">
 
             <Grid>
 
@@ -267,7 +267,9 @@
                         FontWeight="SemiBold"
                         Foreground="{StaticResource TextPrimary}"
                         HorizontalAlignment="Center"
-                        Margin="0,18,0,5"><Run Text="Cri"/><Run Language="pt-br" Text="a"/><Run Text="r"/><Run Language="pt-br" Text=" novo Usuário"/></TextBlock>
+                        Margin="0,18,0,0" 
+                        Text="Remover Usuário">
+                </TextBlock>
 
 
                 <TextBlock
@@ -275,17 +277,20 @@
                         FontSize="13"
                         Foreground="{StaticResource TextSecondary}"
                         HorizontalAlignment="Center"
-                        Margin="0,0,0,28" Height="17" VerticalAlignment="Bottom"><Run Text="Cri"/><Run Language="pt-br" Text="ar novo Usuário no"/><Run Text=" GEARU."/></TextBlock>
+                        Margin="0,0,0,18"
+                        Text="Remover um usuário do sistema GEARU.">
+
+                </TextBlock>
 
 
                 <!-- ================================================= -->
-                <!-- USUÁRIO -->
+                <!-- USUÁRIO OU EMAIL -->
                 <!-- ================================================= -->
 
                 <StackPanel Grid.Row="3">
 
                     <Label
-                            Content="Usuário"
+                            Content="Digite o User ou Email que você quer remover do sistema"
                             Padding="0"
                             Margin="0,0,0,7"
                             FontWeight="SemiBold"/>
@@ -295,88 +300,10 @@
                             TextWrapping="Wrap"
                             Foreground="#1A1A1A"
                             SelectionBrush="{StaticResource PrimaryBlue}"/>
-
-
-                    <Label
-                            x:Name="error_create_user"
-                            Content="Usuário deve conter 3 ou mais caracteres"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
-
-                    <Label
-                            x:Name="error_duplicated_user"
-                            Content="Este usuário já está sendo utilizado"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
                 </StackPanel>
 
-                <!--==================================================-->
-                <!-- NOME COMPLETO -->
-                <!-- =================================================-->
-                <StackPanel Grid.Row="3" Margin="0,90,0,0">
-
-
-                    <Label
-                            x:Name="error_enter_full_name"
-                            Content="Insira um nome válido"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
-                </StackPanel>
                 <!-- ================================================= -->
-                <!-- EMAIL -->
-                <!-- ================================================= -->
-
-                <StackPanel
-                        Grid.Row="4"
-                        Margin="0,18,0,0">
-
-
-                    <Label
-                            x:Name="error_create_email"
-                            Content="Email inválido"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
-
-                    <Label
-                            x:Name="error_duplicated_email"
-                            Content="Este Email já está em uso"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
-                </StackPanel>
-
-
-                <!-- ================================================= -->
-                <!-- SENHA -->
+                <!-- SENHA DE CONFIRMAÇÃO-->
                 <!-- ================================================= -->
 
                 <StackPanel
@@ -384,7 +311,7 @@
                         Margin="0,18,0,0">
 
                     <Label
-                            Content="Criar senha"
+                            Content="Digite sua senha para confirmar a ação"
                             Padding="0"
                             Margin="0,0,0,7"
                             FontWeight="SemiBold"/>
@@ -402,8 +329,8 @@
 
 
                     <Label
-                            x:Name="error_create_password"
-                            Content="Senha deve conter 8 caracteres ou mais"
+                            x:Name="error_incorrect_password"
+                            Content="Senha de confirmação errada"
                             Foreground="#B10000"
                             FontSize="11"
                             FontWeight="Bold"
@@ -411,54 +338,6 @@
                             Padding="0"
                             Margin="0,5,0,0"
                             Visibility="Collapsed"/>
-
-                </StackPanel>
-
-
-                <!-- ================================================= -->
-                <!-- REPETIR SENHA -->
-                <!-- ================================================= -->
-
-                <StackPanel
-                        Grid.Row="6"
-                        Margin="0,18,0,0">
-
-
-                    <Label
-                            x:Name="error_repeat_password"
-                            Content="Senhas não coincidem"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,5,0,0"
-                            Visibility="Collapsed"/>
-
-                </StackPanel>
-
-
-                <!-- ================================================= -->
-                <!-- VERIFICAÇÃO -->
-                <!-- ================================================= -->
-
-                <StackPanel
-                        Grid.Row="7"
-                        Margin="0,18,0,0">
-
-
-                    <Label
-                            x:Name="error_verify"
-                            Content="Confirme que você não é um robô"
-                            Foreground="#B10000"
-                            FontSize="11"
-                            FontWeight="Bold"
-                            HorizontalContentAlignment="Center"
-                            Padding="0"
-                            Margin="0,7,0,0"
-                            Visibility="Collapsed"/>
-
-
 
                 </StackPanel>
 
