@@ -149,7 +149,15 @@ namespace Projeto_GerenciamentoDeUsuarios
                     novoCard.CardAccountBanned = GlobalFunctions.ReturnIsBanned(idBanco) ? "Conta Banida" : "Conta Ativa";
                     novoCard.CardAccountStatus = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online" : "Offline";
                     novoCard.CardOnlineColor = GlobalFunctions.ReturnIsOnline(idBanco) ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#22C55E")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9CA3AF"));
-                    novoCard.CardLastTimeActive = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online Agora" : $"Última vez ativo: {GlobalFunctions.ReturnLastActive(idBanco)}";
+                    if (GlobalFunctions.ReturnLastActive(idBanco) == "")
+                    {
+                        novoCard.CardLastTimeActive = "Ainda sem atividade";
+                    }
+                    else
+                    {
+                        novoCard.CardLastTimeActive = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online Agora" : $"Última vez ativo: {GlobalFunctions.ReturnLastActive(idBanco)}";
+                    }
+                    
                     novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
