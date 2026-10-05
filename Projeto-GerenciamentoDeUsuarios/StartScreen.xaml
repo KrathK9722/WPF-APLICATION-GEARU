@@ -633,7 +633,7 @@
                         HorizontalAlignment="Center"
                         Margin="0,25,0,0"
                         Click="register_click"/>
-
+                    
                 </StackPanel>
 
             </Grid>
@@ -666,7 +666,7 @@
 
 
                     <Border x:Name="border"
-                        Background="{DynamicResource WindowBackground}"
+                        Background="{DynamicResource ButtonBackground}"
                         CornerRadius="12"
                         Padding="30"
                         Effect="{Binding Cursor, ElementName=remove_screen}">
@@ -674,53 +674,16 @@
                         <StackPanel>
 
                             <Button
-                                x:Name="remove_all_button"
-                                Content="Remover todas as casas"
-                                Style="{DynamicResource PrimaryButtonStyle}"
-                                Height="45"
-                                Margin="0,0,0,15"/>
-
-
-                            <Button
-                                x:Name="remove_specific_button"
-                                Content="Selecionar uma casa"
+                                x:Name="remove_user_button"
+                                Content="Remover um usuário do Sistema"
                                 Height="45"
                                 Background="{DynamicResource PrimaryBlue}"
                                 BorderThickness="0"
-                                Click="remove_specific_button_Click" Width="540"/>
+                                Click="remove_user_button_Click" Width="540"/>
 
                         </StackPanel>
 
                     </Border>
-
-                </StackPanel>
-
-            </Grid>
-
-
-            <!-- ============================================= -->
-            <!-- REMOVE SPECIFIC -->
-            <!-- ============================================= -->
-
-            <Grid
-                x:Name="remove_specific_screen"
-                Visibility="Collapsed">
-
-                <StackPanel
-                    Width="600"
-                    HorizontalAlignment="Center"
-                    Margin="50">
-
-                    <TextBlock
-                        x:Name="title_remove_specific"
-                        Text="Selecionar casa"
-                        FontSize="30"
-                        FontWeight="SemiBold"/>
-
-                    <TextBlock
-                        Text="Selecione o ID da casa que deseja remover."
-                        Foreground="{DynamicResource TextSecondary}"
-                        Margin="0,5,0,30"/>
 
                 </StackPanel>
 

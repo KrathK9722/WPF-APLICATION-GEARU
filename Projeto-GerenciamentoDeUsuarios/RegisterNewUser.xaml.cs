@@ -14,7 +14,6 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Reflection;
 
-// FAZER A VERIFICAÇÃO FUNCIONAR DOS DADOS, TA SALVANDO E MANDANDO MSG MESMO COM A VERIFICAÇÃO ERRADA POR CONTA DO GLOBAL
 namespace Projeto_GerenciamentoDeUsuarios
 {
     /// <summary>
@@ -30,6 +29,8 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static string user;
         public static bool IsAdmin;
 
+        public static int ImageValue = 0;
+
         // Instâncias
         public string connectionString = GlobalFunctions.connectionString;
         public bool adminExist = GlobalFunctions.AdminExist();
@@ -39,6 +40,28 @@ namespace Projeto_GerenciamentoDeUsuarios
         public RegisterNewUser()
         {
             InitializeComponent();
+            viewAvatar();
+        }
+
+        public void viewAvatar()
+        {
+            int quantidadeImagens = GlobalFunctions.GetImageCount();
+
+            ContainerDeCards.Children.Clear();
+
+            for (int i = 0; i < quantidadeImagens; i++)
+            {
+                CardImage novoCard = new CardImage();
+
+                novoCard.CardImageSource = GlobalFunctions.getImage(i);
+                novoCard.ImageValue = i;
+
+                novoCard.Width = 100;
+                novoCard.Height = 100;
+                novoCard.Margin = new Thickness(8);
+
+                ContainerDeCards.Children.Add(novoCard);
+            }
         }
 
         public void btn_create_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
@@ -52,7 +75,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             error_duplicated_user.Visibility = Visibility.Collapsed;
             error_repeat_password.Visibility = Visibility.Collapsed;
             error_system.Visibility = Visibility.Collapsed;
-            error_verify.Visibility = Visibility.Collapsed;
             error_enter_full_name.Visibility = Visibility.Collapsed;
             // ERROR MESSAGE FILL EVERYTHING
             if (string.IsNullOrWhiteSpace(txt_create_email.Text) || string.IsNullOrWhiteSpace(txt_create_password.Password))
@@ -72,7 +94,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             if (txt_enter_full_name.Text.Length < 5)
             {
-                error_enter_full_name.Visibility= Visibility.Visible;
+                error_enter_full_name.Visibility = Visibility.Visible;
                 error += 1;
             }
             // ERROR MESSAGE CREATE EMAIL
@@ -100,7 +122,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             if (error == 0)
             {
                 int system_return;
-                system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 1, "Success!! Account Created.");
+                system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 1, "Success!! Account Created.");
                 if (system_return != 0)
                 {
                     // Erro geral do sistema
@@ -108,7 +130,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     {
                         error_system.Visibility = Visibility.Visible;
                     }
-                    
+
                     // Erro de email duplicado
                     if (system_return == 100)
                     {
@@ -135,7 +157,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return;
 
                 }
-                
+
             }
             else
             {
@@ -145,8 +167,12 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
         private void comeback_Click(object sender, RoutedEventArgs e)
         {
-            StartScreen.create_user_opened = false;
             this.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            StartScreen.create_user_opened = false;
         }
     }
 }

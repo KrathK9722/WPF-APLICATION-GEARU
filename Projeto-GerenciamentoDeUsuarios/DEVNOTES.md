@@ -41,4 +41,9 @@ set time_zone = "+00:00";
 
 ---
 
-Validar registro de usuários pela janela de registro
+FINALIZAR REGISTRO DE USUÁRIO: Opção de ser admin
+FINALIZAR EDIÇÃO USUÁRIOS: Edição por janela separada e por janela especifica do card com edição de NOME COMPLETO, USUÁRIO, EMAIL, STATUS, AVATAR, TIPO DE USUÁRIO
+FINALIZAR REMOÇÃO USUÁRIO: Remover pelo nome ou email e confirmar com senha da conta do adm
+
+FINALIZAR LOGIN CORRETO DO USUÁRIO COMUM: LIMITAR JANELAS VISIVEIS E EDIÇÃO DE PERFIL PRÓPRIO
+FAZER TELA DE AUDITORIA E SALVAR LOGS DO SISTEMA OBS: SOMENTE ADMINS PODEM VISUALIZAR

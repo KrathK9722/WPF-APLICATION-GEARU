@@ -14,7 +14,7 @@
     <UserControl.Resources>
 
         <!-- CORES -->
-        <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#0000000D"/>
         <SolidColorBrush x:Key="CardBorder" Color="#E3E4F7"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#202124"/>
         <SolidColorBrush x:Key="TextSecondary" Color="#777982"/>
@@ -168,13 +168,15 @@
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="7"
                                      Height="7"
-                                     Fill="#22A06B"
+                                     Fill="{Binding CardOnlineColor, ElementName=ThisCard}"
                                      VerticalAlignment="Center"
                                      Margin="0,0,5,0"/>
-                            <TextBlock Text="Perfil"
+                            <TextBlock Text="{Binding CardAccountStatus, ElementName=ThisCard}"
                                        FontSize="10"
                                        FontWeight="SemiBold"
-                                       Foreground="#287B5A"/>
+                                       Foreground="{Binding CardOnlineColor, ElementName=ThisCard}">
+                                
+                            </TextBlock>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -194,8 +196,7 @@
 
                         <Ellipse Margin="5">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="{Binding CardImageSource,
-                                                   ElementName=ThisCard}"
+                                <ImageBrush ImageSource="{Binding CardImageSource, ElementName=ThisCard}"
                                             Stretch="UniformToFill"/>
                             </Ellipse.Fill>
                         </Ellipse>
@@ -203,7 +204,7 @@
                         <!-- INDICADOR -->
                         <Ellipse Width="13"
                                  Height="13"
-                                 Fill="#22A06B"
+                                 Fill="{Binding CardOnlineColor, ElementName=ThisCard}"
                                  Stroke="White"
                                  StrokeThickness="2"
                                  HorizontalAlignment="Right"
@@ -215,16 +216,14 @@
                     <StackPanel Margin="105,9,8,0"
                                 VerticalAlignment="Top">
 
-                        <TextBlock Text="{Binding CardUser,
-                                                  ElementName=ThisCard}"
+                        <TextBlock Text="{Binding CardUser,ElementName=ThisCard}"
                                    FontSize="15"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimary}"
                                    TextTrimming="CharacterEllipsis"
                                    TextWrapping="NoWrap"/>
 
-                        <TextBlock Text="{Binding CardUserType,
-                                                  ElementName=ThisCard}"
+                        <TextBlock Text="{Binding CardLastTimeActive,ElementName=ThisCard}"
                                    FontSize="11"
                                    Foreground="{DynamicResource TextSecondary}"
                                    Margin="0,3,0,0"
@@ -233,27 +232,13 @@
                     </StackPanel>
 
                     <!-- MENU VISUAL -->
-                    <Border Width="30"
-                            Height="30"
-                            CornerRadius="15"
-                            Background="#F3F3F5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Margin="0,0,10,5">
-                        <TextBlock Text="•••"
-                                   FontSize="13"
-                                   FontWeight="Bold"
-                                   Foreground="#555555"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Border>
                 </Grid>
 
                 <!-- DIVISÓRIA -->
                 <Border Grid.Row="2"
                         BorderBrush="#EEEEF0"
                         BorderThickness="0,1,0,1"
-                        Background="#FAFAFB">
+                        Background="#0000000D">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -267,10 +252,10 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
                             <TextBlock Text="Perfil"
-                                       FontSize="11"
+                                       FontSize="15"
                                        Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="Usuário"
+                            <TextBlock Text="{Binding CardUserType,ElementName=ThisCard}"
                                        FontSize="13"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource TextPrimary}"
@@ -287,11 +272,11 @@
                         <StackPanel Grid.Column="2"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center">
-                            <TextBlock Text="Status"
-                                       FontSize="11"
+                            <TextBlock
+                                       FontSize="15"
                                        Foreground="{DynamicResource TextSecondary}"
-                                       HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding CardAccountStatus,ElementName=ThisCard}"
+                                       HorizontalAlignment="Center"><Run Language="pt-br" Text="Status"/></TextBlock>
+                            <TextBlock Text="{Binding CardAccountBanned,ElementName=ThisCard}"
                                        FontSize="12"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource TextPrimary}"

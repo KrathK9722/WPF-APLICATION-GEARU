@@ -163,7 +163,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                         StartScreen.ID = user_token;
                         StartScreen Start_screen = new StartScreen();
                         Start_screen.Show();
- 
+                        GlobalFunctions.UpdateLastLogin(user_token);
                         error = 0;
                         txt_enter_email_or_user.Clear();
                         txt_enter_password.Clear();

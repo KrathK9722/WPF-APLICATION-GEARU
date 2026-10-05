@@ -14,7 +14,6 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Reflection;
 
-// FAZER A VERIFICAÇÃO FUNCIONAR DOS DADOS, TA SALVANDO E MANDANDO MSG MESMO COM A VERIFICAÇÃO ERRADA POR CONTA DO GLOBAL
 namespace Projeto_GerenciamentoDeUsuarios
 {
     /// <summary>
@@ -26,43 +25,33 @@ namespace Projeto_GerenciamentoDeUsuarios
         // Variáveis
         bool checado = false;
 
-        // Instâncias
         public string connectionString = GlobalFunctions.connectionString;
         public bool adminExist = GlobalFunctions.AdminExist();
 
+        public int registerNumber = GlobalFunctions.verNumeroRegistros();
+        public static string user = Environment.UserName;
+        public static string archivePath = $@"C:\Users\{user}\Documents\GEARU\Tokens\session.txt";
+
+        public static int ImageValue = 0;
 
         // Inicialização/Função Primária
         public MainWindow()
         {
             InitializeComponent();
-            setTitle();
+            archiveCheck();
         }
-        public void setTitle()
+        public void archiveCheck()
         {
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
-            if (File.Exists(archivePath)) {
-                string savedIdText = File.ReadAllText(archivePath);
-                if (int.TryParse(savedIdText, out int savedId)) { }
-                if (adminExist && Convert.ToInt32(savedId) == 0)
-                {
-                    Login_Screen loginScreen = new Login_Screen();
-                    loginScreen.Show();
-                    this.Close();
-                }
-                else if (Convert.ToInt32(savedId) != 0)
-                {
-                    StartScreen.ID = Convert.ToInt32(savedId);
-                    StartScreen Start_screen = new StartScreen();
-                    Start_screen.Show();
-                    this.Close();
-                    return;
-                }
+            string directory = $@"C:\Users\{user}\Documents\GEARU\Tokens";
+            if (File.Exists(archivePath)) 
+            {
+                startScreen();
             }
             else
             {
-                if (!Directory.Exists(@"C:\Documentos\GEARU\Tokens"))
+                if (!Directory.Exists(directory))
                 {
-                    Directory.CreateDirectory(@"C:\Documentos\GEARU\Tokens");
+                    Directory.CreateDirectory(directory);
                 }
                 if (!File.Exists(archivePath))
                 {
@@ -71,30 +60,60 @@ namespace Projeto_GerenciamentoDeUsuarios
                 }
                 if (File.Exists(archivePath))
                 {
-                    string savedIdText = File.ReadAllText(archivePath);
-                    if (int.TryParse(savedIdText, out int savedId)) { }
-                    if (adminExist && Convert.ToInt32(savedId) == 0)
-                    {
-                        title_create_account.Text = "Criar Conta de Usuário";
-                    }
-                    else if (Convert.ToInt32(savedId) == 0)
-                    {
-                        title_create_account.Text = "Criar Conta de Administrador";
-                    }
-                    else
-                    {
-                        StartScreen.ID = Convert.ToInt32(savedId);
-                        StartScreen Start_screen = new StartScreen();
-                        Start_screen.Show();
-                        this.Close();
-                        return;
-                    }
+                    startScreen();
                 }
                 else
                 {
                     this.Close();
                     MessageBox.Show("Erro ao criar o arquivo.");
                 }
+            }
+        }
+        private void startScreen()
+        {
+            string savedIdText = File.ReadAllText(archivePath);
+            if (int.TryParse(savedIdText, out int savedId)) { }
+            if (adminExist && Convert.ToInt32(savedId) == 0)
+            {
+                Login_Screen loginScreen = new Login_Screen();
+                loginScreen.Show();
+                this.Close();
+            }
+            else if (Convert.ToInt32(savedId) != 0 && registerNumber > 0)
+            {
+                StartScreen.ID = Convert.ToInt32(savedId);
+                StartScreen Start_screen = new StartScreen();
+                Start_screen.Show();
+                this.Close();
+                return;
+            }
+            else
+            {
+                File.SetAttributes(archivePath, FileAttributes.Normal);
+                File.Decrypt(archivePath);
+                File.WriteAllText(archivePath, "0");
+                File.SetAttributes(archivePath, FileAttributes.Hidden);
+                viewAvatar();
+            }
+        }
+        public void viewAvatar()
+        {
+            int quantidadeImagens = GlobalFunctions.GetImageCount();
+
+            ContainerDeCards.Children.Clear();
+
+            for (int i = 0; i < quantidadeImagens; i++)
+            {
+                CardImage novoCard = new CardImage();
+
+                novoCard.CardImageSource = GlobalFunctions.getImage(i);
+                novoCard.ImageValue = i;
+
+                novoCard.Width = 100;
+                novoCard.Height = 100;
+                novoCard.Margin = new Thickness(8);
+
+                ContainerDeCards.Children.Add(novoCard);
             }
         }
 
@@ -206,11 +225,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 int system_return;
                 if (adminExist)
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 1, "Success!! Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 1, "Success!! Account Created.");
                 }
                 else
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, 2, "Success!! Admin Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 2, "Success!! Admin Account Created.");
                 }
                 if (system_return != 0)
                 {

@@ -52,13 +52,14 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int option, string finish_message)
+        public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int imageValue , int option, string finish_message)
         {
             string email = email_space.Text.Trim();
             string user = user_space.Text.Trim();
             string password = password_space.Password.Trim();
             string hashpassword = BCryptNet.HashPassword(password);
             string fullname = fullname_space.Text.Trim();
+            int image = imageValue;
             int admin = 1;
 
             // Garantir abertura do banco de dados
@@ -80,11 +81,11 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 if (option == 1)
                 {
-                    query = "INSERT INTO users (email, user, password, name) VALUES (@email, @user, @hashpassword, @fullname)";
+                    query = "INSERT INTO users (email, user, password, name, imageValue) VALUES (@email, @user, @hashpassword, @fullname, @imageValue)";
                 }
                 else if (option == 2)
                 {
-                    query = "INSERT INTO users (email, user, password, IsAdmin, name) VALUES (@email, @user, @hashpassword, @admin, @fullname)";
+                    query = "INSERT INTO users (email, user, password, IsAdmin, name, imageValue) VALUES (@email, @user, @hashpassword, @admin, @fullname, @imageValue)";
                 }
                 else if (option == 3)
                 {
@@ -103,6 +104,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@user", user);
                             command.Parameters.AddWithValue("@hashpassword", hashpassword);
                             command.Parameters.AddWithValue("@fullname", fullname);
+                            command.Parameters.AddWithValue("@imageValue", image);
                         }
                         else if (option == 2)
                         {
@@ -111,6 +113,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@hashpassword", hashpassword);
                             command.Parameters.AddWithValue("@admin", admin);
                             command.Parameters.AddWithValue("@fullname", fullname);
+                            command.Parameters.AddWithValue("@imageValue", image);
                         }
                         else if (option == 3)
                         {
@@ -141,8 +144,32 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             return 1;
         }
+        public static void UpdateLastLogin(int id)
+        {
+            Open_database();
 
-        
+            string query = @"UPDATE users SET lastLogin = NOW() WHERE id = @id";
+   
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+        public static void UpdateLastActive(int id)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET lastActive = NOW() WHERE id = @id";
+   
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
 
         public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option)
         {   
@@ -337,6 +364,31 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             return null;
         }
+
+        public static string ReturnLastActive(int id)
+        {
+            Open_database();
+            string getLastActive = "SELECT lastActive FROM users WHERE id = @id";
+            using var returnLastActive = new MySqlCommand(getLastActive, Connection);
+            returnLastActive.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnLastActive.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Retorna usuário
+                    return reader["lastActive"].ToString();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return null; // Erro de banco
+            }
+            return null;
+        }
+
         public static bool ReturnIsAdmin(int id)
         {
             Open_database();
@@ -353,6 +405,70 @@ namespace Projeto_GerenciamentoDeUsuarios
                     int isAdmin = Convert.ToInt32(reader["IsAdmin"]);
 
                     if (isAdmin == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+            return false;
+
+        }
+        public static bool ReturnIsLocked(int id)
+        {
+            Open_database();
+            string getLock = "SELECT IsLocked FROM users WHERE id = @id";
+            using var returnLock = new MySqlCommand(getLock, Connection);
+            returnLock.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnLock.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int isLocked = Convert.ToInt32(reader["IsLocked"]);
+
+                    if (isLocked == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+            return false;
+
+        }
+        public static bool ReturnIsBanned(int id)
+        {
+            Open_database();
+            string getBanned = "SELECT IsBanned FROM users WHERE id = @id";
+            using var returnBanned = new MySqlCommand(getBanned, Connection);
+            returnBanned.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnBanned.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int isBanned = Convert.ToInt32(reader["IsBanned"]);
+
+                    if (isBanned == 1)
                     {
                         return true;
                     }
@@ -471,12 +587,55 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
 
         }
+
+        public static bool ReturnIsOnline(int id)
+        {
+            Open_database();
+
+            string query = @"SELECT CASE WHEN lastActive >= NOW() - INTERVAL 30 SECOND THEN 1 ELSE 0 END FROM users WHERE id = @id";
+
+            using MySqlCommand command = new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            object result = command.ExecuteScalar();
+
+            return Convert.ToBoolean(result);
+        }
+
         public static string getImage(int imageNumber)
         {
             string imageText = imageNumber.ToString();
-            string user = Environment.UserName;
             string archivePath = $"/ProfileImage/{imageText}.png";
             return archivePath;
+        }
+
+        public static int GetImageCount()
+        {
+            int count = 0;
+
+            while (true)
+            {
+                try
+                {
+                    string path = getImage(count);
+
+                    var resource = Application.GetResourceStream(
+                        new Uri(path, UriKind.Relative)
+                    );
+
+                    if (resource == null)
+                        break;
+
+                    count++;
+                }
+                catch
+                {
+                    break;
+                }
+            }
+
+            return count;
         }
     }
 }

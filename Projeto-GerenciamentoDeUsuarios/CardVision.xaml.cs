@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -66,6 +67,19 @@ namespace Projeto_GerenciamentoDeUsuarios
             set => SetValue(CardUserTypeProperty, value);
         }
 
+        public static readonly DependencyProperty CardLastTimeActiveProperty =
+            DependencyProperty.Register(
+                nameof(CardLastTimeActive),
+                typeof(string),
+                typeof(CardVision),
+                new PropertyMetadata("Sem Atividade"));
+
+        public string CardLastTimeActive
+        {
+            get => (string)GetValue(CardLastTimeActiveProperty);
+            set => SetValue(CardLastTimeActiveProperty, value);
+        }
+
         public static readonly DependencyProperty CardAccountStatusProperty =
             DependencyProperty.Register(
                 nameof(CardAccountStatus),
@@ -77,6 +91,19 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             get => (string)GetValue(CardAccountStatusProperty);
             set => SetValue(CardAccountStatusProperty, value);
+        }
+
+        public static readonly DependencyProperty CardAccountBannedProperty =
+            DependencyProperty.Register(
+                nameof(CardAccountBanned),
+                typeof(string),
+                typeof(CardVision),
+                new PropertyMetadata("Erro de Status"));
+
+        public string CardAccountBanned
+        {
+            get => (string)GetValue(CardAccountBannedProperty);
+            set => SetValue(CardAccountBannedProperty, value);
         }
 
         public static readonly DependencyProperty CardFullNameProperty =
@@ -104,6 +131,20 @@ namespace Projeto_GerenciamentoDeUsuarios
             get => (Visibility)GetValue(CardOpenClickVisibilityProperty);
             set => SetValue(CardOpenClickVisibilityProperty, value);
         }
+
+        public static readonly DependencyProperty CardOnlineColorProperty =
+            DependencyProperty.Register(
+            nameof(CardOnlineColor),
+            typeof(Brush),
+            typeof(CardVision),
+            new PropertyMetadata(Brushes.Gray));
+
+        public Brush CardOnlineColor
+        {
+            get => (Brush)GetValue(CardOnlineColorProperty);
+            set => SetValue(CardOnlineColorProperty, value);
+        }
+
 
         public static readonly DependencyProperty CardCloseClickVisibilityProperty =
         DependencyProperty.Register(

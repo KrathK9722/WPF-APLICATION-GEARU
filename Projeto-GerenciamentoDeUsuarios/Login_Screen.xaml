@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Class="Projeto_GerenciamentoDeUsuarios.Login_Screen"
-        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Title="Fazer Login no GEARU"
-        Width="1000"
-        Height="650"
-        MinWidth="850"
-        MinHeight="750"
+        Height="700"
+        Width="700"
+        MinWidth="700"
+        MinHeight="500"
         Background="#F7F7F7"
+        WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI">
 
     <Window.Resources>

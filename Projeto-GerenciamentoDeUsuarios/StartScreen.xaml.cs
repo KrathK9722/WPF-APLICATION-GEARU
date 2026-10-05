@@ -10,6 +10,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -21,17 +22,20 @@ namespace Projeto_GerenciamentoDeUsuarios
         public string email;
         public string user;
         public static bool IsAdmin;
-        private static bool SaveLogin = false;
-        private bool _isDarkMode = false;
+
+        private string archivePath = MainWindow.archivePath;
 
         // VERIFICAR TELAS ABERTAS
         public static bool create_user_opened = false;
         public static bool edit_user_opened = false;
         public static bool remove_user_opened = false;
+
+        public static bool exit = false;
             
         // CONEXÃO
         public static string connectionString = GlobalFunctions.connectionString;
         public static MySqlConnection Connection { get; set; }
+        private DispatcherTimer onlineTimer;
 
         // NÚMEROS DE USUÁRIOS REGISTRADOS
         public int registerNumber = GlobalFunctions.verNumeroRegistros();
@@ -42,7 +46,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             InitializeComponent();
             if (ID == 0)
             {
-                string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
                 string savedIdText = File.ReadAllText(archivePath);
                 ID = Convert.ToInt32(savedIdText);
             }
@@ -51,6 +54,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             user = GlobalFunctions.ReturnUser(ID);
             IsAdmin = GlobalFunctions.ReturnIsAdmin(ID);
 
+            StartOnlineTimer();
             SetScreen();
         }
 
@@ -82,7 +86,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 BotaoDarkMode.IsChecked = false;
                 BotaoSaveLogin.IsChecked = false;
             }
-
+            GlobalFunctions.UpdateLastActive(ID);
+            StartOnlineTimer();
             title_landing_page.Text = $"Bem vindo ao Sistema GEARU, {user}";
             ShowScreen(landing_page);
             viewCard();
@@ -96,16 +101,10 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_screen.Visibility = Visibility.Collapsed;
             remove_screen.Visibility = Visibility.Collapsed;
             landing_page.Visibility = Visibility.Collapsed;
-            remove_specific_screen.Visibility = Visibility.Collapsed;
 
             // Mostra somente a tela escolhida
             screen.Visibility = Visibility.Visible;
         }
-
-
-        // ==========================================================
-        // MENU LATERAL
-        // ==========================================================
 
         private void menu_button_click(object sender, RoutedEventArgs e)
         {
@@ -123,32 +122,34 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             int idBanco = 0;
             int cardsCriados = 0;
-            registerNumber = GlobalFunctions.verNumeroRegistros();
             ContainerDeCards.Children.Clear();
 
-            while (cardsCriados < registerNumber)
+            while (cardsCriados < GlobalFunctions.verNumeroRegistros())
             {
                 idBanco += 1;
                 if (GlobalFunctions.ReturnUser(idBanco) == null)
                 {
                     continue;
                 }
-                if (cardsCriados < registerNumber)
+                if (cardsCriados < GlobalFunctions.verNumeroRegistros())
                 {
-                    string userType = "Comum";
+                    string userType = "Usuário";
                     int imageNumber = GlobalFunctions.ReturnImage(idBanco);
                     if (GlobalFunctions.ReturnIsAdmin(idBanco) == true)
                     {
                         userType = "Admin";
-                        imageNumber = 10;
                     }
                     string archivePath = GlobalFunctions.getImage(imageNumber);
                     CardVision novoCard = new CardVision();
                     novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(idBanco)}";
                     novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco)}";
                     novoCard.CardImageSource = $"{archivePath}";
-                    novoCard.CardUserType = $"Tipo de Usuário: {userType}";
+                    novoCard.CardUserType = $"{userType}";
                     novoCard.CardFullName = $"{GlobalFunctions.ReturnFullName(idBanco)}";
+                    novoCard.CardAccountBanned = GlobalFunctions.ReturnIsBanned(idBanco) ? "Conta Banida" : "Conta Ativa";
+                    novoCard.CardAccountStatus = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online" : "Offline";
+                    novoCard.CardOnlineColor = GlobalFunctions.ReturnIsOnline(idBanco) ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#22C55E")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9CA3AF"));
+                    novoCard.CardLastTimeActive = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online Agora" : $"Última vez ativo: {GlobalFunctions.ReturnLastActive(idBanco)}";
                     novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
@@ -164,6 +165,13 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void start_click(object sender, RoutedEventArgs e)
         {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
             viewCard();
             ShowScreen(landing_page);
         }
@@ -176,10 +184,24 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void register_click(object sender, RoutedEventArgs e)
         {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
             ShowScreen(register_screen);
         }
         private void create_user_click(object sender, RoutedEventArgs e)
         {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
             if (create_user_opened == true)
             {
                 return;
@@ -199,6 +221,13 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void edit_click(object sender, RoutedEventArgs e)
         {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
             ShowScreen(edit_screen);
         }
 
@@ -209,16 +238,55 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void remove_click(object sender, RoutedEventArgs e)
         {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
             ShowScreen(remove_screen);
         }
-        private void remove_specific_button_Click(object sender, RoutedEventArgs e)
+        private void remove_user_button_Click(object sender, RoutedEventArgs e)
         {
-            ShowScreen(remove_specific_screen);
+            if (remove_user_opened == true)
+            {
+                return;
+            }
+            RemoveUser removerUser = new RemoveUser();
+            removerUser.Show();
+            RemoveUser.ID = ID;
+            RemoveUser.email = email;
+            RemoveUser.IsAdmin = IsAdmin;
+            RemoveUser.user = user;
+            remove_user_opened = true;
         }
 
         // ==========================================================
         // CONFIGURAÇÕES DO SISTEMA
         // ==========================================================
+
+        private void StartOnlineTimer()
+        {
+            onlineTimer = new DispatcherTimer();
+
+            onlineTimer.Interval = TimeSpan.FromSeconds(30);
+
+            onlineTimer.Tick += (sender, e) => // FUNÇÃO LAMBDA = FUNÇÃO CURTA, PODIA FAZER COM private void OnlineTimer(sender, e){} MAS ASSIM FICA MAIS FACIL E LIMPO
+            {
+                if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+                {
+                    exit = true;
+                    MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ID = 0;
+                    Environment.Exit(0);
+                    return;
+                }
+                GlobalFunctions.UpdateLastActive(ID);
+            };
+
+            onlineTimer.Start();
+        }
         private void BotaoDarkMode_Checked(object sender, RoutedEventArgs e)
         {
             this.Resources["WindowBackground"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#202020"));
@@ -253,7 +321,6 @@ namespace Projeto_GerenciamentoDeUsuarios
         private void BotaoSaveLogin_Checked(object sender, RoutedEventArgs e)
         {
             //Salvar Sessão
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
             string content = ID.ToString();
             File.SetAttributes(archivePath, FileAttributes.Normal);
             File.WriteAllText(archivePath, content);
@@ -264,7 +331,6 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             //Salvar Sessão
             int value = 0;
-            string archivePath = @"C:\Documentos\GEARU\Tokens\session.txt";
 
             string content = value.ToString();
             File.SetAttributes(archivePath, FileAttributes.Normal);
@@ -306,7 +372,6 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             if (result == MessageBoxResult.Yes)
             {
-                ID = 0;
                 Login_Screen login_screen = new Login_Screen();
                 if (BotaoSaveLogin.IsChecked == false)
                 {
@@ -315,10 +380,20 @@ namespace Projeto_GerenciamentoDeUsuarios
                         RegisterNewUser registerUser = new RegisterNewUser();
                         registerUser.Close();
                     }
+                    if (onlineTimer != null)
+                    {
+                        onlineTimer.Stop();
+                    }
+                    ID = 0;
                     login_screen.Show();
                 }
                 else
                 {
+                    if (onlineTimer != null)
+                    {
+                        onlineTimer.Stop();
+                    }
+                    ID = 0;
                     Environment.Exit(0);
                 }
             }
