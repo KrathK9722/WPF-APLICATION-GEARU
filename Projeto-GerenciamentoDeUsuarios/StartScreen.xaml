@@ -15,10 +15,10 @@
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
     Closing="Window_Closing">
-    
-    
+
+
     <Window.Resources>
-        
+
         <!-- CORES -->
 
         <SolidColorBrush x:Key="WindowBackground" Color="#F7F7F7"/>
@@ -304,6 +304,67 @@
                     Grid.Row="1"
                     Margin="4,12,4,0">
 
+                    <!-- PROFILE -->
+
+                    <Button
+                        x:Name="menu_button_edit"
+                        Style="{DynamicResource MenuButtonStyle}"
+                        Click="edit_click"
+                        Width="182"
+                        Height="72"
+                        HorizontalAlignment="Left">
+
+                        <Grid Width="170">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="56"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- PROFILE IMAGE -->
+
+                            <Grid
+                                Grid.Column="0"
+                                Width="40"
+                                Height="40"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+
+                                <!-- Border / background -->
+                                <Ellipse
+                                    Fill="White"
+                                    Stroke="#D0D0D0"
+                                    StrokeThickness="1"/>
+
+                                <!-- User image -->
+                                <Ellipse Margin="3">
+
+                                    <Ellipse.Fill>
+                                        <ImageBrush
+                                            x:Name="profile_image"
+                                            ImageSource="/ProfileImage/0.png"
+                                            Stretch="UniformToFill"
+                                            AlignmentX="Center"
+                                            AlignmentY="Center"/>
+                                    </Ellipse.Fill>
+
+                                </Ellipse>
+
+                            </Grid>
+
+                            <!-- PROFILE TEXT -->
+
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                x:Name="profile_text"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Text="Perfil de Usuário" Grid.ColumnSpan="2" Margin="45,0,0,0"/>
+
+                        </Grid>
+
+                    </Button>
+
 
                     <!-- INÍCIO -->
 
@@ -349,30 +410,6 @@
                         </StackPanel>
 
                     </Button>
-
-
-                    <!-- EDITAR -->
-
-                    <Button
-                        x:Name="menu_button_edit"
-                        Style="{DynamicResource MenuButtonStyle}"
-                        Click="edit_click">
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock
-                                Text="✏️"
-                                FontSize="19"
-                                Width="35"
-                                VerticalAlignment="Center"/>
-
-                            <TextBlock
-                                VerticalAlignment="Center"><Run Language="pt-br" Text="Editar Usuários"/></TextBlock>
-
-                        </StackPanel>
-
-                    </Button>
-
 
                     <!-- REMOVER -->
 
@@ -633,7 +670,7 @@
                         HorizontalAlignment="Center"
                         Margin="0,25,0,0"
                         Click="register_click"/>
-                    
+
                 </StackPanel>
 
             </Grid>
@@ -669,7 +706,7 @@
                         Background="{DynamicResource ButtonBackground}"
                         CornerRadius="12"
                         Padding="30"
-                        Effect="{Binding Cursor, ElementName=remove_screen}">
+                        Effect="{DynamicResource SoftShadow}">
 
                         <StackPanel>
 

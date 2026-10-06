@@ -10,6 +10,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace Projeto_GerenciamentoDeUsuarios
@@ -105,6 +106,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             // Mostra somente a tela escolhida
             screen.Visibility = Visibility.Visible;
+
+            int imageNumber = GlobalFunctions.ReturnImage(ID);
+
+            profile_image.ImageSource = new BitmapImage(
+                new Uri(
+                    $"pack://application:,,,/ProfileImage/{imageNumber}.png",
+                    UriKind.Absolute
+                )
+            );
+
+            profile_text.Text = $"Perfil de {user}";
         }
 
         private void menu_button_click(object sender, RoutedEventArgs e)

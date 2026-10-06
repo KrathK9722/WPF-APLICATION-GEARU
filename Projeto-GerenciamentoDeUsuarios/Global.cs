@@ -42,7 +42,6 @@ namespace Projeto_GerenciamentoDeUsuarios
         {
             try
             {
-                // CORREÇÃO: Abre a conexão sem o 'using' para que ela permaneça viva no app
                 if (Connection == null || Connection.State != System.Data.ConnectionState.Open)
                 {
                     Connection = new MySqlConnection(connectionString);
@@ -65,7 +64,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             int image = imageValue;
             int adminLevel = AdminLevel;
 
-            // Garantir abertura do banco de dados
             Open_database();
 
             string query = "";
@@ -191,13 +189,13 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
 
         // VERIFY EMAIL OR USER EXISTENCE, VERIFY PASSWORD, RETURN ID WITH EMAIL OR USER AND VERIFY ADMIN PASSWORD
-        public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option, int AdminID = 0) 
-        {   
+        public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option, int AdminID = 0)
+        {
             string login = email_or_user_space.Text.Trim();
             string password = password_space.Password.Trim();
             Open_database();
 
-            if (option == 1) // 1 retorna 0 se email ou usuário existe
+            if (option == 1) // 1 RETURN 0 IF THE USER OR EMAIL EXISTS IN DATABASE
             {
                 string sqlVerifyLogin = "SELECT user, email FROM users WHERE user = @login OR email = @login";
 
@@ -207,7 +205,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 using MySqlDataReader reader = verify_login.ExecuteReader();
                 if (reader.Read())
                 {
-                    return 0;             
+                    return 0;
                 }
                 if (!new EmailAddressAttribute().IsValid(login))
                 {
@@ -219,8 +217,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return 103;
                 }
             }
-            else if(option == 2) // 2 retorna 0 se a senha for correta
-            {
+            else if (option == 2) // 2 RETURN 0 IF THE PASSWORD IS CORRECT
+                {
                 string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login"; 
                 using var verifyHash = new MySqlCommand(sqlBuscarHash, Connection);
 
@@ -248,11 +246,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     if (!new EmailAddressAttribute().IsValid(login))
                     {
-                        return 102; // Usuário não cadastrado
+                        return 102;
                     }
                     else
                     {
-                        return 103; // Email não cadastrado
+                        return 103; 
                     }
                 }
                 catch (MySqlException ex)
@@ -260,7 +258,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return 1;
                 }
             }
-            else if (option == 3) // 3 retorna ID usando email ou user
+            else if (option == 3) // 3 RETUNR ID USING EMAIL OR USER
             {
                 string getID = "SELECT id FROM users WHERE user = @login OR email = @login";
                 using var returnID = new MySqlCommand(getID, Connection);
@@ -272,25 +270,25 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                     if (reader.Read())
                     {
-                        // Retorna ID
+                        // RETURN ID
                         return Convert.ToInt32(reader["id"]);
                     }
 
                     if (!new EmailAddressAttribute().IsValid(login))
                     {
-                        return 102; // Usuário não cadastrado
+                        return 102; // USER NOT REGISTERED
                     }
                     else
                     {
-                        return 103; // Email não cadastrado
+                        return 103; // EMAIL NOT REGISTERED
                     }
                 }
                 catch (MySqlException ex)
                 {
-                    return -1; // Erro de banco
+                    return -1; 
                 }
             }
-            else if (option == 4) // verifica senha do admin
+            else if (option == 4) // Verify Admin Password
             {
                 string sqlBuscarHash = "SELECT password FROM users WHERE id = @id";
 
