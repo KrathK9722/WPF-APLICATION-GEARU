@@ -117,8 +117,52 @@ namespace Projeto_GerenciamentoDeUsuarios
             );
 
             profile_text.Text = $"Perfil de {user}";
+
         }
 
+        // CARREGAR PERFIl
+        private void LoadProfile()
+        {
+            int imageNumber = GlobalFunctions.ReturnImage(ID);
+
+            profile_page_image.ImageSource = new BitmapImage(
+                new Uri(
+                    $"pack://application:,,,/ProfileImage/{imageNumber}.png",
+                    UriKind.Absolute
+                )
+            );
+            profile_fullname.Text = GlobalFunctions.ReturnFullName(ID);
+
+            profile_username.Text =
+                $"@{GlobalFunctions.ReturnUser(ID)}";
+
+            profile_email.Text =
+                GlobalFunctions.ReturnEmail(ID);
+
+            profile_user.Text =
+                GlobalFunctions.ReturnUser(ID);
+
+            bool isAdmin =
+                GlobalFunctions.ReturnIsAdmin(ID);
+
+            string accountType =
+                isAdmin ? "Administrador" : "Usuário";
+
+            profile_account_type.Text = accountType;
+            profile_type.Text = accountType;
+
+            if (GlobalFunctions.ReturnIsOnline(ID))
+            {
+                profile_last_active.Text = "Online agora";
+            }
+            else
+            {
+                profile_last_active.Text =
+                    GlobalFunctions.ReturnLastActive(ID);
+            }
+        }
+
+        //IR PARA LANDING PAGE
         private void menu_button_click(object sender, RoutedEventArgs e)
         {
             ShowScreen(landing_page);
@@ -239,6 +283,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         private void edit_click(object sender, RoutedEventArgs e)
         {
+            LoadProfile();
             if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
             {
                 exit = true;

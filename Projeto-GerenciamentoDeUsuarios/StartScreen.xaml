@@ -576,40 +576,255 @@
 
 
             <!-- ============================================= -->
-            <!-- EDIT -->
+            <!-- PROFILE -->
             <!-- ============================================= -->
 
             <Grid
                 x:Name="edit_screen"
                 Visibility="Collapsed">
 
-                <ScrollViewer
-                    VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
 
                     <StackPanel
-                        Width="500"
+                        Width="650"
                         HorizontalAlignment="Center"
                         Margin="40">
 
+                        <!-- TITLE -->
+
                         <TextBlock
+                            Text="Perfil do Usuário"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Foreground="{DynamicResource TextPrimary}"
-                            Margin="0,10,0,5"><Run Language="pt-br" Text="Editar"/><Run Text=" casa"/><Run Language="pt-br" Text="s"/></TextBlock>
+                            Margin="0,10,0,5"/>
 
                         <TextBlock
+                            Text="Visualize e gerencie as informações da sua conta."
                             FontSize="14"
                             Foreground="{DynamicResource TextSecondary}"
-                            Margin="0,0,0,30"><Run Language="pt-br" Text="Edite os anúncios"/><Run Text=" no sistema."/></TextBlock>
+                            Margin="0,0,0,30"/>
 
 
-                        <!-- CARD -->
+                        <!-- PROFILE CARD -->
 
                         <Border
                             Background="{DynamicResource ButtonBackground}"
                             CornerRadius="12"
-                            Padding="30"
+                            Padding="32"
                             Effect="{DynamicResource SoftShadow}">
+
+                            <StackPanel>
+
+                                <!-- PROFILE HEADER -->
+
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Margin="0,0,0,30">
+
+                                    <!-- PROFILE IMAGE -->
+
+                                    <Grid
+                                        Width="90"
+                                        Height="90">
+
+                                        <Ellipse
+                                            Fill="White"
+                                            Stroke="{DynamicResource BorderColor}"
+                                            StrokeThickness="2"/>
+
+                                        <Ellipse
+                                            Margin="5">
+
+                                            <Ellipse.Fill>
+
+                                                <ImageBrush
+                                                    x:Name="profile_page_image"
+                                                    ImageSource="/ProfileImage/0.png"
+                                                    Stretch="UniformToFill"
+                                                    AlignmentX="Center"
+                                                    AlignmentY="Center"/>
+
+                                            </Ellipse.Fill>
+
+                                        </Ellipse>
+
+                                    </Grid>
+
+
+                                    <!-- NAME -->
+
+                                    <StackPanel
+                            Margin="20,0,0,0"
+                            VerticalAlignment="Center">
+
+                                        <TextBlock
+                                x:Name="profile_fullname"
+                                Text="Nome Completo"
+                                FontSize="22"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextPrimary}"/>
+
+                                        <TextBlock
+                                x:Name="profile_username"
+                                Text="@usuario"
+                                FontSize="14"
+                                Foreground="{DynamicResource TextSecondary}"
+                                Margin="0,4,0,0"/>
+
+                                        <Border
+                                Background="{DynamicResource SidebarSelected}"
+                                CornerRadius="6"
+                                HorizontalAlignment="Left"
+                                Padding="8,3"
+                                Margin="0,8,0,0">
+
+                                            <TextBlock
+                                    x:Name="profile_account_type"
+                                    Text="Usuário"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextPrimary}"/>
+
+                                        </Border>
+
+                                    </StackPanel>
+
+                                </StackPanel>
+
+
+                                <!-- SEPARATOR -->
+
+                                <Border
+                        Height="1"
+                        Background="{DynamicResource BorderColor}"
+                        Margin="0,0,0,25"/>
+
+
+                                <!-- INFORMATION -->
+
+                                <TextBlock
+                        Text="Informações da conta"
+                        FontSize="17"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextPrimary}"
+                        Margin="0,0,0,18"/>
+
+
+                                <!-- EMAIL -->
+
+                                <Grid Margin="0,0,0,15">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                            Text="E-mail"
+                            Foreground="{DynamicResource TextSecondary}"
+                            FontSize="13"/>
+
+                                    <TextBlock
+                            x:Name="profile_email"
+                            Grid.Column="1"
+                            Text="email@email.com"
+                            Foreground="{DynamicResource TextPrimary}"
+                            FontSize="14"/>
+
+                                </Grid>
+
+
+                                <!-- USER -->
+
+                                <Grid Margin="0,0,0,15">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                            Text="Usuário"
+                            Foreground="{DynamicResource TextSecondary}"
+                            FontSize="13"/>
+
+                                    <TextBlock
+                            x:Name="profile_user"
+                            Grid.Column="1"
+                            Text="usuario"
+                            Foreground="{DynamicResource TextPrimary}"
+                            FontSize="14"/>
+
+                                </Grid>
+
+
+                                <!-- ACCOUNT TYPE -->
+
+                                <Grid Margin="0,0,0,15">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                            Text="Tipo de conta"
+                            Foreground="{DynamicResource TextSecondary}"
+                            FontSize="13"/>
+
+                                    <TextBlock
+                            x:Name="profile_type"
+                            Grid.Column="1"
+                            Text="Usuário"
+                            Foreground="{DynamicResource TextPrimary}"
+                            FontSize="14"/>
+
+                                </Grid>
+
+
+                                <!-- LAST ACTIVITY -->
+
+                                <Grid Margin="0,0,0,25">
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                            Text="Última atividade"
+                            Foreground="{DynamicResource TextSecondary}"
+                            FontSize="13"/>
+
+                                    <TextBlock
+                            x:Name="profile_last_active"
+                            Grid.Column="1"
+                            Text="Online agora"
+                            Foreground="{DynamicResource TextPrimary}"
+                            FontSize="14"/>
+
+                                </Grid>
+
+
+                                <!-- ACTION -->
+
+                                <Button
+                        x:Name="edit_profile_button"
+                        Content="Editar Perfil"
+                        Style="{DynamicResource PrimaryButtonStyle}"
+                        Width="150"
+                        Height="42"
+                        HorizontalAlignment="Left"/>
+
+                            </StackPanel>
 
                         </Border>
 
@@ -618,7 +833,6 @@
                 </ScrollViewer>
 
             </Grid>
-
 
             <!-- ============================================= -->
             <!-- LANDING PAGE -->
