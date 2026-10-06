@@ -74,7 +74,6 @@ namespace Projeto_GerenciamentoDeUsuarios
         private void btn_login_account_Click(object sender, RoutedEventArgs e) // CRIAR CONTA
         {
             int error = 0;
-            error_data_not_found.Visibility = Visibility.Collapsed;
             error_fill_everything.Visibility = Visibility.Collapsed;
             error_system.Visibility = Visibility.Collapsed;
             error_verify.Visibility = Visibility.Collapsed;
@@ -121,12 +120,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                     {
                         error_wrong_user_or_password.Visibility = Visibility.Visible;
                     }
-
-                    // Erro de dados não encontrados
-                    if (system_return == 105)
-                    {
-                        error_data_not_found.Visibility = Visibility.Visible;
-                    }
                     reset_capcha();
                     return;
                 }
@@ -146,12 +139,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                         if (system_return == 104)
                         {
                             error_wrong_user_or_password.Visibility = Visibility.Visible;
-                        }
-                        // Erro de dados não encontrados
-                        if (system_return == 105)
-                        {
-                            error += 1;
-                            error_data_not_found.Visibility = Visibility.Visible;
                         }
                         error = 0;
                         reset_capcha();

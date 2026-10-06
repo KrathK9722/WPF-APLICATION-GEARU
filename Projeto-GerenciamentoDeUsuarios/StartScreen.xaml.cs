@@ -261,10 +261,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             RemoveUser removerUser = new RemoveUser();
             removerUser.Show();
-            RemoveUser.ID = ID;
-            RemoveUser.email = email;
+            RemoveUser.AdminID = ID;
             RemoveUser.IsAdmin = IsAdmin;
-            RemoveUser.user = user;
             remove_user_opened = true;
         }
 

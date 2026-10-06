@@ -175,7 +175,7 @@
 
         <Style x:Key="SecondaryButtonStyle" TargetType="Button">
 
-            <Setter Property="Background" Value="#EDEDED"/>
+            <Setter Property="Background" Value="LightGray"/>
             <Setter Property="Foreground" Value="#1A1A1A"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -734,7 +734,7 @@
 
                         <Button
                                 x:Name="btn_comeback_screen"
-                                Content="Fechar tela de Registro"
+                                Content="Voltar"
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Height="42"
                                 Margin="0,10,0,0"

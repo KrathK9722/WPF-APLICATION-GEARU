@@ -16,9 +16,12 @@ TIPOS DE RETORNO:
 */
 
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.VisualBasic.FileIO;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,7 +64,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             string fullname = fullname_space.Text.Trim();
             int image = imageValue;
             int adminLevel = AdminLevel;
-            int admin = 1;
 
             // Garantir abertura do banco de dados
             Open_database();
@@ -88,12 +90,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 {
                     query = "INSERT INTO users (email, user, password, IsAdmin, name, imageValue, AdminLevel) VALUES (@email, @user, @hashpassword, @admin, @fullname, @imageValue, @AdminLevel)";
                 }
-                else if (option == 3)
-                {
-                }
-                else if (option == 4)
-                {
-                }
 
                 try
                 {
@@ -112,7 +108,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                             command.Parameters.AddWithValue("@email", email);
                             command.Parameters.AddWithValue("@user", user);
                             command.Parameters.AddWithValue("@hashpassword", hashpassword);
-                            command.Parameters.AddWithValue("@admin", admin);
+                            command.Parameters.AddWithValue("@admin", 1);
                             command.Parameters.AddWithValue("@fullname", fullname);
                             command.Parameters.AddWithValue("@imageValue", image);
                             command.Parameters.AddWithValue("@AdminLevel", adminLevel);
@@ -121,7 +117,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
 
                     MessageBox.Show(finish_message);
-                    Limpar_campos(email_space, user_space, password_space);
                     return 0;
                 }
                 catch (System.Exception ex)
@@ -139,6 +134,33 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             return 1;
         }
+
+        // DELETE THE USER USING ITS ID
+        public static void DeleteUser(int ID, string finish_message)
+        {
+            int id = ID;
+
+            Open_database();
+
+            string query = "DELETE FROM users WHERE id = @id";
+            try
+            {
+                using (MySqlCommand command = new MySqlCommand(query, Connection))
+                {
+
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
+                MessageBox.Show(finish_message);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Erro nos sistema: Não foi possível deletar o usuário.");
+            }
+        }
+
+
+        // UPDATE LAST LOGIN DATE
         public static void UpdateLastLogin(int id)
         {
             Open_database();
@@ -152,6 +174,8 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             command.ExecuteNonQuery();
         }
+
+        // UPDATE LAST ACTIVITIE DATE
         public static void UpdateLastActive(int id)
         {
             Open_database();
@@ -166,13 +190,14 @@ namespace Projeto_GerenciamentoDeUsuarios
             command.ExecuteNonQuery();
         }
 
-        public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option)
+        // VERIFY EMAIL OR USER EXISTENCE, VERIFY PASSWORD, RETURN ID WITH EMAIL OR USER AND VERIFY ADMIN PASSWORD
+        public static int Verify_data_base(TextBox email_or_user_space, PasswordBox password_space, int option, int AdminID = 0) 
         {   
             string login = email_or_user_space.Text.Trim();
             string password = password_space.Password.Trim();
             Open_database();
 
-            if (option == 1)
+            if (option == 1) // 1 retorna 0 se email ou usuário existe
             {
                 string sqlVerifyLogin = "SELECT user, email FROM users WHERE user = @login OR email = @login";
 
@@ -194,9 +219,9 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return 103;
                 }
             }
-            else if(option == 2)
+            else if(option == 2) // 2 retorna 0 se a senha for correta
             {
-                string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login";
+                string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login"; 
                 using var verifyHash = new MySqlCommand(sqlBuscarHash, Connection);
 
                 verifyHash.Parameters.AddWithValue("@login", login);
@@ -235,7 +260,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return 1;
                 }
             }
-            else if (option == 3)
+            else if (option == 3) // 3 retorna ID usando email ou user
             {
                 string getID = "SELECT id FROM users WHERE user = @login OR email = @login";
                 using var returnID = new MySqlCommand(getID, Connection);
@@ -265,8 +290,41 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return -1; // Erro de banco
                 }
             }
+            else if (option == 4) // verifica senha do admin
+            {
+                string sqlBuscarHash = "SELECT password FROM users WHERE id = @id";
+
+                using var verifyHash = new MySqlCommand(sqlBuscarHash, Connection);
+                verifyHash.Parameters.AddWithValue("@id", AdminID);
+
+                try
+                {
+                    using var reader = verifyHash.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        string hashBanco = reader["password"].ToString();
+
+                        bool correctPassword = BCryptNet.Verify(password, hashBanco);
+
+                        if (correctPassword)
+                        {
+                            return 0;
+                        }
+
+                        return 104;
+                    }
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 1;
+                }
+            }
             return 1;
         }
+
+        // RETURN EMAIL USING ID
         public static string ReturnEmail(int id)
         {
             Open_database();
@@ -280,16 +338,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 if (reader.Read())
                 {
-                    // Retorna email
                     return reader["email"].ToString();
                 }
             }
             catch (MySqlException ex)
             {
-                return null; // Erro de banco
+                return null; // DataBase Error
             }
             return null;
         }
+
+        // RETURN FULL NAME USING ID
         public static string ReturnFullName(int id)
         {
             Open_database();
@@ -303,16 +362,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 if (reader.Read())
                 {
-                    // Retorna email
                     return reader["name"].ToString();
                 }
             }
             catch (MySqlException ex)
             {
-                return null; // Erro de banco
+                return null; 
             }
             return null;
         }
+
+        // RETURN USER USING ID
         public static string ReturnUser(int id)
         {
             Open_database();
@@ -326,16 +386,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 if (reader.Read())
                 {
-                    // Retorna usuário
                     return reader["user"].ToString();
                 }
             }
             catch (MySqlException ex)
             {
-                return null; // Erro de banco
+                return null;
             }
             return null;
         }
+
+        // RETURN SYSTEM CONFIG USING ID
         public static string ReturnConfig(int id)
         {
             Open_database();
@@ -349,17 +410,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 if (reader.Read())
                 {
-                    // Retorna usuário
                     return reader["systemConfig"].ToString();
                 }
             }
             catch (MySqlException ex)
             {
-                return null; // Erro de banco
+                return null;
             }
             return null;
         }
 
+        // RETURN LAST ACTIVITIE USING ID
         public static string ReturnLastActive(int id)
         {
             Open_database();
@@ -373,17 +434,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 if (reader.Read())
                 {
-                    // Retorna usuário
                     return reader["lastActive"].ToString();
                 }
             }
             catch (MySqlException ex)
             {
-                return null; // Erro de banco
+                return null;
             }
             return null;
         }
 
+        // RETURN FALSE OR TRUE ISADMIN
         public static bool ReturnIsAdmin(int id)
         {
             Open_database();
@@ -417,6 +478,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         }
 
+        // GET THE ADMIN LEVEL FROM DATABASE
         public static int GetAdminLevel(int id)
         {
             Open_database();
@@ -442,6 +504,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return 0;
 
         }
+
+        // GET THE STATE THE ACTUAL USER IS AT (LOCKED = CANT LOGIN FOR 5 MINUTES)
         public static bool ReturnIsLocked(int id)
         {
             Open_database();
@@ -474,6 +538,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return false;
 
         }
+
+        // RETURN IF THE USER IS BANNED (BANNED = ACCOUNT IS NOT DELETED BUT THE USER CANT LOGIN ANYMORE)
         public static bool ReturnIsBanned(int id)
         {
             Open_database();
@@ -506,12 +572,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return false;
 
         }
-        public static void Limpar_campos(TextBox email_space, TextBox user_space, PasswordBox password_space)
-        {
-            email_space.Clear();
-            user_space.Clear();
-            password_space.Clear();
-        }
+
+        // GENERATES A RANDOM STRING TO VERIFY IF THE ACTUAL USER IS A ROBOT
         public static string Verify_robot()
         {
             Random random = new Random();
@@ -528,6 +590,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return text;
 
         }
+
+        // VERIFY IF AN ADMIN EXIST
         public static bool AdminExist()
         {
             Open_database();
@@ -545,6 +609,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 throw;
             }
         }
+
+        // GET THE NUMBER OF REGISTERS IN THE DATABASE
         public static int verNumeroRegistros()
         {
             Open_database();
@@ -560,6 +626,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return 0;
             }
         }
+
+        // RETURN THE IMAGE ID TO GET IT INTO THE APPLICATION
         public static int ReturnImage(int id)
         {
             Open_database();
@@ -585,6 +653,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             return 0;
 
         }
+
+        // CHANGES THE SYSTEM CONFIG STRING 
         public static int changeConfig(bool darkmode, bool savelogin, int id)
         {
             Open_database();
@@ -609,6 +679,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         }
 
+        // GET IF THE USER IS ONLINE
         public static bool ReturnIsOnline(int id)
         {
             Open_database();
@@ -624,6 +695,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             return Convert.ToBoolean(result);
         }
 
+        // GET THE IMAGE PATH USING ITS ID
         public static string getImage(int imageNumber)
         {
             string imageText = imageNumber.ToString();
@@ -631,6 +703,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             return archivePath;
         }
 
+        // GET THE NUMBER OF IMAGES IN THE PROFILEIMAGE FOLDER
         public static int GetImageCount()
         {
             int count = 0;

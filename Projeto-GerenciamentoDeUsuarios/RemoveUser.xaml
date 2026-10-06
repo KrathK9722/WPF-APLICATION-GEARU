@@ -110,7 +110,7 @@
 
         <Style x:Key="SecondaryButtonStyle" TargetType="Button">
 
-            <Setter Property="Background" Value="#EDEDED"/>
+            <Setter Property="Background" Value="LightGray"/>
             <Setter Property="Foreground" Value="#1A1A1A"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -215,7 +215,7 @@
                 Background="White"
                 CornerRadius="14"
                 HorizontalAlignment="Center"
-                Effect="{StaticResource SoftShadow}" Margin="0,-49,0,-42">
+                Effect="{StaticResource SoftShadow}" Margin="0,-49,0,-47">
 
             <Grid>
 
@@ -296,10 +296,18 @@
                             FontWeight="SemiBold"/>
 
                     <TextBox
-                            x:Name="txt_create_user"
+                            x:Name="txt_enter_email_or_user"
                             TextWrapping="Wrap"
                             Foreground="#1A1A1A"
                             SelectionBrush="{StaticResource PrimaryBlue}"/>
+                    <Label
+                            x:Name="error_user_or_email_not_exist"
+                            Content="Usuário ou Email inexistentes."
+                            Foreground="#B10000"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            HorizontalContentAlignment="Center"
+                            Visibility="Collapsed"/>
                 </StackPanel>
 
                 <!-- ================================================= -->
@@ -317,7 +325,7 @@
                             FontWeight="SemiBold"/>
 
                     <PasswordBox
-                            x:Name="txt_create_password"
+                            x:Name="txt_enter_password"
                             Height="42"
                             FontSize="14"
                             Padding="12,8"
@@ -383,15 +391,15 @@
                         Margin="0,18,0,0">
 
                     <Button
-                            x:Name="btn_create_account"
-                            Content="Criar Conta"
+                            x:Name="btn_delete_account"
+                            Content="Excluir Conta"
                             Style="{StaticResource PrimaryButtonStyle}"
-                            Height="44"/>
+                            Height="44" Click="btn_delete_account_Click"/>
 
 
                     <Button
                             x:Name="btn_comeback_screen"
-                            Content="Fechar tela de Registro"
+                            Content="Voltar"
                             Style="{StaticResource SecondaryButtonStyle}"
                             Height="42"
                             Margin="0,10,0,0"
