@@ -581,7 +581,7 @@
 
             <Grid
                 x:Name="edit_screen"
-                Visibility="Collapsed">
+                Visibility="Visible">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
 
@@ -655,35 +655,46 @@
                                     <!-- NAME -->
 
                                     <StackPanel
-                            Margin="20,0,0,0"
-                            VerticalAlignment="Center">
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center">
 
+                                        <Grid>
+                                            <TextBlock
+                                            x:Name="profile_fullname"
+                                            Text="Nome Completo"
+                                            FontSize="22"
+                                            FontWeight="Bold"
+                                            Foreground="{DynamicResource TextPrimary}"/>
+                                            <TextBox x:Name="edit_profile_fullname" 
+                                                     Text="Nome Completo" 
+                                                     Padding="0,0,0,0" 
+                                                     FontWeight="Bold" 
+                                                     FontSize="22" 
+                                                     HorizontalAlignment="Center" 
+                                                     VerticalAlignment="Center" 
+                                                     Height="45" 
+                                                     Visibility="Collapsed"
+                                                     />
+                                        </Grid>
                                         <TextBlock
-                                x:Name="profile_fullname"
-                                Text="Nome Completo"
-                                FontSize="22"
-                                FontWeight="SemiBold"
-                                Foreground="{DynamicResource TextPrimary}"/>
-
-                                        <TextBlock
-                                x:Name="profile_username"
-                                Text="@usuario"
-                                FontSize="14"
-                                Foreground="{DynamicResource TextSecondary}"
-                                Margin="0,4,0,0"/>
+                                            x:Name="profile_username"
+                                            Text="@usuario"
+                                            FontSize="14"
+                                            Foreground="{DynamicResource TextSecondary}"
+                                            Margin="0,4,0,0"/>
 
                                         <Border
-                                Background="{DynamicResource SidebarSelected}"
-                                CornerRadius="6"
-                                HorizontalAlignment="Left"
-                                Padding="8,3"
-                                Margin="0,8,0,0">
+                                            Background="{DynamicResource SidebarSelected}"
+                                            CornerRadius="6"
+                                            HorizontalAlignment="Left"
+                                            Padding="8,3"
+                                            Margin="0,8,0,0">
 
                                             <TextBlock
-                                    x:Name="profile_account_type"
-                                    Text="Usuário"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource TextPrimary}"/>
+                                                x:Name="profile_account_type"
+                                                Text="Usuário"
+                                                FontSize="12"
+                                                Foreground="{DynamicResource TextPrimary}"/>
 
                                         </Border>
 
@@ -695,19 +706,19 @@
                                 <!-- SEPARATOR -->
 
                                 <Border
-                        Height="1"
-                        Background="{DynamicResource BorderColor}"
-                        Margin="0,0,0,25"/>
+                                    Height="1"
+                                    Background="{DynamicResource BorderColor}"
+                                    Margin="0,0,0,25"/>
 
 
                                 <!-- INFORMATION -->
 
                                 <TextBlock
-                        Text="Informações da conta"
-                        FontSize="17"
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextPrimary}"
-                        Margin="0,0,0,18"/>
+                                    Text="Informações da conta"
+                                    FontSize="17"
+                                    FontWeight="SemiBold"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    Margin="0,0,0,18"/>
 
 
                                 <!-- EMAIL -->
@@ -722,17 +733,17 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock
-                            Text="E-mail"
-                            Foreground="{DynamicResource TextSecondary}"
-                            FontSize="13"/>
+                                        Text="E-mail"
+                                        Foreground="{DynamicResource TextSecondary}"
+                                        FontSize="13"/>
 
                                     <TextBlock
-                            x:Name="profile_email"
-                            Grid.Column="1"
-                            Text="email@email.com"
-                            Foreground="{DynamicResource TextPrimary}"
-                            FontSize="14"/>
-
+                                        x:Name="profile_email"
+                                        Grid.Column="1"
+                                        Text="email@email.com"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        FontSize="14"/>
+                                    <TextBox x:Name="edit_profile_email" Margin="133,0,303,0" Text="email@email.com" Grid.ColumnSpan="2" Visibility="Collapsed"/>
                                 </Grid>
 
 
@@ -748,16 +759,17 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock
-                            Text="Usuário"
-                            Foreground="{DynamicResource TextSecondary}"
-                            FontSize="13"/>
+                                        Text="Usuário"
+                                        Foreground="{DynamicResource TextSecondary}"
+                                        FontSize="13"/>
 
                                     <TextBlock
-                            x:Name="profile_user"
-                            Grid.Column="1"
-                            Text="usuario"
-                            Foreground="{DynamicResource TextPrimary}"
-                            FontSize="14"/>
+                                        x:Name="profile_user"
+                                        Grid.Column="1"
+                                        Text="usuario"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        FontSize="14"/>
+                                    <TextBox x:Name="edit_profile_user" Margin="134,0,302,0" Text="usuario" Grid.ColumnSpan="2" Visibility="Collapsed"/>
 
                                 </Grid>
 
@@ -774,17 +786,17 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock
-                            Text="Tipo de conta"
-                            Foreground="{DynamicResource TextSecondary}"
-                            FontSize="13"/>
+                                        Text="Tipo de conta"
+                                        Foreground="{DynamicResource TextSecondary}"
+                                        FontSize="13"/>
 
                                     <TextBlock
-                            x:Name="profile_type"
-                            Grid.Column="1"
-                            Text="Usuário"
-                            Foreground="{DynamicResource TextPrimary}"
-                            FontSize="14"/>
-
+                                        x:Name="profile_type"
+                                        Grid.Column="1"
+                                        Text="Usuário"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        FontSize="14"/>
+                                    <ComboBox x:Name="edit_profile_type" Margin="134,2,302,-2" Grid.ColumnSpan="2" Visibility="Collapsed"/>
                                 </Grid>
 
 
@@ -800,30 +812,44 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock
-                            Text="Última atividade"
-                            Foreground="{DynamicResource TextSecondary}"
-                            FontSize="13"/>
+                                        Text="Última atividade"
+                                        Foreground="{DynamicResource TextSecondary}"
+                                        FontSize="13"/>
 
                                     <TextBlock
-                            x:Name="profile_last_active"
-                            Grid.Column="1"
-                            Text="Online agora"
-                            Foreground="{DynamicResource TextPrimary}"
-                            FontSize="14"/>
+                                        x:Name="profile_last_active"
+                                        Grid.Column="1"
+                                        Text="Online agora"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        FontSize="14"/>
 
                                 </Grid>
 
 
                                 <!-- ACTION -->
-
-                                <Button
-                        x:Name="edit_profile_button"
-                        Content="Editar Perfil"
-                        Style="{DynamicResource PrimaryButtonStyle}"
-                        Width="150"
-                        Height="42"
-                        HorizontalAlignment="Left"/>
-
+                                <Grid>
+                                    <Button
+                                    x:Name="edit_profile_button"
+                                    Content="Editar Perfil"
+                                    Style="{DynamicResource PrimaryButtonStyle}"
+                                    Width="150"
+                                    Height="42"
+                                    HorizontalAlignment="Left" Click="edit_profile_button_Click" Visibility="Visible"/>
+                                    <Button
+                                    x:Name="cancel_edit_profile_button"
+                                    Content="Cancelar"
+                                    Style="{DynamicResource PrimaryButtonStyle}"
+                                    Width="150"
+                                    Height="42"
+                                    HorizontalAlignment="Left" Click="cancel_edit_profile_button_Click" Visibility="Collapsed"/>
+                                    <Button
+                                    x:Name="save_edit_profile_button"
+                                    Content="Salvar Edição"
+                                    Style="{DynamicResource PrimaryButtonStyle}"
+                                    Width="150"
+                                    Height="42"
+                                    HorizontalAlignment="Left" Margin="169,0,0,0" Click="save_edit_profile_button_Click" Visibility="Collapsed"/>
+                                </Grid>
                             </StackPanel>
 
                         </Border>
@@ -840,7 +866,7 @@
 
             <Grid
                 x:Name="landing_page"
-                Visibility="Visible">
+                Visibility="Collapsed">
 
                 <StackPanel
                     HorizontalAlignment="Center"

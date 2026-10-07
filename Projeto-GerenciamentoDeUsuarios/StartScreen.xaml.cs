@@ -24,6 +24,8 @@ namespace Projeto_GerenciamentoDeUsuarios
         public string user;
         public static bool IsAdmin;
 
+        public bool editMode = false;
+
         private string archivePath = MainWindow.archivePath;
 
         // VERIFICAR TELAS ABERTAS
@@ -88,6 +90,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 BotaoDarkMode.IsChecked = false;
                 BotaoSaveLogin.IsChecked = false;
             }
+            if (!IsAdmin)
+            {
+                menu_button_register.Visibility = Visibility.Collapsed;
+                menu_button_remove.Visibility = Visibility.Collapsed;
+            }
             GlobalFunctions.UpdateLastActive(ID);
             StartOnlineTimer();
             title_landing_page.Text = $"Bem vindo ao Sistema GEARU, {user}";
@@ -119,56 +126,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             profile_text.Text = $"Perfil de {user}";
 
         }
-
-        // CARREGAR PERFIl
-        private void LoadProfile()
-        {
-            int imageNumber = GlobalFunctions.ReturnImage(ID);
-
-            profile_page_image.ImageSource = new BitmapImage(
-                new Uri(
-                    $"pack://application:,,,/ProfileImage/{imageNumber}.png",
-                    UriKind.Absolute
-                )
-            );
-            profile_fullname.Text = GlobalFunctions.ReturnFullName(ID);
-
-            profile_username.Text =
-                $"@{GlobalFunctions.ReturnUser(ID)}";
-
-            profile_email.Text =
-                GlobalFunctions.ReturnEmail(ID);
-
-            profile_user.Text =
-                GlobalFunctions.ReturnUser(ID);
-
-            bool isAdmin =
-                GlobalFunctions.ReturnIsAdmin(ID);
-
-            string accountType =
-                isAdmin ? "Administrador" : "Usuário";
-
-            profile_account_type.Text = accountType;
-            profile_type.Text = accountType;
-
-            if (GlobalFunctions.ReturnIsOnline(ID))
-            {
-                profile_last_active.Text = "Online agora";
-            }
-            else
-            {
-                profile_last_active.Text =
-                    GlobalFunctions.ReturnLastActive(ID);
-            }
-        }
-
-        //IR PARA LANDING PAGE
-        private void menu_button_click(object sender, RoutedEventArgs e)
-        {
-            ShowScreen(landing_page);
-            viewCard();
-        }
-
 
         // ==========================================================
         // MOSTRAR CARDS DE CASA
@@ -237,6 +194,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 Environment.Exit(0);
                 return;
             }
+            cancel_profile_edition();
             viewCard();
             ShowScreen(landing_page);
         }
@@ -256,6 +214,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 Environment.Exit(0);
                 return;
             }
+            cancel_profile_edition();
             ShowScreen(register_screen);
         }
         private void create_user_click(object sender, RoutedEventArgs e)
@@ -278,7 +237,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
 
         // ==========================================================
-        // EDITAR
+        // PROFILE/EDITAR
         // ==========================================================
 
         private void edit_click(object sender, RoutedEventArgs e)
@@ -294,6 +253,54 @@ namespace Projeto_GerenciamentoDeUsuarios
             ShowScreen(edit_screen);
         }
 
+        // CARREGAR PERFIl
+        private void LoadProfile()
+        {
+            int imageNumber = GlobalFunctions.ReturnImage(ID);
+
+            profile_page_image.ImageSource = new BitmapImage(
+                new Uri(
+                    $"pack://application:,,,/ProfileImage/{imageNumber}.png",
+                    UriKind.Absolute
+                )
+            );
+            profile_fullname.Text = GlobalFunctions.ReturnFullName(ID);
+
+            profile_username.Text =
+                $"@{GlobalFunctions.ReturnUser(ID)}";
+
+            profile_email.Text =
+                GlobalFunctions.ReturnEmail(ID);
+
+            profile_user.Text =
+                GlobalFunctions.ReturnUser(ID);
+
+            bool isAdmin =
+                GlobalFunctions.ReturnIsAdmin(ID);
+
+            string accountType =
+                isAdmin ? "Administrador" : "Usuário";
+
+            profile_account_type.Text = accountType;
+            profile_type.Text = accountType;
+
+            if (GlobalFunctions.ReturnIsOnline(ID))
+            {
+                profile_last_active.Text = "Online agora";
+            }
+            else
+            {
+                profile_last_active.Text =
+                    GlobalFunctions.ReturnLastActive(ID);
+            }
+        }
+
+        //IR PARA LANDING PAGE
+        private void menu_button_click(object sender, RoutedEventArgs e)
+        {
+            ShowScreen(landing_page);
+            viewCard();
+        }
 
         // ==========================================================
         // REMOVER
@@ -308,6 +315,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 Environment.Exit(0);
                 return;
             }
+            cancel_profile_edition();
             ShowScreen(remove_screen);
         }
         private void remove_user_button_Click(object sender, RoutedEventArgs e)
@@ -335,6 +343,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             onlineTimer.Tick += (sender, e) => // FUNÇÃO LAMBDA = FUNÇÃO CURTA, PODIA FAZER COM private void OnlineTimer(sender, e){} MAS ASSIM FICA MAIS FACIL E LIMPO
             {
+                viewCard();
                 if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
                 {
                     exit = true;
@@ -464,6 +473,47 @@ namespace Projeto_GerenciamentoDeUsuarios
                 e.Cancel = true;
             }
 
+        }
+
+        private void edit_profile_button_Click(object sender, RoutedEventArgs e)
+        {
+            editMode = true;
+            profile_fullname.Visibility = Visibility.Collapsed;
+            profile_email.Visibility = Visibility.Collapsed;
+            profile_user.Visibility = Visibility.Collapsed;
+            profile_type.Visibility = Visibility.Collapsed;
+            edit_profile_fullname.Visibility = Visibility.Visible;
+            edit_profile_email.Visibility = Visibility.Visible;
+            edit_profile_user.Visibility= Visibility.Visible;
+            edit_profile_type.Visibility = Visibility.Visible;
+            cancel_edit_profile_button.Visibility = Visibility.Visible;
+            save_edit_profile_button.Visibility = Visibility.Visible;
+
+        }
+
+        private void save_edit_profile_button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cancel_edit_profile_button_Click(object sender, RoutedEventArgs e)
+        {
+            cancel_profile_edition();
+        }
+
+        private void cancel_profile_edition()
+        {
+            editMode = false;
+            profile_fullname.Visibility = Visibility.Visible;
+            profile_email.Visibility = Visibility.Visible;
+            profile_user.Visibility = Visibility.Visible;
+            profile_type.Visibility = Visibility.Visible;
+            edit_profile_fullname.Visibility = Visibility.Collapsed;
+            edit_profile_email.Visibility = Visibility.Collapsed;
+            edit_profile_user.Visibility = Visibility.Collapsed;
+            edit_profile_type.Visibility = Visibility.Collapsed;
+            cancel_edit_profile_button.Visibility = Visibility.Collapsed;
+            save_edit_profile_button.Visibility = Visibility.Collapsed;
         }
     }
 }
