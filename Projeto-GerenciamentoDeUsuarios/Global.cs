@@ -164,7 +164,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             Open_database();
 
             string query = @"UPDATE users SET lastLogin = NOW() WHERE id = @id";
-   
+
             using MySqlCommand command =
                 new MySqlCommand(query, Connection);
 
@@ -179,7 +179,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             Open_database();
 
             string query = @"UPDATE users SET lastActive = NOW() WHERE id = @id";
-   
+
             using MySqlCommand command =
                 new MySqlCommand(query, Connection);
 
@@ -218,8 +218,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 }
             }
             else if (option == 2) // 2 RETURN 0 IF THE PASSWORD IS CORRECT
-                {
-                string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login"; 
+            {
+                string sqlBuscarHash = "SELECT password FROM users WHERE user = @login OR email = @login";
                 using var verifyHash = new MySqlCommand(sqlBuscarHash, Connection);
 
                 verifyHash.Parameters.AddWithValue("@login", login);
@@ -230,7 +230,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                     if (reader.Read())
                     {
-                        
+
                         string hashBanco = reader["password"].ToString();
 
                         bool correctPassword = BCryptNet.Verify(password, hashBanco);
@@ -250,7 +250,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        return 103; 
+                        return 103;
                     }
                 }
                 catch (MySqlException ex)
@@ -285,7 +285,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 }
                 catch (MySqlException ex)
                 {
-                    return -1; 
+                    return -1;
                 }
             }
             else if (option == 4) // Verify Admin Password
@@ -365,7 +365,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             catch (MySqlException ex)
             {
-                return null; 
+                return null;
             }
             return null;
         }
@@ -575,9 +575,9 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static string Verify_robot()
         {
             Random random = new Random();
-            char[] alphabet = ['A', 'B', 'C', 'D','E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            char[] alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
             char[] letter = new char[6];
-            string text="";
+            string text = "";
 
             for (int i = 0; i < 6; i++)
             {
@@ -658,15 +658,15 @@ namespace Projeto_GerenciamentoDeUsuarios
             Open_database();
             string query = "UPDATE users SET systemConfig = @config WHERE ID=@id";
             string configString = $"DarkMode:{darkmode.ToString().ToLower()} SaveLogin:{savelogin.ToString().ToLower()}";
-            
+
 
             try
             {
                 using (MySqlCommand command = new MySqlCommand(query, Connection))
                 {
-                        command.Parameters.AddWithValue("@id", id);
-                        command.Parameters.AddWithValue("@config", configString);
-                        command.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("@id", id);
+                    command.Parameters.AddWithValue("@config", configString);
+                    command.ExecuteNonQuery();
                 }
                 return 0;
             }
@@ -729,5 +729,74 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             return count;
         }
+            public static int UpdateUserProfile(int id, string fullname, string email, string username, bool isAdmin)
+            {
+                fullname = fullname.Trim();
+                email = email.Trim();
+                username = username.Trim();
+
+                try
+                {
+                    using var connection =
+                        new MySqlConnection(connectionString);
+
+                    connection.Open();
+
+                    // Verifica e-mail duplicado, ignorando o próprio usuário
+                    string checkEmail = @"
+                        SELECT COUNT(*)
+                        FROM users
+                        WHERE email = @email AND id <> @id";
+
+                    using (var cmd = new MySqlCommand(checkEmail, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        if (Convert.ToInt32(cmd.ExecuteScalar()) > 0)
+                            return 100;
+                    }
+
+                    // Verifica nome de usuário duplicado
+                    string checkUser = @"
+                        SELECT COUNT(*)
+                        FROM users
+                        WHERE user = @user AND id <> @id";
+
+                    using (var cmd = new MySqlCommand(checkUser, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@user", username);
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        if (Convert.ToInt32(cmd.ExecuteScalar()) > 0)
+                            return 101;
+                    }
+
+                    // Atualiza os dados
+                    string query = @"
+                        UPDATE users
+                        SET name = @fullname,
+                            email = @email,
+                            user = @user,
+                            IsAdmin = @isAdmin
+                        WHERE id = @id";
+
+                    using var command = new MySqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@fullname", fullname);
+                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@user", username);
+                    command.Parameters.AddWithValue("@isAdmin", isAdmin ? 1 : 0);
+                    command.Parameters.AddWithValue("@id", id);
+
+                    int affectedRows = command.ExecuteNonQuery();
+
+                    return affectedRows > 0 ? 0 : 102;
+                }
+                catch (MySqlException)
+                {
+                    return 1;
+                }
+            }
+        }
     }
-}

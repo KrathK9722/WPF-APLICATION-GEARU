@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.ComponentModel.DataAnnotations;
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -474,18 +475,39 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
 
         }
-
         private void edit_profile_button_Click(object sender, RoutedEventArgs e)
         {
+            LoadProfile();
+
+            edit_profile_fullname.Text = profile_fullname.Text;
+            edit_profile_email.Text = profile_email.Text;
+            edit_profile_user.Text = profile_user.Text;
+
+            edit_profile_type.Items.Clear();
+            edit_profile_type.Items.Add("Usuário");
+            edit_profile_type.Items.Add("Administrador");
+
+            edit_profile_type.SelectedItem =
+                GlobalFunctions.ReturnIsAdmin(ID)
+                ? "Administrador"
+                : "Usuário";
+
+            // Usuários comuns não podem alterar permissões
+            edit_profile_type.IsEnabled = IsAdmin;
+
             editMode = true;
+
             profile_fullname.Visibility = Visibility.Collapsed;
             profile_email.Visibility = Visibility.Collapsed;
             profile_user.Visibility = Visibility.Collapsed;
             profile_type.Visibility = Visibility.Collapsed;
+
             edit_profile_fullname.Visibility = Visibility.Visible;
             edit_profile_email.Visibility = Visibility.Visible;
-            edit_profile_user.Visibility= Visibility.Visible;
+            edit_profile_user.Visibility = Visibility.Visible;
             edit_profile_type.Visibility = Visibility.Visible;
+
+            edit_profile_button.Visibility = Visibility.Collapsed;
             cancel_edit_profile_button.Visibility = Visibility.Visible;
             save_edit_profile_button.Visibility = Visibility.Visible;
 
