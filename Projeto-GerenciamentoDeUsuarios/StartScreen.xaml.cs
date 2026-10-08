@@ -512,10 +512,123 @@ namespace Projeto_GerenciamentoDeUsuarios
             save_edit_profile_button.Visibility = Visibility.Visible;
 
         }
-
         private void save_edit_profile_button_Click(object sender, RoutedEventArgs e)
         {
+            string fullname = edit_profile_fullname.Text.Trim();
+            string email = edit_profile_email.Text.Trim();
+            string username = edit_profile_user.Text.Trim();
 
+            // Verifica campos vazios
+            if (string.IsNullOrWhiteSpace(fullname) ||
+                string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(username))
+            {
+                MessageBox.Show("Preencha todos os campos.");
+                return;
+            }
+
+            // Valida nome completo
+            if (fullname.Length < 5 || !fullname.Contains(' '))
+            {
+                MessageBox.Show(
+                    "Digite seu nome completo (nome e sobrenome).");
+                return;
+            }
+
+            // Valida e-mail
+            if (!new EmailAddressAttribute().IsValid(email))
+            {
+                MessageBox.Show("Digite um e-mail válido.");
+                return;
+            }
+
+            // Valida nome de usuário
+            if (username.Length < 3 || username.Length > 30)
+            {
+                MessageBox.Show(
+                    "O usuário deve ter entre 3 e 30 caracteres.");
+                return;
+            }
+
+            // Impede espaços no usuário
+            if (username.Any(char.IsWhiteSpace))
+            {
+                MessageBox.Show(
+                    "O nome de usuário não pode conter espaços.");
+                return;
+            }
+
+            // Consulta as permissões atuais no banco
+            bool currentAdmin = GlobalFunctions.ReturnIsAdmin(ID);
+
+            bool newAdmin = currentAdmin;
+
+            if (currentAdmin)
+            {
+                newAdmin =
+                    edit_profile_type.SelectedItem?.ToString()
+                    == "Administrador";
+            }
+
+            // Impede que o administrador retire a própria permissão
+            if (currentAdmin && !newAdmin)
+            {
+                MessageBox.Show(
+                    "Você não pode remover sua própria permissão " +
+                    "de administrador nesta tela.");
+                return;
+            }
+
+            int result = GlobalFunctions.UpdateUserProfile(
+                ID,
+                fullname,
+                email,
+                username,
+                newAdmin
+            );
+
+            switch (result)
+            {
+                case 0:
+                    MessageBox.Show(
+                        "Perfil atualizado com sucesso!",
+                        "Sucesso",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    user = username;
+                    this.email = email;
+                    IsAdmin = newAdmin;
+
+                    title_landing_page.Text =
+                        $"Bem vindo ao Sistema GEARU, {user}";
+
+                    LoadProfile();
+                    cancel_profile_edition();
+                    viewCard();
+                    ShowScreen(edit_screen);
+                    break;
+
+                case 100:
+                    MessageBox.Show("Este e-mail já está cadastrado.");
+                    break;
+
+                case 101:
+                    MessageBox.Show("Este usuário já está cadastrado.");
+                    break;
+
+                case 102:
+                    MessageBox.Show("Usuário não encontrado.");
+                    break;
+
+                default:
+                    MessageBox.Show(
+                        "Não foi possível salvar as alterações.",
+                        "Erro",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    break;
+            }
         }
 
         private void cancel_edit_profile_button_Click(object sender, RoutedEventArgs e)
@@ -523,19 +636,30 @@ namespace Projeto_GerenciamentoDeUsuarios
             cancel_profile_edition();
         }
 
+
         private void cancel_profile_edition()
         {
             editMode = false;
+
             profile_fullname.Visibility = Visibility.Visible;
             profile_email.Visibility = Visibility.Visible;
             profile_user.Visibility = Visibility.Visible;
             profile_type.Visibility = Visibility.Visible;
+
             edit_profile_fullname.Visibility = Visibility.Collapsed;
             edit_profile_email.Visibility = Visibility.Collapsed;
             edit_profile_user.Visibility = Visibility.Collapsed;
             edit_profile_type.Visibility = Visibility.Collapsed;
+
+            edit_profile_button.Visibility = Visibility.Visible;
             cancel_edit_profile_button.Visibility = Visibility.Collapsed;
             save_edit_profile_button.Visibility = Visibility.Collapsed;
+
+            // Restaura os valores que estão realmente salvos
+            edit_profile_fullname.Text = profile_fullname.Text;
+            edit_profile_email.Text = profile_email.Text;
+            edit_profile_user.Text = profile_user.Text;
         }
+
     }
 }
