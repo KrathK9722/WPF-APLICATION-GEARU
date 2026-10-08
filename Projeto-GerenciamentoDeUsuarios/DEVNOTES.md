@@ -49,3 +49,26 @@ FINALIZAR REMOÇÃO USUÁRIO: Remover pelo nome ou email e confirmar com senha d
 
 FINALIZAR LOGIN CORRETO DO USUÁRIO COMUM: LIMITAR JANELAS VISIVEIS E EDIÇÃO DE PERFIL PRÓPRIO
 FAZER TELA DE AUDITORIA E SALVAR LOGS DO SISTEMA OBS: SOMENTE ADMINS PODEM VISUALIZAR
+
+
+
+
+<!-- EDITAR EMAIL -->
+<TextBox
+    x:Name="edit_profile_email"
+    Grid.Column="1"
+    Text="email@email.com"
+    Visibility="Collapsed"/>
+
+<!-- EDITAR USUÁRIO -->
+<TextBox
+    x:Name="edit_profile_user"
+    Grid.Column="1"
+    Text="usuario"
+    Visibility="Collapsed"/>
+
+<!-- EDITAR TIPO DE CONTA -->
+<ComboBox
+    x:Name="edit_profile_type"
+    Grid.Column="1"
+    Visibility="Collapsed"/>
