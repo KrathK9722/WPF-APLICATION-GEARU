@@ -185,10 +185,14 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error += 1;
             }
             // ERROR MESSAGE ENTER FULL NAME
+            string fullname = txt_enter_full_name.Text.Trim();
 
-            if (txt_enter_full_name.Text.Length < 5)
+            string[] names = fullname.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (names.Length < 2 || names.Any(name => name.Length < 2) || names.Any(name => !name.All(c =>
+                    char.IsLetter(c) || c == '\'' || c == '-')))
             {
-                error_enter_full_name.Visibility= Visibility.Visible;
+                error_enter_full_name.Visibility = Visibility.Visible;
                 error += 1;
             }
             // ERROR MESSAGE CREATE EMAIL

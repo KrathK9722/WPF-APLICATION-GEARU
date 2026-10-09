@@ -129,7 +129,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
 
         // ==========================================================
-        // MOSTRAR CARDS DE CASA
+        // MOSTRAR CARDS DE USUÁRIO
         // ==========================================================
 
         public void viewCard()
@@ -527,14 +527,15 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return;
             }
 
-            // Valida nome completo
-            if (fullname.Length < 5 || !fullname.Contains(' '))
+            // ERROR MESSAGE ENTER FULL NAME
+            string[] names = fullname.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (names.Length < 2 || names.Any(name => name.Length < 2) || names.Any(name => !name.All(c =>
+                    char.IsLetter(c) || c == '\'' || c == '-')))
             {
-                MessageBox.Show(
-                    "Digite seu nome completo (nome e sobrenome).");
+                MessageBox.Show("Digite um nome completo válido.");
                 return;
             }
-
             // Valida e-mail
             if (!new EmailAddressAttribute().IsValid(email))
             {
