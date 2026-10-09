@@ -6,10 +6,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Projeto_GerenciamentoDeUsuarios"
              mc:Ignorable="d"
-             d:DesignHeight="440"
-             d:DesignWidth="280"
-             MinWidth="260"
-             MinHeight="420">
+            d:DesignHeight="440"
+            d:DesignWidth="280"
+            MinWidth="260"
+            MinHeight="420">
 
     <UserControl.Resources>
 
@@ -113,9 +113,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="130"/>
                     <RowDefinition Height="82"/>
-                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="70"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="58"/>
+                    <RowDefinition Height="72"/>
                 </Grid.RowDefinitions>
 
                 <!-- BANNER SUPERIOR -->
@@ -175,7 +175,7 @@
                                        FontSize="10"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding CardOnlineColor, ElementName=ThisCard}">
-                                
+
                             </TextBlock>
                         </StackPanel>
                     </Border>
@@ -216,12 +216,24 @@
                     <StackPanel Margin="105,9,8,0"
                                 VerticalAlignment="Top">
 
-                        <TextBlock Text="{Binding CardUser,ElementName=ThisCard}"
-                                   FontSize="15"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextPrimary}"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="NoWrap"/>
+
+                        <!-- NOME DE USUÁRIO -->
+                        <Grid>
+                            <TextBlock x:Name="CardUserText"
+                           Text="{Binding CardUser, ElementName=ThisCard}"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Foreground="#202124"
+                           TextTrimming="CharacterEllipsis"/>
+
+                            <TextBox x:Name="CardEditUser"
+                             Height="32"
+                             FontSize="12"
+                             Foreground="#202124"
+                             Background="White"
+                             BorderBrush="#CFCFCF"
+                             Visibility="Collapsed"/>
+                        </Grid>
 
                         <TextBlock Text="{Binding CardLastTimeActive,ElementName=ThisCard}"
                                    FontSize="11"
@@ -255,11 +267,28 @@
                                        FontSize="15"
                                        Foreground="{DynamicResource TextSecondary}"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding CardUserType,ElementName=ThisCard}"
-                                       FontSize="13"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource TextPrimary}"
-                                       HorizontalAlignment="Center"/>
+
+                            <Grid>
+                                <TextBlock x:Name="CardTypeText"
+                               Text="{Binding CardUserType, ElementName=ThisCard}"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Foreground="#202124"
+                               HorizontalAlignment="Center"/>
+
+                                <ComboBox x:Name="CardEditType"
+                              Width="110"
+                              Height="30"
+                              FontSize="11"
+                              Foreground="#202124"
+                              Background="White"
+                              BorderBrush="#CFCFCF"
+                              Visibility="Collapsed">
+                                    <ComboBoxItem Content="Usuário"/>
+                                    <ComboBoxItem Content="Administrador"/>
+                                </ComboBox>
+                            </Grid>
+
                         </StackPanel>
 
                         <!-- DIVISÓRIA VERTICAL -->
@@ -286,65 +315,153 @@
                 </Border>
 
                 <!-- INFORMAÇÕES -->
-                <StackPanel Grid.Row="3"
-                            Margin="16,13,16,5">
+                <StackPanel Grid.Row="3" Margin="16,13,16,8">
 
-                    <TextBlock
-                               FontSize="13"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimary}"
-                               Margin="0,0,0,5" Text="Nome Completo"/>
+                    <!-- NOME COMPLETO -->
+                    <TextBlock Text="Nome Completo"
+                   FontSize="13"
+                   FontWeight="Bold"
+                   Foreground="#202124"
+                   Margin="0,0,0,5"/>
 
-                    <TextBlock Text="{Binding CardFullName,ElementName=ThisCard}"
-                               FontSize="11"
-                               Foreground="{DynamicResource TextSecondary}"
-                               TextWrapping="Wrap"
-                               LineHeight="16"
-                               Margin="0,0,0,12"/>
+                    <Grid Margin="0,0,0,12">
 
+                        <TextBlock x:Name="CardFullNameText"
+                       Text="{Binding CardFullName, ElementName=ThisCard}"
+                       FontSize="12"
+                       Foreground="#444444"
+                       TextWrapping="Wrap"/>
+
+                        <TextBox x:Name="CardEditFullName"
+                         Height="34"
+                         FontSize="12"
+                         Foreground="#202124"
+                         Background="White"
+                         BorderBrush="#CFCFCF"
+                         Visibility="Collapsed"/>
+
+                    </Grid>
+
+                    <!-- EMAIL -->
                     <TextBlock Text="E-mail"
-                               FontSize="12"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimary}"
-                               Margin="0,0,0,5"/>
+                   FontSize="12"
+                   FontWeight="Bold"
+                   Foreground="#202124"
+                   Margin="0,0,0,5"/>
 
-                    <TextBlock Text="{Binding CardEmail,ElementName=ThisCard}"
-                               FontSize="11"
-                               Foreground="{DynamicResource TextSecondary}"
-                               TextWrapping="Wrap"
-                               TextTrimming="CharacterEllipsis"/>
+                    <Grid Margin="0,0,0,12">
+
+                        <TextBlock x:Name="CardEmailText"
+                       Text="{Binding CardEmail, ElementName=ThisCard}"
+                       FontSize="12"
+                       Foreground="#444444"
+                       TextWrapping="Wrap"/>
+
+                        <TextBox x:Name="CardEditEmail"
+                         Height="34"
+                         FontSize="12"
+                         Foreground="#202124"
+                         Background="White"
+                         BorderBrush="#CFCFCF"
+                         Visibility="Collapsed"/>
+
+                    </Grid>
+
+                    <!-- BANIMENTO -->
+                    <Button x:Name="CardBanButton"
+                    Height="36"
+                    Margin="0,12,0,0"
+                    Background="#C62828"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Visibility="Collapsed"
+                    Click="CardBanButton_Click">
+
+                        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+
+                            <TextBlock x:Name="BanButtonIcon"
+                       Text="🚩"
+                       FontSize="15"
+                       Margin="0,0,8,0"/>
+
+                            <TextBlock x:Name="BanButtonText"
+                       Text="Banir usuário"
+                       FontSize="12"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"/>
+
+                        </StackPanel>
+                    </Button>
+
                 </StackPanel>
 
+
+
                 <!-- RODAPÉ -->
-                <Grid Grid.Row="4"
-                      Margin="12,5,12,10">
+                <Grid Grid.Row="4" Margin="12,8,12,12">
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="42"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="110"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- BOTÃO PRINCIPAL VISUAL -->
-                    <Button x:Name="CardButton" Grid.Column="0"
-                            Content="Visualizar perfil"
-                            Style="{StaticResource ProfileButton}"
-                            Visibility="{Binding CardOpenClickVisibility, ElementName=ThisCard}"
-                            Margin="0,0,6,0"
-                            Click="Card_Click"/>
+                    <!-- VISUALIZAR -->
+                    <Button x:Name="CardButton"
+                Grid.Column="0"
+                Content="Visualizar perfil"
+                Style="{StaticResource ProfileButton}"
+                Visibility="{Binding CardOpenClickVisibility, ElementName=ThisCard}"
+                Click="Card_Click" Grid.ColumnSpan="3"/>
 
-                    <Button x:Name="CardCloseButton" Grid.Column="0"
-                            Content="Fechar Perfil"
-                            Style="{StaticResource ProfileButton}"
-                            Visibility="{Binding CardCloseClickVisibility, ElementName=ThisCard}"
-                            Click="Card_Close_Click" Grid.ColumnSpan="2"/>
+                    <!-- FECHAR -->
+                    <Button x:Name="CardCloseButton"
+                Grid.Column="0"
+                Content="Fechar Perfil"
+                Style="{StaticResource ProfileButton}"
+                Visibility="{Binding CardCloseClickVisibility, ElementName=ThisCard}"
+                Click="Card_Close_Click" Grid.ColumnSpan="3"/>
 
-                    <!-- BOTÃO SECUNDÁRIO VISUAL -->
-                    <Button Grid.Column="1"
-                            Content="↗"
-                            Visibility="{Binding CardOpenClickVisibility, ElementName=ThisCard}"
-                            Style="{StaticResource SecondaryButton}"
-                            Click="Card_Click"
-                            FontSize="18">
+                    <!-- BOTÃO ABRIR -->
+
+                    <!-- BOTÃO EDITAR -->
+                    <Button x:Name="CardEditButton"
+                Grid.Column="2"
+                Style="{StaticResource SecondaryButton}"
+                Visibility="{Binding CardEditVisibility, ElementName=ThisCard}"
+                Click="CardEditButton_Click"
+                ToolTip="Editar usuário" Margin="55,0,0,0">
+
+                        <Viewbox Width="20" Height="20">
+                            <Path Stroke="#243746"
+                          StrokeThickness="2"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          Data="M3,21 L7,20 L20,7
+                                L17,4 L4,17 Z
+                                M15,6 L18,9"/>
+                        </Viewbox>
                     </Button>
+
+                    <!-- CANCELAR -->
+                    <Button x:Name="CardCancelEditButton"
+                Grid.Column="0"
+                Content="Cancelar"
+                Style="{StaticResource SecondaryButton}"
+                Visibility="Collapsed"
+                Margin="0,0,8,0"
+                Click="CardCancelEditButton_Click"/>
+
+                    <!-- SALVAR -->
+                    <Button x:Name="CardSaveEditButton"
+                Grid.Column="2"
+                Content="Salvar"
+                Style="{StaticResource ProfileButton}"
+                Visibility="Collapsed"
+                Click="CardSaveEditButton_Click"/>
                 </Grid>
 
             </Grid>

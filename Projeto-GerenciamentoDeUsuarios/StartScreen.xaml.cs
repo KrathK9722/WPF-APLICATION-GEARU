@@ -156,6 +156,15 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     string archivePath = GlobalFunctions.getImage(imageNumber);
                     CardVision novoCard = new CardVision();
+                    novoCard.UserId = idBanco;
+
+                    novoCard.CardEditVisibility = Visibility.Collapsed;
+
+                    // Conecta o clique do lápis à StartScreen
+                    novoCard.UserUpdated += () =>
+                    {
+                        viewCard();
+                    };
                     novoCard.CardUser = $"Usuário: {GlobalFunctions.ReturnUser(idBanco)}";
                     novoCard.CardEmail = $"Email: {GlobalFunctions.ReturnEmail(idBanco)}";
                     novoCard.CardImageSource = $"{archivePath}";
@@ -344,7 +353,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             onlineTimer.Tick += (sender, e) => // FUNÇÃO LAMBDA = FUNÇÃO CURTA, PODIA FAZER COM private void OnlineTimer(sender, e){} MAS ASSIM FICA MAIS FACIL E LIMPO
             {
-                viewCard();
+                GlobalFunctions.UpdateLastActive(ID);
                 if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
                 {
                     exit = true;
@@ -353,7 +362,13 @@ namespace Projeto_GerenciamentoDeUsuarios
                     Environment.Exit(0);
                     return;
                 }
-                GlobalFunctions.UpdateLastActive(ID);
+                if (ContainerDeCards.Children
+                    .OfType<CardVision>()
+                    .Any(card => card.IsEditing))
+                {
+                    return;
+                }
+                viewCard();
             };
 
             onlineTimer.Start();
@@ -660,6 +675,27 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_profile_fullname.Text = profile_fullname.Text;
             edit_profile_email.Text = profile_email.Text;
             edit_profile_user.Text = profile_user.Text;
+        }
+
+        private void EditCardUser(int userId)
+        {
+            if (!GlobalFunctions.ReturnIsAdmin(ID))
+            {
+                MessageBox.Show("Acesso negado.");
+                return;
+            }
+
+            string username = GlobalFunctions.ReturnUser(userId);
+
+            if (username == null)
+            {
+                MessageBox.Show("Usuário não encontrado.");
+                return;
+            }
+
+            MessageBox.Show(
+                $"Editar usuário: {username}\nID: {userId}"
+            );
         }
 
     }

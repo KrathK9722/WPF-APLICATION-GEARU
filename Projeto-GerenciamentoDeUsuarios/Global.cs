@@ -14,20 +14,19 @@ TIPOS DE RETORNO:
 104 = Senha incorreta
 
 */
-
+using MySql.Data.MySqlClient;
+using System.ComponentModel.DataAnnotations;
+using BCryptNet = BCrypt.Net.BCrypt;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.VisualBasic.FileIO;
-using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media.Imaging;
-using BCryptNet = BCrypt.Net.BCrypt;
+using System.Windows.Media.Imaging; 
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -729,8 +728,8 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             return count;
         }
-            public static int UpdateUserProfile(int id, string fullname, string email, string username, bool isAdmin)
-            {
+        public static int UpdateUserProfile(int id, string fullname, string email, string username, bool isAdmin)
+        {
                 fullname = fullname.Trim();
                 email = email.Trim();
                 username = username.Trim();
@@ -743,10 +742,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     connection.Open();
 
                     // Verifica e-mail duplicado, ignorando o próprio usuário
-                    string checkEmail = @"
-                        SELECT COUNT(*)
-                        FROM users
-                        WHERE email = @email AND id <> @id";
+                    string checkEmail = @"SELECT COUNT(*) FROM users WHERE email = @email AND id <> @id";
 
                     using (var cmd = new MySqlCommand(checkEmail, connection))
                     {
@@ -758,10 +754,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
 
                     // Verifica nome de usuário duplicado
-                    string checkUser = @"
-                        SELECT COUNT(*)
-                        FROM users
-                        WHERE user = @user AND id <> @id";
+                    string checkUser = @"SELECT COUNT(*) FROM users WHERE user = @user AND id <> @id";
 
                     using (var cmd = new MySqlCommand(checkUser, connection))
                     {
@@ -773,13 +766,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
 
                     // Atualiza os dados
-                    string query = @"
-                        UPDATE users
-                        SET name = @fullname,
-                            email = @email,
-                            user = @user,
-                            IsAdmin = @isAdmin
-                        WHERE id = @id";
+                    string query = @"UPDATE users SET name = @fullname, email = @email, user = @user, IsAdmin = @isAdmin WHERE id = @id";
 
                     using var command = new MySqlCommand(query, connection);
 
@@ -797,6 +784,229 @@ namespace Projeto_GerenciamentoDeUsuarios
                 {
                     return 1;
                 }
+        }
+
+        public static int UpdateManagedUser(
+            int adminId,
+            int targetId,
+            string fullname,
+            string email,
+            string username,
+            bool makeAdmin)
+        {
+            fullname = fullname.Trim();
+            email = email.Trim();
+            username = username.Trim();
+
+            if (string.IsNullOrWhiteSpace(fullname) ||
+                fullname.Length > 150 ||
+                !new EmailAddressAttribute().IsValid(email) ||
+                email.Length > 254 ||
+                username.Length < 3 ||
+                username.Length > 30 ||
+                username.Any(char.IsWhiteSpace))
+                return 1;
+
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                using var transaction = connection.BeginTransaction();
+
+                bool actorAdmin;
+                bool actorBanned;
+                int actorLevel;
+
+                // Verifica quem está realizando a edição
+                using (var cmd = new MySqlCommand(@"SELECT IsAdmin, IsBanned, AdminLevel FROM users WHERE id = @id FOR UPDATE", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@id", adminId);
+
+                    using var reader = cmd.ExecuteReader();
+
+                    if (!reader.Read())
+                        return 105;
+
+                    actorAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    actorBanned = Convert.ToBoolean(reader["IsBanned"]);
+                    actorLevel = reader["AdminLevel"] == DBNull.Value? 0 : Convert.ToInt32(reader["AdminLevel"]);
+                }
+
+                if (!actorAdmin || actorBanned)
+                    return 105;
+
+                bool targetAdmin;
+                int targetLevel;
+
+                using (var cmd = new MySqlCommand(@"SELECT IsAdmin, AdminLevel FROM users WHERE id = @id FOR UPDATE", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    using var reader = cmd.ExecuteReader();
+
+                    if (!reader.Read())
+                        return 102;
+
+                    targetAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    targetLevel = reader["AdminLevel"] == DBNull.Value
+                        ? 0 : Convert.ToInt32(reader["AdminLevel"]);
+                }
+
+                if (adminId == targetId && !makeAdmin)
+                    return 106;
+
+                if (adminId != targetId && targetAdmin && actorLevel >= targetLevel)
+                    return 105;
+
+
+                using (var cmd = new MySqlCommand(@"SELECT COUNT(*) FROM users WHERE email = @email AND id <> @id", 
+                    connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    if (Convert.ToInt32(cmd.ExecuteScalar()) > 0)
+                        return 100;
+                }
+
+                using (var cmd = new MySqlCommand(@"SELECT COUNT(*) FROM users WHERE user = @username AND id <> @id", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    if (Convert.ToInt32(cmd.ExecuteScalar()) > 0)
+                        return 101;
+                }
+
+                int newLevel = makeAdmin? (targetAdmin ? targetLevel : actorLevel + 1): 0;
+
+                using (var cmd = new MySqlCommand(@"UPDATE users SET name = @name, email = @email, user = @username, IsAdmin = @admin, AdminLevel = @level WHERE id = @id", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@name", fullname);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@admin", makeAdmin ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@level", newLevel);
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+
+                return 0;
+            }
+            catch (MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    if (ex.Message.Contains("email",
+                        StringComparison.OrdinalIgnoreCase))
+                        return 100;
+
+                    if (ex.Message.Contains("user",
+                        StringComparison.OrdinalIgnoreCase))
+                        return 101;
+                }
+
+                return 1;
+            }
+            catch (Exception)
+            {
+                return 1;
             }
         }
+
+        public static int SetUserBanStatus(
+            int adminId,
+            int targetId,
+            string password,
+            bool ban)
+        {
+            if (adminId == targetId)
+                return 105;
+
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                using var transaction = connection.BeginTransaction();
+
+                string hash;
+                bool admin;
+                bool adminBanned;
+                int adminLevel;
+
+                using (var cmd = new MySqlCommand(@"SELECT password, IsAdmin, IsBanned, AdminLevel FROM users WHERE id = @id FOR UPDATE", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@id", adminId);
+
+                    using var reader = cmd.ExecuteReader();
+
+                    if (!reader.Read())
+                    {
+                        return 105;
+                    }
+                    hash = reader["password"].ToString() ?? "";
+                    admin = Convert.ToBoolean(reader["IsAdmin"]);
+                    adminBanned = Convert.ToBoolean(reader["IsBanned"]);
+                    adminLevel = reader["AdminLevel"] == DBNull.Value
+                        ? 0 : Convert.ToInt32(reader["AdminLevel"]);
+                }
+
+                if (!admin || adminBanned)
+                {
+                    return 105;
+                }
+                if (!BCryptNet.Verify(password, hash))
+                {
+                    return 104;
+                }
+                bool targetAdmin;
+                bool currentBan;
+                int targetLevel;
+
+                using (var cmd = new MySqlCommand(@"SELECT IsAdmin, IsBanned, AdminLevel FROM users WHERE id = @id FOR UPDATE", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    using var reader = cmd.ExecuteReader();
+
+                    if (!reader.Read())
+                        return 102;
+
+                    targetAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    currentBan = Convert.ToBoolean(reader["IsBanned"]);
+                    targetLevel = reader["AdminLevel"] == DBNull.Value? 0 : Convert.ToInt32(reader["AdminLevel"]);
+                }
+
+                if (targetAdmin && adminLevel >= targetLevel)
+                    return 105;
+
+                if (currentBan == ban)
+                    return 107;
+
+                using (var cmd = new MySqlCommand(
+                    @"UPDATE users SET IsBanned = @banned WHERE id = @id", connection, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@banned", ban ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@id", targetId);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+
+                return 0;
+            }
+            catch (Exception)
+            {
+                return 1;
+            }
+        }
+
+
     }
+}

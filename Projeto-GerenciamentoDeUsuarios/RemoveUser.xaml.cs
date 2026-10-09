@@ -62,6 +62,9 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error += 1;
                 return;
             }
+            {
+                
+            }
             // VERIFICAÇÃO DE EMAIL E USUÁRIO
             if (error == 0)
             {
