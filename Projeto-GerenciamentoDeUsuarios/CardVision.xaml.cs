@@ -14,8 +14,6 @@ namespace Projeto_GerenciamentoDeUsuarios
         public bool IsEditing => editing;
 
         public event Action? UserUpdated;
-
-        // 1. Registro da propriedade do Título
         public static readonly DependencyProperty CardUserProperty =
             DependencyProperty.Register(
                 nameof(CardUser),
@@ -29,7 +27,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             set => SetValue(CardUserProperty, value);
         }
 
-        // 2. Registro da propriedade da Descrição
         public static readonly DependencyProperty CardEmailProperty =
             DependencyProperty.Register(
                 nameof(CardEmail),
@@ -43,7 +40,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             set => SetValue(CardEmailProperty, value);
         }
 
-        // 3. Registro da propriedade da Imagem
         public static readonly DependencyProperty CardImageSourceProperty =
             DependencyProperty.Register(
                 nameof(CardImageSource),
@@ -235,14 +231,13 @@ namespace Projeto_GerenciamentoDeUsuarios
             set => SetValue(CardEditVisibilityProperty, value);
         }
 
-        // CLIQUE NO BOTÃO EDITAR
+        // EDIT CLICK
 
         private void CardEditButton_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
 
-            if (!GlobalFunctions.ReturnIsAdmin(StartScreen.ID) ||
-                GlobalFunctions.ReturnIsBanned(StartScreen.ID))
+            if (!GlobalFunctions.ReturnIsAdmin(StartScreen.ID) || GlobalFunctions.ReturnIsBanned(StartScreen.ID))
             {
                 MessageBox.Show("Você não possui permissão para editar usuários.");
                 return;

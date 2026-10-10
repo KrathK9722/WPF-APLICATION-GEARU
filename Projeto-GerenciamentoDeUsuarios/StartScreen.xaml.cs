@@ -111,6 +111,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_screen.Visibility = Visibility.Collapsed;
             remove_screen.Visibility = Visibility.Collapsed;
             landing_page.Visibility = Visibility.Collapsed;
+            log_page.Visibility = Visibility.Collapsed;
 
             // Mostra somente a tela escolhida
             screen.Visibility = Visibility.Visible;
@@ -490,6 +491,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
 
         }
+
         private void edit_profile_button_Click(object sender, RoutedEventArgs e)
         {
             LoadProfile();
@@ -502,10 +504,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_profile_type.Items.Add("Usuário");
             edit_profile_type.Items.Add("Administrador");
 
-            edit_profile_type.SelectedItem =
-                GlobalFunctions.ReturnIsAdmin(ID)
-                ? "Administrador"
-                : "Usuário";
+            edit_profile_type.SelectedItem = GlobalFunctions.ReturnIsAdmin(ID)? "Administrador": "Usuário";
 
             // Usuários comuns não podem alterar permissões
             edit_profile_type.IsEnabled = IsAdmin;
@@ -677,26 +676,38 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_profile_user.Text = profile_user.Text;
         }
 
-        private void EditCardUser(int userId)
+        // =============================================
+        //  SYSTEM LOG
+        // ============================================
+        private void UsersDataGrid_AutoGeneratingColumn(
+            object sender,
+            DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (!GlobalFunctions.ReturnIsAdmin(ID))
+            if (e.Column is DataGridTextColumn textColumn)
             {
-                MessageBox.Show("Acesso negado.");
-                return;
-            }
-
-            string username = GlobalFunctions.ReturnUser(userId);
-
-            if (username == null)
+                textColumn.ElementStyle = new Style(typeof(TextBlock))
+                {
+                    Setters =
             {
-                MessageBox.Show("Usuário não encontrado.");
-                return;
+                new Setter(
+                    TextBlock.ForegroundProperty,
+                    Brushes.Black)
             }
-
-            MessageBox.Show(
-                $"Editar usuário: {username}\nID: {userId}"
-            );
+                };
+            }
         }
 
+        private void menu_log_click(object sender, RoutedEventArgs e)
+        {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
+            cancel_profile_edition();
+            ShowScreen(log_page);
+        }
     }
 }

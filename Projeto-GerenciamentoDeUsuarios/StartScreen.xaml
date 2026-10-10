@@ -193,8 +193,8 @@
 
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="{DynamicResource SidebarSelected}"/>
-            <Setter Property="BorderBrush" Value="#D1D1D1"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="BorderBrush" Value="white"/>
             <Setter Property="BorderThickness" Value="1"/>
 
         </Style>
@@ -389,6 +389,30 @@
 
                     </Button>
 
+                    <!-- REGISTRO -->
+
+                    <Button
+                            x:Name="menu_log"
+                            Style="{DynamicResource MenuButtonStyle}"
+                            Click="menu_log_click">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock
+                                Text="📄"
+                                FontSize="21"
+                                Width="35"
+                                VerticalAlignment="Center"/>
+
+                            <TextBlock
+                                Text="Registros do Sistema"
+                                VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
+
+
 
                     <!-- REGISTRAR -->
 
@@ -581,7 +605,7 @@
 
             <Grid
                 x:Name="edit_screen"
-                Visibility="Visible">
+                Visibility="Collapsed">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
 
@@ -914,7 +938,46 @@
                 </StackPanel>
 
             </Grid>
+            
+            <!-- ============================================= -->
+            <!-- LANDING PAGE -->
+            <!-- ============================================= -->
 
+            <Grid
+                x:Name="log_page"
+                Visibility="Visible">
+
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Width="970"
+                    Margin="0,50,0,0">
+
+                    <TextBlock
+                        x:Name="title_log_page"
+                        FontSize="30"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        Text="Registros do Sistema" ></TextBlock>
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextSecondary}"
+                        FontSize="14"
+                        HorizontalAlignment="Center"
+                        Margin="0,7,0,30"
+                        Text="Registros atualizados a cada 1 minuto"/>
+                    <Border
+                        Background="{DynamicResource ButtonBackground}"
+                        CornerRadius="19,19,19,19"
+                        Padding="15"
+                        Effect="{DynamicResource SoftShadow}" Width="970">
+                        <ui:DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" AutoGeneratingColumn="UsersDataGrid_AutoGeneratingColumn" Background="{DynamicResource BorderColor}" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" GridLinesVisibility="None" />
+
+                    </Border>
+                </StackPanel>
+
+            </Grid>
 
             <!-- ============================================= -->
             <!-- REMOVE -->
