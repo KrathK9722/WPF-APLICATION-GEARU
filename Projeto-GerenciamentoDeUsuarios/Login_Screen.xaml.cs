@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
+
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -127,7 +117,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 else
                 {
                     system_return = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 2);
-                    int user_token = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 3);
+                    int user_token = GlobalFunctions.GetUserIdByLogin(txt_enter_email_or_user.Text);
                     GlobalFunctions.UpdateLastLogin(user_token);
                     if (GlobalFunctions.ReturnIsLocked(user_token))
                     {
@@ -190,6 +180,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
+                        MessageBox.Show(
+                            $"Usuário digitado: {txt_enter_email_or_user.Text}\n" +
+                            $"ID encontrado: {user_token}\n" +
+                            $"Usuário do ID: {GlobalFunctions.ReturnUser(user_token)}"
+                        );
                         StartScreen.ID = user_token;
                         StartScreen Start_screen = new StartScreen();
                         Start_screen.Show();

@@ -611,17 +611,17 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                     if (user != usernameEdit)
                     {
-                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, usernameEdit, $"Usuário atualizou seu nome e usuário de {user} para {usernameEdit}");
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, usernameEdit, $"Usuário atualizou seu nome de usuário de {user} para {usernameEdit}");
                         user = usernameEdit;
                     }
                     if (email != emailEdit)
                     {
-                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu em email de {email} para {emailEdit}");
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu email de {email} para {emailEdit}");
                         email = emailEdit;
                     }
                     if (fullname != fullnameEdit)
                     {
-                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu em nome completo de {fullname} para {fullnameEdit}");
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu nome completo de {fullname} para {fullnameEdit}");
                         fullname = fullnameEdit;
                     }
                     IsAdmin = newAdmin;
