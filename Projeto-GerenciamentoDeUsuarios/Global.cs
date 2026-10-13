@@ -17,16 +17,10 @@ TIPOS DE RETORNO:
 using MySql.Data.MySqlClient;
 using System.ComponentModel.DataAnnotations;
 using BCryptNet = BCrypt.Net.BCrypt;
-using Google.Protobuf.WellKnownTypes;
-using Microsoft.VisualBasic.FileIO;
-using Mysqlx.Crud;
-using System.ComponentModel;
-using System.Diagnostics.Eventing.Reader;
-using System.Security.Cryptography;
 using System.Windows;
+using System.Data;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media.Imaging;
+
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -53,6 +47,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
+        // GENERAL FUNCTION TO ADD USERS TO THE DATABASE
         public static int Change_user_data(TextBox email_space, TextBox user_space, PasswordBox password_space, TextBox fullname_space, int imageValue, int AdminLevel, int option, string finish_message)
         {
             string email = email_space.Text.Trim();
@@ -154,22 +149,6 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 MessageBox.Show("Erro nos sistema: Não foi possível deletar o usuário.");
             }
-        }
-
-
-        // UPDATE LAST LOGIN DATE
-        public static void UpdateLastLogin(int id)
-        {
-            Open_database();
-
-            string query = @"UPDATE users SET lastLogin = NOW() WHERE id = @id";
-
-            using MySqlCommand command =
-                new MySqlCommand(query, Connection);
-
-            command.Parameters.AddWithValue("@id", id);
-
-            command.ExecuteNonQuery();
         }
 
         // UPDATE LAST ACTIVITIE DATE
@@ -502,17 +481,119 @@ namespace Projeto_GerenciamentoDeUsuarios
 
         }
 
-        // GET THE STATE THE ACTUAL USER IS AT (LOCKED = CANT LOGIN FOR 5 MINUTES)
-        public static bool ReturnIsLocked(int id)
+        // UPDATE LAST LOGIN TRY DATE
+        public static void UpdateLastLogin(int id)
         {
             Open_database();
-            string getLock = "SELECT IsLocked FROM users WHERE id = @id";
-            using var returnLock = new MySqlCommand(getLock, Connection);
-            returnLock.Parameters.AddWithValue("@id", id);
+
+            string query = @"UPDATE users SET lastTryLogin = NOW() WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+
+        // SET TIME ACCOUNT WAS LOCKED
+        public static void SendLockedTime(int id)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET LockedTime = NOW() WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+
+        // ADD ONE MORE FAILURE TO THE LOGIN TRY WITH INCORRECT PASSWORD
+        public static void AddPasswordTry(int id)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET PasswordTry = PasswordTry+1 WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+
+        // RESET PASSWORD TRIES
+        public static void ResetPasswordTry(int id)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET PasswordTry = 0 WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+
+        // VERIFY HOW MANY TIMES USER HAS TRIED TO LOGIN WITH A INCORRECT PASSWORD
+        public static int GetPasswordTry(int id)
+        {
+            Open_database();
+            string getPasswordTry = "SELECT PasswordTry FROM users WHERE id = @id";
+            using var returnPasswordTry = new MySqlCommand(getPasswordTry, Connection);
+            returnPasswordTry.Parameters.AddWithValue("@id", id);
 
             try
             {
-                using var reader = returnLock.ExecuteReader();
+                using var reader = returnPasswordTry.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    int PasswordTry = Convert.ToInt32(reader["PasswordTry"]);
+
+                    return PasswordTry;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return -1;
+            }
+            return -1;
+        }
+
+        // VERIFY IF ACCOUNT IS STILL LOCEKD
+        public static bool HasLockExpired(int id)
+        {
+            Open_database();
+
+            string query = @"SELECT TIMESTAMPDIFF(SECOND, LockedTime, NOW()) >= 300 FROM users WHERE id = @id";
+
+            using MySqlCommand command = new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            object result = command.ExecuteScalar();
+
+            return result != null && result != DBNull.Value && Convert.ToBoolean(result);
+        }
+
+        // RETURN IF THE USER IS LOCKED (LOCKED = ACCOUNT CANT LOGIN FOR 5 MINUTES)
+        public static bool ReturnIsLocked(int id)
+        {
+            Open_database();
+            string getLocked = "SELECT IsLocked FROM users WHERE id = @id";
+            using var returnLocked = new MySqlCommand(getLocked, Connection);
+            returnLocked.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using var reader = returnLocked.ExecuteReader();
 
                 if (reader.Read())
                 {
@@ -535,6 +616,46 @@ namespace Projeto_GerenciamentoDeUsuarios
             return false;
 
         }
+
+        // SET THE LOCK STATE AFTER 3 LOGIN TRIES
+        public static void SetIsLocked(int id, int value)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET IsLocked = @value WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@value", value);
+
+            command.ExecuteNonQuery();
+        }
+
+
+        // RETURN TIME REAMING
+        public static string GetRemainingLockTime(int id)
+        {
+            Open_database();
+
+            string query = @"SELECT GREATEST(300 - TIMESTAMPDIFF(SECOND, LockedTime, NOW()), 0) FROM users WHERE id = @id";
+
+            using MySqlCommand command = new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            object result = command.ExecuteScalar();
+
+            if (result == null || result == DBNull.Value)
+            {
+                return "00:00";
+            }
+            int seconds = Convert.ToInt32(result);
+
+            return TimeSpan.FromSeconds(seconds).ToString(@"mm\:ss");
+        }
+
 
         // RETURN IF THE USER IS BANNED (BANNED = ACCOUNT IS NOT DELETED BUT THE USER CANT LOGIN ANYMORE)
         public static bool ReturnIsBanned(int id)
@@ -568,6 +689,26 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             return false;
 
+        }
+
+        // GET USER ID BY ITS LOGIN (EMAIL OR USER) 
+        public static int GetUserIdByLogin(string login)
+        {
+            using var connection =
+                new MySqlConnection(connectionString);
+
+            connection.Open();
+
+            string query = @"SELECT id FROM users WHERE user = @login OR email = @login LIMIT 1";
+
+            using var command =
+                new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@login", login);
+
+            object result = command.ExecuteScalar();
+
+            return result == null || result == DBNull.Value? -1: Convert.ToInt32(result);
         }
 
         // GENERATES A RANDOM STRING TO VERIFY IF THE ACTUAL USER IS A ROBOT
@@ -728,6 +869,8 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             return count;
         }
+
+        // UPDATE THE USER VISUAL PROFILE
         public static int UpdateUserProfile(int id, string fullname, string email, string username, bool isAdmin)
         {
             fullname = fullname.Trim();
@@ -741,7 +884,6 @@ namespace Projeto_GerenciamentoDeUsuarios
 
                 connection.Open();
 
-                // Verifica e-mail duplicado, ignorando o próprio usuário
                 string checkEmail = @"SELECT COUNT(*) FROM users WHERE email = @email AND id <> @id";
 
                 using (var cmd = new MySqlCommand(checkEmail, connection))
@@ -753,7 +895,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                         return 100;
                 }
 
-                // Verifica nome de usuário duplicado
                 string checkUser = @"SELECT COUNT(*) FROM users WHERE user = @user AND id <> @id";
 
                 using (var cmd = new MySqlCommand(checkUser, connection))
@@ -765,7 +906,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                         return 101;
                 }
 
-                // Atualiza os dados
                 string query = @"UPDATE users SET name = @fullname, email = @email, user = @user, IsAdmin = @isAdmin WHERE id = @id";
 
                 using var command = new MySqlCommand(query, connection);
@@ -786,13 +926,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
-        public static int UpdateManagedUser(
-            int adminId,
-            int targetId,
-            string fullname,
-            string email,
-            string username,
-            bool makeAdmin)
+        // UPDATE USER
+        public static int UpdateManagedUser(int adminId, int targetId, string fullname, string email, string username, bool makeAdmin)
         {
             fullname = fullname.Trim();
             email = email.Trim();
@@ -818,7 +953,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 bool actorBanned;
                 int actorLevel;
 
-                // Verifica quem está realizando a edição
                 using (var cmd = new MySqlCommand(@"SELECT IsAdmin, IsBanned, AdminLevel FROM users WHERE id = @id FOR UPDATE", connection, transaction))
                 {
                     cmd.Parameters.AddWithValue("@id", adminId);
@@ -917,7 +1051,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return 1;
             }
         }
-
+        
+        // SET STATUS OF THE USER
         public static int SetUserBanStatus(
             int adminId,
             int targetId,
@@ -1010,10 +1145,61 @@ namespace Projeto_GerenciamentoDeUsuarios
         // =========================================================================================================================================================== //
 
         // LOG TABLE FUNCTIONS
-        public static void sendLog()
+        public static bool SendLog(string location, int adminID, string adminUser, int userChangedID, string userChanged, string changes)
         {
+            string query = @"INSERT INTO `log` (location, adminUser, adminID, userChanged, userChangedID, `time`, changes) VALUES (@location, @adminUser, @adminID, @userChanged, @userChangedID, NOW(), @changes)";
+            try
+            {
+                using var connection =
+                    new MySqlConnection(connectionString);
 
+                connection.Open();
+
+                using var command =
+                    new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@location", location);
+                command.Parameters.AddWithValue("@adminUser", adminUser);
+                command.Parameters.AddWithValue("@adminID", adminID);
+                command.Parameters.AddWithValue("@userChanged", userChanged);
+                command.Parameters.AddWithValue("@userChangedID", userChangedID);
+                command.Parameters.AddWithValue("@changes", changes);
+
+                return command.ExecuteNonQuery() == 1;
+            }
+            catch (MySqlException)
+            {
+                return false;
+            }
         }
+            public static DataTable GetLogs()
+            {
+                DataTable logs = new DataTable();
 
+                string query = @"
+                SELECT id AS 'ID', 
+                location AS 'Local', 
+                adminUser AS 'Responsável', 
+                adminID AS 'ID Responsável', 
+                userChanged AS 'Usuário Afetado', 
+                userChangedID AS 'ID Afetado', 
+                `time` AS 'Data', 
+                changes AS 'Alterações'
+                FROM `log`
+                ORDER BY `time` DESC, id DESC";
+
+                using var connection =
+                    new MySqlConnection(connectionString);
+
+                connection.Open();
+
+                using var command = new MySqlCommand(query, connection);
+
+                using var adapter = new MySqlDataAdapter(command);
+
+                adapter.Fill(logs);
+
+                return logs;
+            }
+        }
     }
-}

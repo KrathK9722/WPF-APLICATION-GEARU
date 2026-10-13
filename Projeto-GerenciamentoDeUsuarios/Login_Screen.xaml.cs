@@ -78,6 +78,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             error_system.Visibility = Visibility.Collapsed;
             error_verify.Visibility = Visibility.Collapsed;
             error_wrong_user_or_password.Visibility = Visibility.Collapsed;
+            error_account_locked.Visibility = Visibility.Collapsed;
+            error_account_locked_time.Visibility = Visibility.Collapsed;
 
             // ERROR MESSAGE FILL EVERYTHING
             if (string.IsNullOrWhiteSpace(txt_enter_email_or_user.Text) || string.IsNullOrWhiteSpace(txt_enter_password.Password))
@@ -94,8 +96,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                 error_verify.Visibility = Visibility.Visible;
                 error += 1;
             }
-
-
 
             // VERIFICAÇÃO DE EMAIL E USUÁRIO
             if (error == 0)
@@ -127,6 +127,24 @@ namespace Projeto_GerenciamentoDeUsuarios
                 else
                 {
                     system_return = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 2);
+                    int user_token = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 3);
+                    GlobalFunctions.UpdateLastLogin(user_token);
+                    if (GlobalFunctions.ReturnIsLocked(user_token))
+                    {
+                        if (!GlobalFunctions.HasLockExpired(user_token))
+                        {
+                            error_account_locked.Visibility = Visibility.Visible;
+                            error_account_locked_time.Visibility = Visibility.Visible;
+                            error_account_locked_time.Content = $"Aguarde {GlobalFunctions.GetRemainingLockTime(user_token)} para realizar a próxima tentativa.";
+                            reset_capcha();
+                            return;
+                        }
+                        else
+                        {
+                            GlobalFunctions.ResetPasswordTry(user_token);
+                            GlobalFunctions.SetIsLocked(user_token, 0);
+                        }
+                    }
                     if (system_return != 0)
                     {
                         // Erro geral do sistema
@@ -139,18 +157,42 @@ namespace Projeto_GerenciamentoDeUsuarios
                         if (system_return == 104)
                         {
                             error_wrong_user_or_password.Visibility = Visibility.Visible;
+                            if (GlobalFunctions.GetPasswordTry(user_token) >= 2)
+                            {
+                                if (!GlobalFunctions.ReturnIsLocked(user_token))
+                                {
+                                    GlobalFunctions.SendLockedTime(user_token);
+                                    GlobalFunctions.SetIsLocked(user_token, 1);
+                                }
+                            }
+                            else if (GlobalFunctions.GetPasswordTry(user_token) == -1)
+                            {
+                                MessageBox.Show("`Erro ao Verificar conta, tente novamente.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                GlobalFunctions.AddPasswordTry(user_token);
+                                if (GlobalFunctions.GetPasswordTry(user_token) >= 2)
+                                {
+                                    GlobalFunctions.SendLockedTime(user_token);
+                                    GlobalFunctions.SetIsLocked(user_token, 1);
+                                }
+                            }
                         }
                         error = 0;
                         reset_capcha();
                         return;
                     }
+                    else if (GlobalFunctions.ReturnIsBanned(user_token))
+                    {
+                        MessageBox.Show("`Conta Banida do Sistema", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                     else
                     {
-                        int user_token = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 3);
                         StartScreen.ID = user_token;
                         StartScreen Start_screen = new StartScreen();
                         Start_screen.Show();
-                        GlobalFunctions.UpdateLastLogin(user_token);
                         error = 0;
                         txt_enter_email_or_user.Clear();
                         txt_enter_password.Clear();

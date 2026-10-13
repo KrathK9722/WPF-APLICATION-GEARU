@@ -370,6 +370,10 @@ namespace Projeto_GerenciamentoDeUsuarios
                     "O usuário deve ter entre 3 e 30 caracteres, sem espaços.");
                 return;
             }
+            string oldUser = GlobalFunctions.ReturnUser(UserId);
+            string oldEmail = GlobalFunctions.ReturnEmail(UserId);
+            string oldFullname = GlobalFunctions.ReturnFullName(UserId);
+            bool oldIsAdmin = GlobalFunctions.ReturnIsAdmin(UserId);
 
             int result = GlobalFunctions.UpdateManagedUser(
                 StartScreen.ID,
@@ -383,14 +387,38 @@ namespace Projeto_GerenciamentoDeUsuarios
             switch (result)
             {
                 case 0:
+                    string adminUser = GlobalFunctions.ReturnUser(StartScreen.ID);
+
+                    if (oldUser != username)
+                    {
+                        GlobalFunctions.SendLog("CardVision - EditUser", StartScreen.ID, adminUser, UserId, oldUser, 
+                            $"Administrador alterou o usuário de {oldUser} para {username}");
+                    }
+
+                    if (oldEmail != email)
+                    {
+                        GlobalFunctions.SendLog("CardVision - EditUser", StartScreen.ID, adminUser, UserId, username, 
+                            $"Administrador alterou o email de {oldEmail} para {email}");
+                    }
+
+                    if (oldFullname != fullname)
+                    {
+                        GlobalFunctions.SendLog("CardVision - EditUser", StartScreen.ID, adminUser, UserId, username, 
+                            $"Administrador alterou o nome completo de {oldFullname} para {fullname}");
+                    }
+
+                    if (oldIsAdmin != makeAdmin)
+                    {
+                        GlobalFunctions.SendLog("CardVision - EditUser", StartScreen.ID, adminUser, UserId, username, 
+                            makeAdmin ? "Usuário promovido a administrador" : "Administrador rebaixado a usuário comum");
+                    }
+
                     MessageBox.Show("Usuário atualizado com sucesso!");
+                    MessageBox.Show("Feche o Card para atualizar as informações.");
 
                     CancelCardEdition();
-
-                    // Atualiza a StartScreen
                     UserUpdated?.Invoke();
                     break;
-
                 case 100:
                     MessageBox.Show("E-mail já cadastrado.");
                     break;
@@ -460,6 +488,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 Text = ban ? "Confirmar banimento" : "Confirmar desbanimento",
                 FontWeight = FontWeights.SemiBold,
+                Foreground = Brushes.Black,
                 FontSize = 18,
                 Margin = new Thickness(0, 0, 0, 12)
             };
@@ -467,6 +496,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             TextBlock description = new TextBlock
             {
                 Text = "Digite sua senha de administrador:",
+                Foreground = Brushes.Black,
                 Margin = new Thickness(0, 0, 0, 8)
 
             };
@@ -474,6 +504,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             PasswordBox passwordBox = new PasswordBox
             {
                 Height = 34,
+                Background = Brushes.Gray,
+                Foreground = Brushes.White,
                 Padding = new Thickness(8),
                 Margin = new Thickness(0, 0, 0, 15)
             };
@@ -489,6 +521,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 Content = "Cancelar",
                 Width = 100,
                 Height = 32,
+                Background = Brushes.Gray,
+                Foreground = Brushes.White,
                 Margin = new Thickness(0, 0, 8, 0)
             };
 
@@ -572,7 +606,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 case 0:
                     MessageBox.Show(
                         ban ? "Usuário banido!" : "Usuário desbanido!");
-
+                    MessageBox.Show("Feche o Card para atualizar as informações.");
                     CancelCardEdition();
                     UserUpdated?.Invoke();
                     break;

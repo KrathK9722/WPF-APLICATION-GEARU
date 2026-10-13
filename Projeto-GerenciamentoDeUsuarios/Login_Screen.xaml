@@ -274,7 +274,7 @@
                         BorderThickness="1"
                         VerticalContentAlignment="Center"/>
                 </StackPanel>
-                <Grid x:Name="grid_not_robot" Height="31" Visibility="Visible" Margin="0,15,0,194" Grid.Row="6">
+                <Grid x:Name="grid_not_robot" Visibility="Visible" Margin="0,45,0,10" Grid.Row="5" Grid.RowSpan="2">
                     <CheckBox                       
                         x:Name="checkbox_not_robot"
                         Content="Não sou um robô."
@@ -283,14 +283,14 @@
                         Foreground="#444444"
                         FontSize="13" Background="#FFC3C3C3" HorizontalAlignment="Center"/>
                 </Grid>
-                <Grid x:Name="checked_image_grid" Height="31" Visibility="Collapsed" Margin="0,15,0,194" Grid.Row="6">
+                <Grid x:Name="checked_image_grid" Height="31" Visibility="Collapsed" Margin="0,15,0,15" Grid.Row="6">
                     <Image x:Name="checked_image"
                         Source="/DesignImages/image_checked_notrobot.png"
                         Stretch="Uniform" Margin="89,2,80,0"/>
                 </Grid>
                 <StackPanel
-                    Grid.Row="6"
-                    Margin="0,45,0,0">
+                    Grid.Row="7"
+                    Margin="0,0,0,0">
                     <Label
                         x:Name="error_fill_everything"
                         Content="Preencha todos os campos"
@@ -299,7 +299,22 @@
                         FontWeight="Bold"
                         HorizontalContentAlignment="Center"
                         Visibility="Collapsed"/>
-
+                    <Label
+                        x:Name="error_account_locked"
+                        Content="Tentativas Excessivas de Login: Conta bloqueada temporariamente"
+                        Foreground="#B10000"
+                        FontSize="10"
+                        FontWeight="Bold"
+                        HorizontalContentAlignment="Center"
+                        Visibility="Collapsed"/>
+                    <Label
+                        x:Name="error_account_locked_time"
+                        Content="Aguarde para realizar a próxima tentativa."
+                        Foreground="#B10000"
+                        FontSize="10"
+                        FontWeight="Bold"
+                        HorizontalContentAlignment="Center"
+                        Visibility="Collapsed"/>
                     <Label
                         x:Name="error_verify"
                         Content="Confirme que você não é um robô"
@@ -321,8 +336,8 @@
                 </StackPanel>
 
                 <StackPanel
-                    Grid.Row="6"
-                    Margin="0,72,0,72">
+                    Grid.Row="8"
+                    Margin="0,60,0,0">
 
 
                     <Button

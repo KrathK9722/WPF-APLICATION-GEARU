@@ -172,10 +172,17 @@ namespace Projeto_GerenciamentoDeUsuarios
                 }
                 else
                 {
-                    Login_Screen login_Screen = new Login_Screen();
+                    int newUserID = GlobalFunctions.GetUserIdByLogin(txt_create_user.Text.Trim());
+
+                    if (newUserID > 0)
+                    {
+                        GlobalFunctions.SendLog("RegisterNewUser", AdminID, GlobalFunctions.ReturnUser(AdminID), newUserID, txt_create_user.Text.Trim(), 
+                            NewUserIsAdmin? "Conta administrativa criada": "Conta de usuário criada"
+                        );
+                    }
+
                     txt_register_password.Clear();
                     return;
-
                 }
 
             }

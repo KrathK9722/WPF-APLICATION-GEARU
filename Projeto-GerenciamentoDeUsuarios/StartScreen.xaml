@@ -186,20 +186,6 @@
 
         </Style>
 
-
-        <!-- COMBOBOX -->
-
-        <Style TargetType="ComboBox">
-
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="Black"/>
-            <Setter Property="BorderBrush" Value="white"/>
-            <Setter Property="BorderThickness" Value="1"/>
-
-        </Style>
-
-
         <!-- LABEL -->
 
         <Style TargetType="Label">
@@ -469,7 +455,7 @@
                                 FontSize="19"
                                 Width="35"
                                 VerticalAlignment="Center"><Run Language="pt-br" Text="🌓"/></TextBlock>
-                            <ui:ToggleSwitch x:Name="BotaoDarkMode" Content="Dark Mode" Checked="BotaoDarkMode_Checked" Unchecked="BotaoDarkMode_Unchecked" Foreground="Black" Height="58" Width="140" IsChecked="False" >
+                            <ui:ToggleSwitch x:Name="BotaoDarkMode" Content="Dark Mode" Checked="BotaoDarkMode_Checked" Unchecked="BotaoDarkMode_Unchecked" Foreground="{DynamicResource TextPrimary}" Height="58" Width="140" IsChecked="False" >
                                 <ui:ToggleSwitch.Background>
                                     <SolidColorBrush Color="#FF5D5D5D"/>
                                 </ui:ToggleSwitch.Background>
@@ -820,7 +806,16 @@
                                         Text="Usuário"
                                         Foreground="{DynamicResource TextPrimary}"
                                         FontSize="14"/>
-                                    <ComboBox x:Name="edit_profile_type" Margin="134,2,302,-2" Grid.ColumnSpan="2" Visibility="Collapsed"/>
+                                    <ComboBox x:Name="edit_profile_type"
+                                        Margin="134,2,302,-2"
+                                        Foreground="#202124"
+                                        Background="White"
+                                        BorderBrush="#CFCFCF"
+                                        Visibility="Collapsed"
+                                        Grid.ColumnSpan="2">
+                                        <ComboBoxItem Content="Usuário"/>
+                                        <ComboBoxItem Content="Administrador"/>
+                                    </ComboBox>
                                 </Grid>
 
 
@@ -972,8 +967,58 @@
                         CornerRadius="19,19,19,19"
                         Padding="15"
                         Effect="{DynamicResource SoftShadow}" Width="970">
-                        <ui:DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" AutoGeneratingColumn="UsersDataGrid_AutoGeneratingColumn" Background="{DynamicResource BorderColor}" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" GridLinesVisibility="None" />
+                        <ui:DataGrid x:Name="LogsDataGrid"
+                             AutoGenerateColumns="True"
+                             AutoGeneratingColumn="LogsDataGrid_AutoGeneratingColumn"
+                             IsReadOnly="True"
+                             CanUserAddRows="False"
+                             CanUserDeleteRows="False"
+                             Foreground="{DynamicResource TextPrimary}"
+                             Background="{DynamicResource WindowBackground}"
+                             RowBackground="{DynamicResource WindowBackground}"
+                             AlternatingRowBackground="{DynamicResource WindowBackground}"
+                             GridLinesVisibility="None"
+                             RowHeight="42">
 
+                            <ui:DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                </Style>
+                            </ui:DataGrid.RowStyle>
+
+                            <ui:DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                    <Setter Property="Padding" Value="15,8"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SidebarSelected}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ui:DataGrid.CellStyle>
+
+                            <ui:DataGrid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                    <Setter Property="Margin" Value="10,0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </ui:DataGrid.Resources>
+
+                            <ui:DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                    <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
+                                    <Setter Property="Padding" Value="15,10"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Style>
+                            </ui:DataGrid.ColumnHeaderStyle>
+
+                        </ui:DataGrid>
                     </Border>
                 </StackPanel>
 

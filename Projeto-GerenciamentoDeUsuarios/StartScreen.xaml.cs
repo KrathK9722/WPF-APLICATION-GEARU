@@ -23,6 +23,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static int ID;
         public string email;
         public string user;
+        public string fullname;
         public static bool IsAdmin;
 
         public bool editMode = false;
@@ -57,6 +58,7 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             email = GlobalFunctions.ReturnEmail(ID);
             user = GlobalFunctions.ReturnUser(ID);
+            fullname = GlobalFunctions.ReturnFullName(ID);
             IsAdmin = GlobalFunctions.ReturnIsAdmin(ID);
 
             StartOnlineTimer();
@@ -528,21 +530,21 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
         private void save_edit_profile_button_Click(object sender, RoutedEventArgs e)
         {
-            string fullname = edit_profile_fullname.Text.Trim();
-            string email = edit_profile_email.Text.Trim();
-            string username = edit_profile_user.Text.Trim();
+            string fullnameEdit = edit_profile_fullname.Text.Trim();
+            string emailEdit = edit_profile_email.Text.Trim();
+            string usernameEdit = edit_profile_user.Text.Trim();
 
             // Verifica campos vazios
-            if (string.IsNullOrWhiteSpace(fullname) ||
-                string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(username))
+            if (string.IsNullOrWhiteSpace(fullnameEdit) ||
+                string.IsNullOrWhiteSpace(emailEdit) ||
+                string.IsNullOrWhiteSpace(usernameEdit))
             {
                 MessageBox.Show("Preencha todos os campos.");
                 return;
             }
 
             // ERROR MESSAGE ENTER FULL NAME
-            string[] names = fullname.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] names = fullnameEdit.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             if (names.Length < 2 || names.Any(name => name.Length < 2) || names.Any(name => !name.All(c =>
                     char.IsLetter(c) || c == '\'' || c == '-')))
@@ -551,14 +553,14 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return;
             }
             // Valida e-mail
-            if (!new EmailAddressAttribute().IsValid(email))
+            if (!new EmailAddressAttribute().IsValid(emailEdit))
             {
                 MessageBox.Show("Digite um e-mail válido.");
                 return;
             }
 
             // Valida nome de usuário
-            if (username.Length < 3 || username.Length > 30)
+            if (usernameEdit.Length < 3 || usernameEdit.Length > 30)
             {
                 MessageBox.Show(
                     "O usuário deve ter entre 3 e 30 caracteres.");
@@ -566,7 +568,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
 
             // Impede espaços no usuário
-            if (username.Any(char.IsWhiteSpace))
+            if (usernameEdit.Any(char.IsWhiteSpace))
             {
                 MessageBox.Show(
                     "O nome de usuário não pode conter espaços.");
@@ -580,25 +582,21 @@ namespace Projeto_GerenciamentoDeUsuarios
 
             if (currentAdmin)
             {
-                newAdmin =
-                    edit_profile_type.SelectedItem?.ToString()
-                    == "Administrador";
+                newAdmin = edit_profile_type.SelectedItem?.ToString() == "Administrador";
             }
 
             // Impede que o administrador retire a própria permissão
             if (currentAdmin && !newAdmin)
             {
-                MessageBox.Show(
-                    "Você não pode remover sua própria permissão " +
-                    "de administrador nesta tela.");
+                MessageBox.Show("Você não pode remover sua própria permissão " + "de administrador nesta tela.");
                 return;
             }
 
             int result = GlobalFunctions.UpdateUserProfile(
                 ID,
-                fullname,
-                email,
-                username,
+                fullnameEdit,
+                emailEdit,
+                usernameEdit,
                 newAdmin
             );
 
@@ -611,13 +609,25 @@ namespace Projeto_GerenciamentoDeUsuarios
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
 
-                    user = username;
-                    this.email = email;
+                    if (user != usernameEdit)
+                    {
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, usernameEdit, $"Usuário atualizou seu nome e usuário de {user} para {usernameEdit}");
+                        user = usernameEdit;
+                    }
+                    if (email != emailEdit)
+                    {
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu em email de {email} para {emailEdit}");
+                        email = emailEdit;
+                    }
+                    if (fullname != fullnameEdit)
+                    {
+                        GlobalFunctions.SendLog("StartScreen - EditProfile", ID, user, ID, user, $"Usuário atualizou seu em nome completo de {fullname} para {fullnameEdit}");
+                        fullname = fullnameEdit;
+                    }
                     IsAdmin = newAdmin;
 
                     title_landing_page.Text =
                         $"Bem vindo ao Sistema GEARU, {user}";
-
                     LoadProfile();
                     cancel_profile_edition();
                     viewCard();
@@ -708,6 +718,43 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             cancel_profile_edition();
             ShowScreen(log_page);
+            LoadLogs();
+        }
+
+        private void LoadLogs()
+        {
+            try
+            {
+                LogsDataGrid.ItemsSource = GlobalFunctions.GetLogs().DefaultView;
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("Erro ao carregar os logs do sistema.");
+            }
+        }
+
+
+        //DATA GRID COLUMN STYLE
+        private void LogsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.Column is DataGridTextColumn column)
+            {
+                Style textStyle = new Style(typeof(TextBlock));
+
+                textStyle.Setters.Add(new Setter(
+                    TextBlock.ForegroundProperty,
+                    new DynamicResourceExtension("TextPrimary")));
+
+                textStyle.Setters.Add(new Setter(
+                    TextBlock.MarginProperty,
+                    new Thickness(10, 0, 10, 0)));
+
+                textStyle.Setters.Add(new Setter(
+                    TextBlock.VerticalAlignmentProperty,
+                    VerticalAlignment.Center));
+
+                column.ElementStyle = textStyle;
+            }
         }
     }
 }

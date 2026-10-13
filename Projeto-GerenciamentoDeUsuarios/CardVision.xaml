@@ -14,7 +14,7 @@
     <UserControl.Resources>
 
         <!-- CORES -->
-        <SolidColorBrush x:Key="CardBackground" Color="#0000000D"/>
+        <SolidColorBrush x:Key="CardBackground" Color="White"/>
         <SolidColorBrush x:Key="CardBorder" Color="#E3E4F7"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#202124"/>
         <SolidColorBrush x:Key="TextSecondary" Color="#777982"/>
@@ -229,6 +229,7 @@
                             <TextBox x:Name="CardEditUser"
                              Height="32"
                              FontSize="12"
+                             FontWeight="Bold"
                              Foreground="#202124"
                              Background="White"
                              BorderBrush="#CFCFCF"
@@ -277,9 +278,11 @@
                                HorizontalAlignment="Center"/>
 
                                 <ComboBox x:Name="CardEditType"
-                              Width="110"
+                              Width="140"
                               Height="30"
                               FontSize="11"
+                              FontWeight="Bold"
+                              Margin="17,0,0,0"
                               Foreground="#202124"
                               Background="White"
                               BorderBrush="#CFCFCF"
