@@ -80,6 +80,15 @@ CREATE TABLE `GEARU`.`log` (`id` INT NOT NULL AUTO_INCREMENT ,
 `changes` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
 PRIMARY KEY (`id`));
 
+CREATE TABLE `GEARU`.`eventlog` (`id` INT NOT NULL AUTO_INCREMENT ,
+`location` VARCHAR(255) NOT NULL ,
+`userChanged` varchar(255) not null,
+`userChangedID` int not null default 0,
+`time` DATETIME NOT null default current_timestamp,
+`event` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
+`result` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
+PRIMARY KEY (`id`));
+
 
 TRUNCATE TABLE users; #Limpa a tabela de usuários
 TRUNCATE TABLE log;
