@@ -1,12 +1,10 @@
 # GEARU APPLICATION - SENAI PROJECT
 
+This application was developed while I was studying C# and WPF. It did not have a strict deadline, so I continued working on it after the teacher's evaluation to improve my personal skills and implementation logic.
 
-This application was made while I was studying C# and didn't have a exact time limit to finish, I worked on it after the teacher's evaluation just to improve my personal skills.
+### TECHNOLOGIES USED IN THIS PROJECT:
 
-TECHNOLOGIES IN THIS PROJECT:
-[![C# LOGO]([https://raw.githubusercontent.com/learnbr/csharp/master/csharp-logo.png]) C# was the main language on this project.
-[![MariaDB LOGO]([https://raw.githubusercontent.com/learnbr/csharp/master/csharp-logo.png]) MariaDB was the DATABASE used in this project
-[![MariaDB LOGO]([(https://celsokitamura.com.br/wp-content/uploads/2019/07/011-XAML-Conceitos-01.jpg)]) MariaDB was the DATABASE used in this project
-[![MariaDB LOGO]([https://raw.githubusercontent.com/learnbr/csharp/master/csharp-logo.png]) MariaDB was the DATABASE used in this project
-[![MariaDB LOGO]([https://raw.githubusercontent.com/learnbr/csharp/master/csharp-logo.png]) MariaDB was the DATABASE used in this project
-
+* ![C# LOGO](https://shields.io) **C#** was the main programming language used in this project.
+* ![WPF / XAML LOGO](https://shields.io) **WPF / XAML** was used to build the desktop User Interface (UI).
+* ![MariaDB LOGO](https://shields.io) **MariaDB** was the relational database engine used to persist all application data.
+* ![MySQL LOGO](https://shields.io) **MySQL Connector** was the extension used within C# to bridge and connect the application to the MariaDB server.
