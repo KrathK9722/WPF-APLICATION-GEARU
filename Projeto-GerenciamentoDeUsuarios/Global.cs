@@ -390,6 +390,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             return null;
         }
 
+
         // RETURN FALSE OR TRUE ISADMIN
         public static bool ReturnIsAdmin(int id)
         {
@@ -452,11 +453,26 @@ namespace Projeto_GerenciamentoDeUsuarios
         }
 
         // UPDATE LAST LOGIN TRY DATE
-        public static void UpdateLastLogin(int id)
+        public static void UpdateLastTryLogin(int id)
         {
             Open_database();
 
             string query = @"UPDATE users SET lastTryLogin = NOW() WHERE id = @id";
+
+            using MySqlCommand command =
+                new MySqlCommand(query, Connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            command.ExecuteNonQuery();
+        }
+
+        // UPDATE LAST LOGIN DATE
+        public static void UpdateLastLogin(int id)
+        {
+            Open_database();
+
+            string query = @"UPDATE users SET lastLogin = NOW() WHERE id = @id";
 
             using MySqlCommand command =
                 new MySqlCommand(query, Connection);
@@ -1142,8 +1158,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                 return false;
             }
         }
-            public static DataTable GetLogs()
-            {
+        public static DataTable GetLogs()
+        {
                 DataTable logs = new DataTable();
 
                 string query = @"
@@ -1170,6 +1186,62 @@ namespace Projeto_GerenciamentoDeUsuarios
                 adapter.Fill(logs);
 
                 return logs;
+        }
+
+        public static bool SendEventLog(string location, int userChangedID, string userChanged, string events, string result)
+        {
+            string query = @"INSERT INTO `eventlog` (location, userActor, userActorID, `time`, `event`, result) VALUES (@location, @userActor, @userActorID, NOW(), @event, @result)";
+            try
+            {
+                using var connection =
+                    new MySqlConnection(connectionString);
+
+                connection.Open();
+
+                using var command =
+                    new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@location", location);
+                command.Parameters.AddWithValue("@userActor", userChanged);
+                command.Parameters.AddWithValue("@userActorID", userChangedID);
+                command.Parameters.AddWithValue("@event", events);
+                command.Parameters.AddWithValue("@result", result);
+
+                return command.ExecuteNonQuery() == 1;
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erro SQL: {ex.Message}");
+                return false;
             }
         }
+        public static DataTable GetEventLogs()
+        {
+                DataTable logs = new DataTable();
+
+                string query = @"
+                    SELECT id AS 'ID', 
+                    location AS 'Local',  
+                    userActor AS 'Usuário Ator', 
+                    userActorID AS 'ID Ator', 
+                    `time` AS 'Data', 
+                    `event` AS 'Evento',
+                    result AS 'Resultado'
+                    FROM `eventlog`
+                    ORDER BY `time` DESC, id DESC";
+
+                using var connection =
+                    new MySqlConnection(connectionString);
+
+                connection.Open();
+
+                using var command = new MySqlCommand(query, connection);
+
+                using var adapter = new MySqlDataAdapter(command);
+
+                adapter.Fill(logs);
+
+                return logs;
+        }
     }
+}

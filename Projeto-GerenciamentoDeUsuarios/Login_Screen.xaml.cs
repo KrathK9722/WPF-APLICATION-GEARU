@@ -118,7 +118,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                 {
                     system_return = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 2);
                     int user_token = GlobalFunctions.GetUserIdByLogin(txt_enter_email_or_user.Text);
-                    GlobalFunctions.UpdateLastLogin(user_token);
+                    GlobalFunctions.UpdateLastTryLogin(user_token);
                     if (GlobalFunctions.ReturnIsLocked(user_token))
                     {
                         if (!GlobalFunctions.HasLockExpired(user_token))
@@ -127,12 +127,14 @@ namespace Projeto_GerenciamentoDeUsuarios
                             error_account_locked_time.Visibility = Visibility.Visible;
                             error_account_locked_time.Content = $"Aguarde {GlobalFunctions.GetRemainingLockTime(user_token)} para realizar a próxima tentativa.";
                             reset_capcha();
+                            GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Tentativa de Login", "Falha");
                             return;
                         }
                         else
                         {
                             GlobalFunctions.ResetPasswordTry(user_token);
                             GlobalFunctions.SetIsLocked(user_token, 0);
+                            GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Bloqueio temporário de conta", "Bloqueio desfeito");
                         }
                     }
                     if (system_return != 0)
@@ -153,6 +155,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                                 {
                                     GlobalFunctions.SendLockedTime(user_token);
                                     GlobalFunctions.SetIsLocked(user_token, 1);
+                                    GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Bloqueio temporário de conta", "Bloqueio efetuado");
                                 }
                             }
                             else if (GlobalFunctions.GetPasswordTry(user_token) == -1)
@@ -166,29 +169,29 @@ namespace Projeto_GerenciamentoDeUsuarios
                                 {
                                     GlobalFunctions.SendLockedTime(user_token);
                                     GlobalFunctions.SetIsLocked(user_token, 1);
+                                    GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Bloqueio temporário de conta", "Bloqueio efetuado");
                                 }
                             }
                         }
                         error = 0;
                         reset_capcha();
+                        GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Tentativa de Login", "Falha");
                         return;
                     }
                     else if (GlobalFunctions.ReturnIsBanned(user_token))
                     {
                         MessageBox.Show("`Conta Banida do Sistema", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Tentativa de Login", "Falha");
                         return;
                     }
                     else
                     {
-                        MessageBox.Show(
-                            $"Usuário digitado: {txt_enter_email_or_user.Text}\n" +
-                            $"ID encontrado: {user_token}\n" +
-                            $"Usuário do ID: {GlobalFunctions.ReturnUser(user_token)}"
-                        );
+                        GlobalFunctions.SendEventLog("Login_Screen", user_token, GlobalFunctions.ReturnUser(user_token), "Tentativa de Login", "Sucesso");
                         StartScreen.ID = user_token;
                         StartScreen Start_screen = new StartScreen();
                         Start_screen.Show();
                         error = 0;
+                        GlobalFunctions.UpdateLastLogin(user_token);
                         txt_enter_email_or_user.Clear();
                         txt_enter_password.Clear();
                         reset_capcha();
@@ -201,6 +204,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 error = 0;
                 reset_capcha();
+                GlobalFunctions.SendEventLog("Login_Screen", 0, "Sem registro", "Tentativa de Login", "Falha");
                 return;
             }
         }

@@ -17,6 +17,7 @@ CREATE TABLE `GEARU`.`users` (`id` INT NOT NULL AUTO_INCREMENT ,
 `IsBanned` TINYINT(1) NOT NULL DEFAULT 0,
 `PasswordTry` INT not null default 0,
 `lastTryLogin` DATETIME null,
+`lastLogin` DATETIME null, 
 `LockedTime` DATETIME null,
 `IsLocked` TINYINT(1) not null default 0,
 `lastActive` DATETIME null,
@@ -35,6 +36,15 @@ CREATE TABLE `GEARU`.`log` (`id` INT NOT NULL AUTO_INCREMENT ,
 `userChangedID` int not null default 0,
 `time` DATETIME NOT null default current_timestamp,
 `changes` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
+PRIMARY KEY (`id`));
+
+CREATE TABLE `GEARU`.`eventlog` (`id` INT NOT NULL AUTO_INCREMENT ,
+`location` VARCHAR(255) NOT NULL ,
+`userChanged` varchar(255) not null,
+`userChangedID` int not null default 0,
+`time` DATETIME NOT null default current_timestamp,
+`event` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
+`result` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
 PRIMARY KEY (`id`));
 
 

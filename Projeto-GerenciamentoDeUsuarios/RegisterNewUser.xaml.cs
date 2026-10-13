@@ -1,5 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
-using System.IO;
-using System.Reflection;
 
 namespace Projeto_GerenciamentoDeUsuarios
 {
@@ -137,11 +138,11 @@ namespace Projeto_GerenciamentoDeUsuarios
                 int system_return;
                 if (NewUserIsAdmin) 
                 { 
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, GlobalFunctions.GetAdminLevel(AdminID)+1, 2, "Success!! New Admin Account Created."); 
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, GlobalFunctions.GetAdminLevel(AdminID)+1, 2, "Sucesso! Conta de administrador criada."); 
                 }
                 else 
                 {
-                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 0, 1, "Success!! User Account Created.");
+                    system_return = GlobalFunctions.Change_user_data(txt_create_email, txt_create_user, txt_create_password, txt_enter_full_name, ImageValue, 0, 1, "Sucesso! Conta de usuário criada.");
                 }
                 if (system_return != 0)
                 {
@@ -168,6 +169,8 @@ namespace Projeto_GerenciamentoDeUsuarios
                             error_duplicated_user.Visibility = Visibility.Visible;
                         }
                     }
+                    sendEventLog(AdminID, "Tentativa de Criação de Conta", "Falha");
+                    return;
 
                 }
                 else
@@ -189,6 +192,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             else
             {
                 error = 0;
+                sendEventLog(AdminID, "Tentativa de Criação de Conta", "Falha");
                 return;
             }
         }
@@ -200,6 +204,10 @@ namespace Projeto_GerenciamentoDeUsuarios
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StartScreen.create_user_opened = false;
+        }
+        public void sendEventLog(int id, string events, string result)
+        {
+            GlobalFunctions.SendEventLog("RegisterNewUser", id, GlobalFunctions.ReturnUser(id), events, result);
         }
     }
 }

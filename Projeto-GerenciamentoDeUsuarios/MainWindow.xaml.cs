@@ -260,15 +260,18 @@ namespace Projeto_GerenciamentoDeUsuarios
                             error_duplicated_user.Visibility = Visibility.Visible;
                         }
                     }
-
+                    GlobalFunctions.SendEventLog("MainWindow", 0, "Sem registro", "Tentativa de Criação de Admin Primário", "Falha");
+                    return;
                 }
                 else
                 {
+                    int AdminID = GlobalFunctions.GetUserIdByLogin(txt_create_user.Text);
                     Login_Screen login_Screen = new Login_Screen();
                     login_Screen.Show();
-                    this.Close();
                     txt_register_password.Clear();
                     reset_capcha();
+                    GlobalFunctions.SendEventLog("MainWindow", AdminID, GlobalFunctions.ReturnUser(AdminID), "Tentativa de Criação de Admin Primário", "Sucesso");
+                    this.Close();
                     return;
 
                 }
@@ -278,6 +281,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 error = 0;
                 reset_capcha();
+                GlobalFunctions.SendEventLog("MainWindow", 0, "Sem registro", "Tentativa de Criação de Admin Primário", "Falha");
                 return;
             }
         }

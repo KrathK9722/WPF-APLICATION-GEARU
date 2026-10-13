@@ -14,6 +14,7 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Reflection;
 using Mysqlx.Crud;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 // FAZER A VERIFICAÇÃO FUNCIONAR DOS DADOS, TA SALVANDO E MANDANDO MSG MESMO COM A VERIFICAÇÃO ERRADA POR CONTA DO GLOBAL
 namespace Projeto_GerenciamentoDeUsuarios
@@ -94,6 +95,25 @@ namespace Projeto_GerenciamentoDeUsuarios
                 //Verificação de senha
                 else
                 {
+                    int delete_user_token = GlobalFunctions.GetUserIdByLogin(txt_enter_email_or_user.Text);
+                    if (AdminID == delete_user_token)
+                    {
+                        MessageBox.Show("`Você não pode excluir sua própria conta.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        sendEventLog(delete_user_token, "Tentativa de Exclusão", "Falha");
+                        return;
+                    }
+                    if (1 == delete_user_token)
+                    {
+                        MessageBox.Show("`Você não pode excluir o Administrador Principal.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        sendEventLog(delete_user_token, "Tentativa de Exclusão", "Falha");
+                        return;
+                    }
+                    if (GlobalFunctions.ReturnIsAdmin(AdminID))
+                    {
+                        MessageBox.Show("`Um usuário comum não pode realizar esta operação.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        sendEventLog(delete_user_token, "Tentativa de Exclusão", "Falha");
+                        return;
+                    }
                     system_return = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 4, AdminID);
                     if (system_return != 0)
                     {
@@ -109,11 +129,13 @@ namespace Projeto_GerenciamentoDeUsuarios
                             error_incorrect_password.Visibility = Visibility.Visible; 
                         }
                         error = 0;
+                        sendEventLog(AdminID, "Tentativa de Exclusão de Conta", "Falha");
+                        GlobalFunctions.SendLog("RemoveUser", AdminID, GlobalFunctions.ReturnUser(AdminID), delete_user_token, GlobalFunctions.ReturnUser(delete_user_token),
+                            "Tentativa falha de exclusão da conta");
                         return;
                     }
                     else
                     {
-                        int delete_user_token = GlobalFunctions.GetUserIdByLogin(txt_enter_email_or_user.Text);
                         GlobalFunctions.SendLog("RemoveUser", AdminID, GlobalFunctions.ReturnUser(AdminID), delete_user_token, GlobalFunctions.ReturnUser(delete_user_token),
                             "Usuário deletado do sistema.");
                         GlobalFunctions.DeleteUser(delete_user_token, "Usuário deletado com sucesso!");
@@ -128,8 +150,14 @@ namespace Projeto_GerenciamentoDeUsuarios
             else
             {
                 error = 0;
+                sendEventLog(AdminID, "Tentativa de Exclusão de Conta", "Falha");
                 return;
             }
+        }
+
+        public void sendEventLog(int id, string events, string result)
+        {
+            GlobalFunctions.SendEventLog("Login_Screen", id, GlobalFunctions.ReturnUser(id), events, result);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         public static bool remove_user_opened = false;
 
         public static bool exit = false;
-            
+
         // CONEXÃO
         public static string connectionString = GlobalFunctions.connectionString;
         public static MySqlConnection Connection { get; set; }
@@ -97,6 +97,8 @@ namespace Projeto_GerenciamentoDeUsuarios
             {
                 menu_button_register.Visibility = Visibility.Collapsed;
                 menu_button_remove.Visibility = Visibility.Collapsed;
+                menu_event_log.Visibility = Visibility.Collapsed;
+                menu_event_log.Visibility = Visibility.Collapsed;
             }
             GlobalFunctions.UpdateLastActive(ID);
             StartOnlineTimer();
@@ -114,6 +116,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             remove_screen.Visibility = Visibility.Collapsed;
             landing_page.Visibility = Visibility.Collapsed;
             log_page.Visibility = Visibility.Collapsed;
+            event_log_page.Visibility = Visibility.Collapsed;
 
             // Mostra somente a tela escolhida
             screen.Visibility = Visibility.Visible;
@@ -184,7 +187,7 @@ namespace Projeto_GerenciamentoDeUsuarios
                     {
                         novoCard.CardLastTimeActive = GlobalFunctions.ReturnIsOnline(idBanco) ? "Online Agora" : $"Última vez ativo: {GlobalFunctions.ReturnLastActive(idBanco)}";
                     }
-                    
+
                     novoCard.Width = 280;
                     novoCard.Margin = new Thickness(13.5);
 
@@ -449,7 +452,7 @@ namespace Projeto_GerenciamentoDeUsuarios
         // ==========================================================
         private void exit_click(object sender, RoutedEventArgs e)
         {
-                Close();
+            Close();
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -506,7 +509,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             edit_profile_type.Items.Add("Usuário");
             edit_profile_type.Items.Add("Administrador");
 
-            edit_profile_type.SelectedItem = GlobalFunctions.ReturnIsAdmin(ID)? "Administrador": "Usuário";
+            edit_profile_type.SelectedItem = GlobalFunctions.ReturnIsAdmin(ID) ? "Administrador" : "Usuário";
 
             // Usuários comuns não podem alterar permissões
             edit_profile_type.IsEnabled = IsAdmin;
@@ -707,6 +710,7 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
         }
 
+        //EDIT LOG
         private void menu_log_click(object sender, RoutedEventArgs e)
         {
             if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
@@ -729,10 +733,36 @@ namespace Projeto_GerenciamentoDeUsuarios
             }
             catch (MySqlException)
             {
-                MessageBox.Show("Erro ao carregar os logs do sistema.");
+                MessageBox.Show("Erro ao carregar os logs de alteração.");
             }
         }
 
+        //EVENT LOG
+        private void menu_event_log_click(object sender, RoutedEventArgs e)
+        {
+            if (GlobalFunctions.ReturnUser(ID) == null && exit == false)
+            {
+                exit = true;
+                MessageBox.Show("`Saida repentina do sistema. Causa: Conta Excluida ou Desativada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+                return;
+            }
+            cancel_profile_edition();
+            ShowScreen(event_log_page);
+            LoadEventLogs();
+        }
+
+        private void LoadEventLogs()
+        {
+            try
+            {
+                EventLogsDataGrid.ItemsSource = GlobalFunctions.GetEventLogs().DefaultView;
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("Erro ao carregar os logs de evento.");
+            }
+        }
 
         //DATA GRID COLUMN STYLE
         private void LogsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

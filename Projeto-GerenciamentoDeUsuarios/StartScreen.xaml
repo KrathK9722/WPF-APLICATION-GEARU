@@ -375,7 +375,7 @@
 
                     </Button>
 
-                    <!-- REGISTRO -->
+                    <!-- REGISTRO DE EVENTOS -->
 
                     <Button
                             x:Name="menu_log"
@@ -391,14 +391,35 @@
                                 VerticalAlignment="Center"/>
 
                             <TextBlock
-                                Text="Registros do Sistema"
+                                Text="Registros de Alteração"
                                 VerticalAlignment="Center"/>
 
                         </StackPanel>
 
                     </Button>
 
+                    <!-- REGISTRO DE ALTERAÇÃO -->
 
+                    <Button
+                            x:Name="menu_event_log"
+                            Style="{DynamicResource MenuButtonStyle}"
+                            Click="menu_event_log_click">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock
+                                Text="📥"
+                                FontSize="21"
+                                Width="35"
+                                VerticalAlignment="Center"/>
+
+                            <TextBlock
+                                Text="Registros de Evento"
+                                VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Button>
 
                     <!-- REGISTRAR -->
 
@@ -933,15 +954,14 @@
                 </StackPanel>
 
             </Grid>
-            
+
             <!-- ============================================= -->
-            <!-- LANDING PAGE -->
+            <!-- CHANGE LOGS -->
             <!-- ============================================= -->
 
             <Grid
                 x:Name="log_page"
-                Visibility="Visible">
-
+                Visibility="Collapsed">
                 <StackPanel
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
@@ -954,7 +974,95 @@
                         FontWeight="SemiBold"
                         HorizontalAlignment="Center"
                         Foreground="{DynamicResource TextPrimary}"
-                        Text="Registros do Sistema" ></TextBlock>
+                        ><Run Text="Registros d"/><Run Text="e Alteração"/></TextBlock>
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextSecondary}"
+                        FontSize="14"
+                        HorizontalAlignment="Center"
+                        Margin="0,7,0,30"
+                        Text="Registros atualizados a cada 1 minuto"/>
+                        <Border
+                        Background="{DynamicResource ButtonBackground}"
+                        CornerRadius="19,19,19,19"
+                        Padding="15"
+                        Effect="{DynamicResource SoftShadow}" Width="970">
+                            <ui:DataGrid x:Name="LogsDataGrid"
+                             AutoGenerateColumns="True"
+                             AutoGeneratingColumn="LogsDataGrid_AutoGeneratingColumn"
+                             IsReadOnly="True"
+                             CanUserAddRows="False"
+                             CanUserDeleteRows="False"
+                             Foreground="{DynamicResource TextPrimary}"
+                             Background="{DynamicResource WindowBackground}"
+                             RowBackground="{DynamicResource WindowBackground}"
+                             AlternatingRowBackground="{DynamicResource WindowBackground}"
+                             GridLinesVisibility="None"
+                             RowHeight="42">
+
+                                <ui:DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                    </Style>
+                                </ui:DataGrid.RowStyle>
+
+                                <ui:DataGrid.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                        <Setter Property="Padding" Value="15,8"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource SidebarSelected}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ui:DataGrid.CellStyle>
+
+                                <ui:DataGrid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                        <Setter Property="Margin" Value="10,0"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </ui:DataGrid.Resources>
+
+                                <ui:DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                        <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
+                                        <Setter Property="Padding" Value="15,10"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Style>
+                                </ui:DataGrid.ColumnHeaderStyle>
+
+                            </ui:DataGrid>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+            <!-- ============================================= -->
+            <!-- EVENT LOGS -->
+            <!-- ============================================= -->
+
+            <Grid
+                x:Name="event_log_page"
+                Visibility="Visible">
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Width="970"
+                    Margin="0,50,0,0">
+
+                    <TextBlock
+                        x:Name="title_event_log_page"
+                        FontSize="30"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        Text="Registros de Eventos do Sistema" ></TextBlock>
 
                     <TextBlock
                         Foreground="{DynamicResource TextSecondary}"
@@ -967,7 +1075,7 @@
                         CornerRadius="19,19,19,19"
                         Padding="15"
                         Effect="{DynamicResource SoftShadow}" Width="970">
-                        <ui:DataGrid x:Name="LogsDataGrid"
+                        <ui:DataGrid x:Name="EventLogsDataGrid"
                              AutoGenerateColumns="True"
                              AutoGeneratingColumn="LogsDataGrid_AutoGeneratingColumn"
                              IsReadOnly="True"
@@ -1021,9 +1129,7 @@
                         </ui:DataGrid>
                     </Border>
                 </StackPanel>
-
             </Grid>
-
             <!-- ============================================= -->
             <!-- REMOVE -->
             <!-- ============================================= -->
