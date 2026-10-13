@@ -4,7 +4,7 @@ This application was developed while I was studying C# and WPF. It did not have 
 
 ### TECHNOLOGIES USED IN THIS PROJECT:
 
-* ![C# LOGO](https://shields.io) **C#** was the main programming language used in this project.
-* ![WPF / XAML LOGO](https://shields.io) **WPF / XAML** was used to build the desktop User Interface (UI).
-* ![MariaDB LOGO](https://shields.io) **MariaDB** was the relational database engine used to persist all application data.
-* ![MySQL LOGO](https://shields.io) **MySQL Connector** was the extension used within C# to bridge and connect the application to the MariaDB server.
+* <img src="https://githubusercontent.com" alt="C# Logo" width="25" height="25"/> **C#** was the main programming language used in this project.
+* <img src="https://githubusercontent.com" alt="WPF XAML Logo" width="25" height="25"/> **WPF / XAML** was used to build the desktop User Interface (UI).
+* <img src="https://githubusercontent.com" alt="MariaDB Logo" width="25" height="25"/> **MariaDB** was the relational database engine used to persist all application data.
+* <img src="https://githubusercontent.com" alt="MySQL Logo" width="25" height="25"/> **MySQL Connector** was the extension used within C# to bridge and connect the application to the MariaDB server.
