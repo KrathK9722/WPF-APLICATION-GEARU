@@ -82,8 +82,8 @@ PRIMARY KEY (`id`));
 
 CREATE TABLE `GEARU`.`eventlog` (`id` INT NOT NULL AUTO_INCREMENT ,
 `location` VARCHAR(255) NOT NULL ,
-`userChanged` varchar(255) not null,
-`userChangedID` int not null default 0,
+`userActor` varchar(255) null default "Sem registro",
+`userActorID` int null default 0,
 `time` DATETIME NOT null default current_timestamp,
 `event` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
 `result` VARCHAR(300) NOT NULL DEFAULT "Error: action not registered",
