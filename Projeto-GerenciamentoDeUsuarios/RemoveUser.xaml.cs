@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.IO;
 using System.Reflection;
+using Mysqlx.Crud;
 
 // FAZER A VERIFICAÇÃO FUNCIONAR DOS DADOS, TA SALVANDO E MANDANDO MSG MESMO COM A VERIFICAÇÃO ERRADA POR CONTA DO GLOBAL
 namespace Projeto_GerenciamentoDeUsuarios
@@ -112,7 +113,9 @@ namespace Projeto_GerenciamentoDeUsuarios
                     }
                     else
                     {
-                        int delete_user_token = GlobalFunctions.Verify_data_base(txt_enter_email_or_user, txt_enter_password, 3);
+                        int delete_user_token = GlobalFunctions.GetUserIdByLogin(txt_enter_email_or_user.Text);
+                        GlobalFunctions.SendLog("RemoveUser", AdminID, GlobalFunctions.ReturnUser(AdminID), delete_user_token, GlobalFunctions.ReturnUser(delete_user_token),
+                            "Usuário deletado do sistema.");
                         GlobalFunctions.DeleteUser(delete_user_token, "Usuário deletado com sucesso!");
                         error = 0;
                         txt_enter_email_or_user.Clear();

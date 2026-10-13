@@ -236,36 +236,6 @@ namespace Projeto_GerenciamentoDeUsuarios
                     return 1;
                 }
             }
-            else if (option == 3) // 3 RETUNR ID USING EMAIL OR USER
-            {
-                string getID = "SELECT id FROM users WHERE user = @login OR email = @login";
-                using var returnID = new MySqlCommand(getID, Connection);
-                returnID.Parameters.AddWithValue("@login", login);
-
-                try
-                {
-                    using var reader = returnID.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        // RETURN ID
-                        return Convert.ToInt32(reader["id"]);
-                    }
-
-                    if (!new EmailAddressAttribute().IsValid(login))
-                    {
-                        return 102; // USER NOT REGISTERED
-                    }
-                    else
-                    {
-                        return 103; // EMAIL NOT REGISTERED
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    return -1;
-                }
-            }
             else if (option == 4) // Verify Admin Password
             {
                 string sqlBuscarHash = "SELECT password FROM users WHERE id = @id";
