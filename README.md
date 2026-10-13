@@ -7,16 +7,16 @@ This application was developed while I was studying C# and WPF. It did not have 
 ---
 
 ### 💻 Development & UI
-![C#](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/csharp.webp)
+<img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/csharp.webp" alt="C# LOGO" height="60" />
 * **C#** was the main programming language used in this project.
 
-![WPF / XAML](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTJdhBKFUiC0xlWtP_SzPSOOgxYJ_7NBnwRFQvsD-W9MI6I2HQOAmKNR_N&s=10)
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTJdhBKFUiC0xlWtP_SzPSOOgxYJ_7NBnwRFQvsD-W9MI6I2HQOAmKNR_N&s=10" alt="WPF / XAML LOGO" height="60" />
 * **WPF / XAML** was used to build the desktop User Interface (UI).
 
 ---
 
 ### 🗄️ Database & Connectivity
-![MariaDB](https://mariadb.com/wp-content/uploads/2019/11/mariadb-logo-vert_black-transparent.png)
+<img src="https://mariadb.com/wp-content/uploads/2019/11/mariadb-logo-vert_black-transparent.png" alt="MariaDB LOGO" height="60" />
 * **MariaDB** was the relational database engine used to persist all application data.
 
 * NUGETS USED IN THIS PROJECT
